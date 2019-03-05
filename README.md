@@ -1,2 +1,2 @@
 # Dig_Dug
-Dig Dug Game
+Dig Dug The Game
