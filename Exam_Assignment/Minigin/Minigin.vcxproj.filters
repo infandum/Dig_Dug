@@ -20,6 +20,9 @@
     <Filter Include="Content">
       <UniqueIdentifier>{64e0e1c2-d75d-4c8e-a31d-36cbdf3db70e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{b5fb3a28-b1b5-4795-876d-e6eea6efd7c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
@@ -55,13 +58,7 @@
     <ClInclude Include="Font.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Content</Filter>
-    </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="TextObject.h">
       <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="Texture2D.h">
@@ -78,6 +75,15 @@
     </ClInclude>
     <ClInclude Include="Singleton.h">
       <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TextObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -112,13 +118,7 @@
     <ClCompile Include="Font.cpp">
       <Filter>Content</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
-    <ClCompile Include="TextObject.cpp">
       <Filter>Content</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
@@ -126,6 +126,15 @@
     </ClCompile>
     <ClCompile Include="Transform.cpp">
       <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="TextObject.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
