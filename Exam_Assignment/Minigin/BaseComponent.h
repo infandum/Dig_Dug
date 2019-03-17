@@ -18,8 +18,8 @@ namespace dae
 		
 	protected:
 		virtual void Initialize();
-		virtual void Update(float deltaTime);
-		virtual void Draw(float deltaTime);
+		virtual void Update(float& deltaTime);
+		virtual void Draw(float& deltaTime);
 
 		GameObject* m_pGameObject;
 	private:

@@ -17,8 +17,8 @@ namespace dae
 		TransformComponent(float x = 0, float y = 0, float z = 0) : mPosition(x, y, z) {};
 		virtual ~TransformComponent() = default;
 
-		void Update(float deltaTime) override;
-		void Draw(float deltaTime) override;
+		void Update(float& deltaTime) override;
+		void Draw(float& deltaTime) override;
 
 		const glm::vec3& GetPosition() const { return mPosition; }
 		void SetPosition(float x = 0, float y = 0, float z = 0);

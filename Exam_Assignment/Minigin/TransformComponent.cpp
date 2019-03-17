@@ -1,12 +1,12 @@
 #include "MiniginPCH.h"
 #include "TransformComponent.h"
 
-void dae::TransformComponent::Update(float deltaTime)
+void dae::TransformComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
 }
 
-void dae::TransformComponent::Draw(float deltaTime)
+void dae::TransformComponent::Draw(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
 }

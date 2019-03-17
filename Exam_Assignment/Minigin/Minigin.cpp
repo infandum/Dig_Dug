@@ -45,6 +45,7 @@ void dae::Minigin::LoadGame() const
 
 	auto go = std::make_shared<GameObject>();
 	go->SetTexture("background.jpg");
+	go->AddComponent(new FPSComponent());
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();

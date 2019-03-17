@@ -40,9 +40,6 @@
     <ClInclude Include="MiniginPCH.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="SceneObject.h">
       <Filter>Base</Filter>
     </ClInclude>
@@ -91,6 +88,12 @@
     <ClInclude Include="DataStructs.h">
       <Filter>Base</Filter>
     </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Content</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp">
@@ -106,9 +109,6 @@
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="Log.cpp">
-      <Filter>Base</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
@@ -141,6 +141,12 @@
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Content</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
