@@ -10,7 +10,7 @@
 #include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
-#include "FPSComponent.h"
+#include "Components.h"
 
 
 void dae::Minigin::Initialize()
@@ -50,6 +50,9 @@ void dae::Minigin::LoadGame() const
 	go = std::make_shared<GameObject>();
 	go->SetTexture("logo.png");
 	go->SetPosition(216, 180);
+	go->AddComponent(new TransformComponent(216, 180));
+	go->AddComponent(new FPSComponent());
+
 	scene.Add(go);
 
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
@@ -72,7 +75,7 @@ void dae::Minigin::Run()
 
 	// tell the resource manager where he can find the game data
 	ResourceManager::GetInstance().Init("../Data/");
-
+	
 	LoadGame();
 
 	{
@@ -81,15 +84,13 @@ void dae::Minigin::Run()
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 
-		auto obj = new GameObject;
-		obj->AddComponent(new FPSComponent());
-
 		bool doContinue = true;
 		while (doContinue)
 		{
+			auto c = std::chrono::high_resolution_clock::now();
+			const auto deltaTime = std::chrono::duration<float>(c - t).count();
 			doContinue = input.ProcessInput();
-
-			sceneManager.Update();
+			sceneManager.Update(deltaTime);
 			renderer.Render();
 
 			t += std::chrono::milliseconds(msPerFrame);

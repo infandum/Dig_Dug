@@ -1,19 +1,29 @@
 #pragma once
-#include "BaseComponent.h"
+#include "Components.h"
+#pragma warning(push)
+#pragma warning (disable:4201)
+#include <glm/vec3.hpp>
+#pragma warning(pop)
 
-class TransformComponent final : public BaseComponent
+namespace dae
 {
-public:
-	TransformComponent(const TransformComponent& other) = delete;
-	TransformComponent(TransformComponent&& other) noexcept = delete;
-	TransformComponent& operator=(const TransformComponent& other) = delete;
-	TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
-	TransformComponent() = default;
-	virtual ~TransformComponent() = default;
+	class TransformComponent final : public BaseComponent
+	{
+	public:
+		TransformComponent(const TransformComponent& other) = delete;
+		TransformComponent(TransformComponent&& other) noexcept = delete;
+		TransformComponent& operator=(const TransformComponent& other) = delete;
+		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
+		TransformComponent(float x = 0, float y = 0, float z = 0) : mPosition(x, y, z) {};
+		virtual ~TransformComponent() = default;
 
-	glm::vec3 mPosition;
-public:
-	const glm::vec3& GetPosition() const { return mPosition; }
-	void SetPosition(float x, float y, float z);
-};
+		void Update(float deltaTime) override;
+		void Draw(float deltaTime) override;
 
+		const glm::vec3& GetPosition() const { return mPosition; }
+		void SetPosition(float x = 0, float y = 0, float z = 0);
+
+	private:
+		glm::vec3 mPosition;
+	};
+}

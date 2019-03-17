@@ -1,9 +1,22 @@
+//#pragma once
 #include "MiniginPCH.h"
 #include "BaseComponent.h"
-//#include "GameObject.h"
 
-BaseComponent::BaseComponent()
+dae::BaseComponent::BaseComponent()
 	: m_pGameObject(nullptr)
 {
+}
 
+void dae::BaseComponent::Initialize()
+{
+}
+
+void dae::BaseComponent::Update(float deltaTime)
+{
+	UNREFERENCED_PARAMETER(deltaTime);
+}
+
+void dae::BaseComponent::Draw(float deltaTime)
+{
+	UNREFERENCED_PARAMETER(deltaTime);
 }

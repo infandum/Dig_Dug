@@ -11,8 +11,9 @@ dae::TextObject::TextObject(const std::string& text, std::shared_ptr<Font> font)
 	: mNeedsUpdate(true), mText(text), mFont(font), mTexture(nullptr)
 { }
 
-void dae::TextObject::Update()
+void dae::TextObject::Update(float deltaTime)
 {
+	UNREFERENCED_PARAMETER(deltaTime);
 	if (mNeedsUpdate)
 	{
 		const SDL_Color color = { 255,255,255 }; // only white text is supported now

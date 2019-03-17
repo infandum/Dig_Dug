@@ -2,12 +2,19 @@
 #include "GameObject.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "BaseComponent.h"
+#include "Components.h"
 
 
 dae::GameObject::~GameObject() = default;
 
-void dae::GameObject::Update(){}
+void dae::GameObject::Update(float deltaTime)
+{
+	UNREFERENCED_PARAMETER(deltaTime);
+	for (auto *component : m_pComponents)
+	{
+		component->Update(deltaTime);
+	}
+}
 
 void dae::GameObject::Render() const
 {

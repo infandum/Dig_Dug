@@ -1,25 +1,28 @@
 #pragma once
-#include "GameObject.h"
-
-class BaseComponent
+namespace dae
 {
-public:
-	BaseComponent(const BaseComponent& other) = delete;
-	BaseComponent(BaseComponent&& other) noexcept = delete;
-	BaseComponent& operator=(const BaseComponent& other) = delete;
-	BaseComponent& operator=(BaseComponent&& other) noexcept = delete;
-	BaseComponent();
-	virtual ~BaseComponent() = default;
+	class GameObject;
 
-	dae::GameObject* GetGameObject() const { return m_pGameObject; }
+	class BaseComponent
+	{
+		friend class GameObject;
+	public:
+		BaseComponent(const BaseComponent& other) = delete;
+		BaseComponent(BaseComponent&& other) noexcept = delete;
+		BaseComponent& operator=(const BaseComponent& other) = delete;
+		BaseComponent& operator=(BaseComponent&& other) noexcept = delete;
+		BaseComponent();
+		virtual ~BaseComponent() = default;
 
-	dae::GameObject* m_pGameObject;
-protected:
-	void Initialize();
-	void Update();
-	void Draw();
+		GameObject* GetGameObject() const { return m_pGameObject; }
+		
+	protected:
+		virtual void Initialize();
+		virtual void Update(float deltaTime);
+		virtual void Draw(float deltaTime);
 
-private:
+		GameObject* m_pGameObject;
+	private:
 	
-};
-
+	};
+}
