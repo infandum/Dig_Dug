@@ -11,7 +11,7 @@ namespace dae
 {
 	class BaseComponent;
 
-	class GameObject : public SceneObject
+	class GameObject final : public SceneObject
 	{
 	public:
 		GameObject() = default;
@@ -46,10 +46,11 @@ namespace dae
 		}
 
 	private:
-		std::string mName;
+		
 		Transform mTransform;
 		std::shared_ptr<Texture2D> mTexture;
 
-		std::vector<BaseComponent*> m_pComponents;
+		std::string mName = "GameObject";
+		std::vector<BaseComponent*> m_pComponents{};
 	};
 }

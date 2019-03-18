@@ -34,14 +34,6 @@ void dae::GameObject::SetPosition(float x, float y)
 
 void dae::GameObject::AddComponent(BaseComponent* pComp)
 {
-	/*for (auto *component : m_pComponents)
-	{
-		if (component == pComp)
-		{
-			std::wcout << L"GameObject::AddComponent > GameObject already contains this component!" << std::endl;
-			return;
-		}
-	}*/
 	m_pComponents.push_back(pComp);
 	pComp->m_pGameObject = this;
 }

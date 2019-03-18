@@ -1,18 +1,22 @@
 #pragma once
-#include "BaseComponent.h"
+#include "Components.h"
 
 namespace dae
 {
-	
+	class GameObject;
+	class TextObject;
+
+	static unsigned int m_Frames;
+
 	class FPSComponent : public BaseComponent
 	{
-		static unsigned int m_Frames;
+		
 	public:
 		FPSComponent(const FPSComponent& other) = delete;
 		FPSComponent(FPSComponent&& other) noexcept = delete;
 		FPSComponent& operator=(const FPSComponent& other) = delete;
 		FPSComponent& operator=(FPSComponent&& other) noexcept = delete;
-		FPSComponent();
+		FPSComponent() = default;
 		virtual ~FPSComponent() = default;
 
 		float GetFramesPerSecond() const { return m_fps; }
@@ -20,7 +24,7 @@ namespace dae
 		void Update(float& deltaTime) override;
 		void Draw(float& deltaTime) override;
 	protected:
-
+		
 	private:
 		float m_fps = 0;
 		

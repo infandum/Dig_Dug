@@ -57,8 +57,9 @@ void dae::Minigin::LoadGame() const
 	scene.Add(go);
 
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_shared<TextObject>("Programming 4 Assignment", font);
-	to->SetPosition(80, 20);
+	auto to = std::make_shared<TextObject>("00FPS", font);
+	to->SetPosition(10, 10);
+	to->AddComponent(new FPSComponent());
 	scene.Add(to);
 }
 

@@ -4,6 +4,7 @@
 
 dae::BaseComponent::BaseComponent()
 	: m_pGameObject(nullptr)
+	, m_pTextObject(nullptr)
 {
 }
 
