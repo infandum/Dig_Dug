@@ -7,7 +7,6 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-#include "TextObject.h"
 #include "GameObject.h"
 #include "Scene.h"
 #include "Components.h"
@@ -44,19 +43,22 @@ void dae::Minigin::LoadGame() const
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
 	auto go = std::make_shared<GameObject>();
-	go->SetTexture("background.jpg");
 	go->AddComponent(new TransformComponent());
+	go->AddComponent(new TextureComponent());
+	go->GetComponent<TextureComponent>()->SetTexture("background.jpg");
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();
-	go->SetTexture("logo.png");
 	go->AddComponent(new TransformComponent());
+	go->AddComponent(new TextureComponent());
+	go->GetComponent<TextureComponent>()->SetTexture("logo.png");
 	go->GetComponent<TransformComponent>()->SetPosition(216, 180);
 	scene.Add(go);
 
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 	go = std::make_shared<GameObject>();
 	go->AddComponent(new TransformComponent());
+	go->AddComponent(new TextureComponent());
 	go->AddComponent(new TextComponent("Programming 4 Assignment", font));
 	go->GetComponent<TransformComponent>()->SetPosition(80, 20);
 	scene.Add(go);
@@ -64,8 +66,9 @@ void dae::Minigin::LoadGame() const
 	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
 	go = std::make_shared<GameObject>();
 	go->AddComponent(new TransformComponent());
-	go->AddComponent(new FPSComponent());
+	go->AddComponent(new TextureComponent());
 	go->AddComponent(new TextComponent("00FPS", font));
+	go->AddComponent(new FPSComponent());
 	const SDL_Color color{ 255, 255, 0 };
 	go->GetComponent<TextComponent>()->SetColor(color);
 	scene.Add(go);
@@ -85,36 +88,29 @@ void dae::Minigin::Run()
 
 	// tell the resource manager where he can find the game data
 	ResourceManager::GetInstance().Init("../Data/");
-	
 	LoadGame();
-
 	{
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 		auto doContinue = true;
-		float lag{ 0.0f };
+		auto lag{ 0.0f };
 		auto previousTime = GetCurrentTime();
-		const float perUpdateTime{ float(msPerFrame) };
-
+		const auto perUpdateTime{ float(msPerFrame) };
 		while (doContinue)
 		{
 			const auto currentTime = GetCurrentTime();
 			const auto elapsedTime = currentTime - previousTime;
 			previousTime = currentTime;
 			lag += elapsedTime;
-
 			doContinue = input.ProcessInput();
-
 			while (lag >= perUpdateTime)
 			{
 				sceneManager.Update(float(elapsedTime));
 				lag -= perUpdateTime;
 			}
-
 			renderer.Render();
 		}
 	}
-
 	Cleanup();
 }

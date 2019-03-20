@@ -3,6 +3,20 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "Components.h"
+#include <complex>
+
+dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureComponent(nullptr)
+{
+	++m_NumberOfGameObjects;
+}
+
+//dae::GameObject::~GameObject()
+//{
+//	for (auto& component : m_pComponents)
+//		component = nullptr;
+//
+//	m_pComponents.clear();
+//}
 
 void dae::GameObject::Update(float deltaTime)
 {
@@ -10,20 +24,26 @@ void dae::GameObject::Update(float deltaTime)
 	for (auto component : m_pComponents)
 	{
 		component->Update(deltaTime);
+		if (component && typeid(*component) == typeid(TransformComponent))
+			m_pTransformComponent = static_cast<TransformComponent*>(component);
+
+		if (component && typeid(*component) == typeid(TextureComponent))
+			m_pTextureComponent = static_cast<TextureComponent*>(component);
+
 	}
 }
 
 void dae::GameObject::Render() const
 {
-	if (mTexture)
-	{
-		const auto& ti = typeid(TransformComponent);
-		for (auto &component : m_pComponents)
-		{
-			if (component && typeid(*component) == ti)
-				Renderer::GetInstance().RenderTexture(*mTexture, static_cast<TransformComponent*>(component)->GetPosition().x, static_cast<TransformComponent*>(component)->GetPosition().y);
-		}
-	}	
+	if (m_pTextureComponent != nullptr && m_pTransformComponent != nullptr)
+		if(m_pTextureComponent->GetTexture())
+			Renderer::GetInstance().RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y);
+
+}
+
+void dae::GameObject::SetName(std::string& name)
+{
+	m_Name = name;
 }
 
 void dae::GameObject::SetTexture(const std::string& filename)
@@ -34,11 +54,6 @@ void dae::GameObject::SetTexture(const std::string& filename)
 void dae::GameObject::SetTexture(std::shared_ptr<Texture2D> texture)
 {
 	mTexture = texture;
-}
-
-void dae::GameObject::SetPosition(float x, float y)
-{
-	mTransform.SetPosition(x, y, 0.0f);
 }
 
 void dae::GameObject::AddComponent(BaseComponent* comp)

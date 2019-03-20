@@ -1,19 +1,17 @@
 #pragma once
-#include <memory>
-#include <typeinfo>
-
-#include "Transform.h"
-#include "Texture2D.h"
-
 #include "SceneObject.h"
 #include "Components.h"
+#include <memory>
+#include <typeinfo>
+#include "Texture2D.h"
 
 namespace dae
 {
+	static unsigned int m_NumberOfGameObjects{0};
 	class GameObject final : public SceneObject
 	{
 	public:
-		GameObject() = default;
+		GameObject();
 		virtual ~GameObject() = default;
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -23,9 +21,13 @@ namespace dae
 		void Update(float deltaTime) override;
 		void Render() const override;
 
+		static unsigned int GetObjectCount() { return m_NumberOfGameObjects; }
+
+		void SetName(std::string& name);
+		std::string GetName() const { return m_Name; }
+
 		void SetTexture(const std::string& filename);
 		void SetTexture(std::shared_ptr<Texture2D> texture);
-		void SetPosition(float x, float y);
 
 		void AddComponent(BaseComponent* comp);
 		void RemoveComponent(BaseComponent* pComp);
@@ -40,11 +42,12 @@ namespace dae
 					return static_cast<T*>(component);
 			}
 			return nullptr;
-		}		
+		}
 	private:
-		Transform mTransform;
 		std::shared_ptr<Texture2D> mTexture{};
-		std::string mName = "GameObject";
+		std::string m_Name = "GameObject" + std::to_string(m_NumberOfGameObjects);
 		std::vector<BaseComponent*> m_pComponents{};
+		TransformComponent* m_pTransformComponent;
+		TextureComponent* m_pTextureComponent;
 	};
 }

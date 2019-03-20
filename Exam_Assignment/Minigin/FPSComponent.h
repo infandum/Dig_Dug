@@ -13,7 +13,7 @@ namespace dae
 		FPSComponent(FPSComponent&& other) noexcept = delete;
 		FPSComponent& operator=(const FPSComponent& other) = delete;
 		FPSComponent& operator=(FPSComponent&& other) noexcept = delete;
-		FPSComponent();
+		FPSComponent() = default;
 		virtual ~FPSComponent() = default;
 
 		int GetFramesPerSecond() const { return m_Fps; }

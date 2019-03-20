@@ -40,9 +40,6 @@
     <ClInclude Include="MiniginPCH.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="SceneObject.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -53,9 +50,6 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
       <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="Texture2D.h">
@@ -85,9 +79,6 @@
     <ClInclude Include="Components.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="DataStructs.h">
-      <Filter>Base</Filter>
-    </ClInclude>
     <ClInclude Include="RenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -97,7 +88,18 @@
     <ClInclude Include="TextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="TextureComponent.h" />
+    <ClInclude Include="TextureComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneObject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="DataStructs.h">
+      <Filter>Content</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp">
@@ -124,11 +126,7 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Font.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
       <Filter>Content</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
@@ -155,7 +153,15 @@
     <ClCompile Include="TextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="TextureComponent.cpp" />
+    <ClCompile Include="TextureComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc">
