@@ -1,4 +1,6 @@
 #pragma once
+#include "DataStructs.h"
+
 namespace dae
 {
 	class GameObject;
@@ -7,26 +9,26 @@ namespace dae
 	class BaseComponent
 	{
 		friend class GameObject;
-		friend class TextObject;
 	public:
 		BaseComponent(const BaseComponent& other) = delete;
 		BaseComponent(BaseComponent&& other) noexcept = delete;
 		BaseComponent& operator=(const BaseComponent& other) = delete;
 		BaseComponent& operator=(BaseComponent&& other) noexcept = delete;
-		BaseComponent();
+		BaseComponent() = default;
+		BaseComponent(std::shared_ptr<GameObject> owner) : m_pGameObject(owner){}
+
 		virtual ~BaseComponent() = default;
 
-		GameObject* GetGameObject() const { return m_pGameObject; }
-		TextObject* GetTextObject() const { return m_pTextObject; }
+		std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; }
+		CompType GetType() const { return m_Type; }
 
 	protected:
 		virtual void Initialize();
 		virtual void Update(float& deltaTime);
 		virtual void Draw(float& deltaTime);
 
-		GameObject* m_pGameObject;
-		TextObject* m_pTextObject;
+		std::shared_ptr<GameObject> m_pGameObject{};
 	private:
-	
+		CompType m_Type = CompType::BASECOMPONENT;
 	};
 }

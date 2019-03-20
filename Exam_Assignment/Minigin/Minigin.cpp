@@ -45,22 +45,30 @@ void dae::Minigin::LoadGame() const
 
 	auto go = std::make_shared<GameObject>();
 	go->SetTexture("background.jpg");
-	go->AddComponent(new FPSComponent());
+	go->AddComponent(new TransformComponent());
 	scene.Add(go);
 
 	go = std::make_shared<GameObject>();
 	go->SetTexture("logo.png");
-	go->SetPosition(216, 180);
-	go->AddComponent(new TransformComponent(216, 180));
-	go->AddComponent(new FPSComponent());
-
+	go->AddComponent(new TransformComponent());
+	go->GetComponent<TransformComponent>()->SetPosition(216, 180);
 	scene.Add(go);
 
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	auto to = std::make_shared<TextObject>("00FPS", font);
-	to->SetPosition(10, 10);
-	to->AddComponent(new FPSComponent());
-	scene.Add(to);
+	go = std::make_shared<GameObject>();
+	go->AddComponent(new TransformComponent());
+	go->AddComponent(new TextComponent("Programming 4 Assignment", font));
+	go->GetComponent<TransformComponent>()->SetPosition(80, 20);
+	scene.Add(go);
+
+	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
+	go = std::make_shared<GameObject>();
+	go->AddComponent(new TransformComponent());
+	go->AddComponent(new FPSComponent());
+	go->AddComponent(new TextComponent("00FPS", font));
+	const SDL_Color color{ 255, 255, 0 };
+	go->GetComponent<TextComponent>()->SetColor(color);
+	scene.Add(go);
 }
 
 void dae::Minigin::Cleanup()
@@ -81,22 +89,30 @@ void dae::Minigin::Run()
 	LoadGame();
 
 	{
-		auto t = std::chrono::high_resolution_clock::now();
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
+		auto doContinue = true;
+		float lag{ 0.0f };
+		auto previousTime = GetCurrentTime();
+		const float perUpdateTime{ float(msPerFrame) };
 
-		bool doContinue = true;
 		while (doContinue)
 		{
-			auto c = std::chrono::high_resolution_clock::now();
-			const auto deltaTime = std::chrono::duration<float>(c - t).count();
-			doContinue = input.ProcessInput();
-			sceneManager.Update(deltaTime);
-			renderer.Render();
+			const auto currentTime = GetCurrentTime();
+			const auto elapsedTime = currentTime - previousTime;
+			previousTime = currentTime;
+			lag += elapsedTime;
 
-			t += std::chrono::milliseconds(msPerFrame);
-			std::this_thread::sleep_until(t);
+			doContinue = input.ProcessInput();
+
+			while (lag >= perUpdateTime)
+			{
+				sceneManager.Update(float(elapsedTime));
+				lag -= perUpdateTime;
+			}
+
+			renderer.Render();
 		}
 	}
 

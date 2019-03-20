@@ -17,9 +17,9 @@ namespace dae
 		void SetText(const std::string& text);
 		void SetPosition(float x, float y);
 
-		void AddComponent(BaseComponent* pComp);
+		/*void AddComponent(BaseComponent* pComp);
 		void RemoveComponent(BaseComponent* pComp);
-
+*/
 		template <class T>
 		T* GetComponent()
 		{

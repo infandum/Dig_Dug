@@ -53,20 +53,20 @@ void dae::TextObject::SetPosition(const float x, const float y)
 	mTransform.SetPosition(x, y, 0.0f);
 }
 
-void dae::TextObject::AddComponent(BaseComponent* pComp)
-{
-	m_pComponents.push_back(pComp);
-	pComp->m_pTextObject = this;
-}
-
-void dae::TextObject::RemoveComponent(BaseComponent* pComp)
-{
-	auto comp = std::find(m_pComponents.begin(), m_pComponents.end(), pComp);
-	if (comp == m_pComponents.end())
-	{
-		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
-		return;
-	}
-	m_pComponents.erase(comp);
-	pComp->m_pTextObject = nullptr;
-}
+//void dae::TextObject::AddComponent(BaseComponent* pComp)
+//{
+//	m_pComponents.push_back(pComp);
+//	pComp->m_pTextObject = this;
+//}
+//
+//void dae::TextObject::RemoveComponent(BaseComponent* pComp)
+//{
+//	auto comp = std::find(m_pComponents.begin(), m_pComponents.end(), pComp);
+//	if (comp == m_pComponents.end())
+//	{
+//		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+//		return;
+//	}
+//	m_pComponents.erase(comp);
+//	pComp->m_pTextObject = nullptr;
+//}

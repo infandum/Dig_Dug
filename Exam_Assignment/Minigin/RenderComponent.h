@@ -29,5 +29,7 @@ namespace dae
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
 
 		SDL_Renderer* GetSDLRenderer() const { return mRenderer; }
+	private:
+		CompType m_Type = CompType::RENDERCOMPONENT;
 	};
 }

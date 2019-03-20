@@ -3,9 +3,6 @@
 
 namespace dae
 {
-	class GameObject;
-	class TextObject;
-
 	static unsigned int m_Frames;
 
 	class FPSComponent : public BaseComponent
@@ -16,17 +13,18 @@ namespace dae
 		FPSComponent(FPSComponent&& other) noexcept = delete;
 		FPSComponent& operator=(const FPSComponent& other) = delete;
 		FPSComponent& operator=(FPSComponent&& other) noexcept = delete;
-		FPSComponent() = default;
+		FPSComponent();
 		virtual ~FPSComponent() = default;
 
-		float GetFramesPerSecond() const { return m_fps; }
+		int GetFramesPerSecond() const { return m_Fps; }
 
-		void Update(float& deltaTime) override;
-		void Draw(float& deltaTime) override;
-	protected:
-		
+		static unsigned int GetTotalFrames() { return m_Frames; }
+
+		void Update(float& deltaTime) override;	
 	private:
-		float m_fps = 0;
-		
+		CompType m_Type = CompType::FPSCOMPONENT;
+		int m_Fps = 0;
+		int m_FpsCounter;
+		float m_TotalTime;
 	};
 }
