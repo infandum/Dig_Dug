@@ -8,10 +8,8 @@
 
 dae::TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font> font)
 	: m_NeedsUpdate(true), m_Text(text), mFont(font)
-{ }
-
-void dae::TextComponent::Initialize()
 {
+	
 }
 
 void dae::TextComponent::Update(float& deltaTime)

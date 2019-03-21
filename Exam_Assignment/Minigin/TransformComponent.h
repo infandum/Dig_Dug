@@ -7,7 +7,6 @@
 
 namespace dae
 {
-	class BaseComponent;
 	class TransformComponent final : public BaseComponent
 	{
 	public:
@@ -16,17 +15,18 @@ namespace dae
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
-		explicit TransformComponent(float x = 0, float y = 0, float z = 0) : mPosition(x, y, z) {};
+		explicit TransformComponent(float x = 0, float y = 0, float z = 0) : m_Position(x, y, z) {};
 		virtual ~TransformComponent() = default;
 
-		void Initialize() override;
+		const glm::vec3& GetPosition() const { return m_Position; }
+		void SetPosition(float x = 0, float y = 0, float z = 0);
+
+	protected:
 		void Update(float& deltaTime) override;
 		void Draw(float& deltaTime) override;
 
-		const glm::vec3& GetPosition() const { return mPosition; }
-		void SetPosition(float x = 0, float y = 0, float z = 0);
 	private:
 		CompType m_Type = TRANSFROMCOMPONENT;
-		glm::vec3 mPosition;
+		glm::vec3 m_Position;
 	};
 }

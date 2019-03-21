@@ -1,5 +1,4 @@
 #pragma once
-#include "Components.h"
 #include <SDL.h>
 
 namespace dae{
@@ -24,7 +23,6 @@ namespace dae{
 		void SetText(const std::string& text);
 
 	protected:
-		void Initialize() override;
 		void Update(float& deltaTime) override;
 		void Draw(float& deltaTime) override;
 

@@ -1,9 +1,7 @@
 #pragma once
 #include "SceneObject.h"
 #include "Components.h"
-#include <memory>
 #include <typeinfo>
-#include "Texture2D.h"
 
 namespace dae
 {
@@ -26,9 +24,6 @@ namespace dae
 		void SetName(std::string& name);
 		std::string GetName() const { return m_Name; }
 
-		void SetTexture(const std::string& filename);
-		void SetTexture(std::shared_ptr<Texture2D> texture);
-
 		void AddComponent(BaseComponent* comp);
 		void RemoveComponent(BaseComponent* pComp);
 
@@ -44,7 +39,6 @@ namespace dae
 			return nullptr;
 		}
 	private:
-		std::shared_ptr<Texture2D> mTexture{};
 		std::string m_Name = "GameObject" + std::to_string(m_NumberOfGameObjects);
 		std::vector<BaseComponent*> m_pComponents{};
 		TransformComponent* m_pTransformComponent;

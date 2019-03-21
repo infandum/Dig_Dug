@@ -1,6 +1,5 @@
 #include "MiniginPCH.h"
-#include "TextureComponent.h"
-#include <SDL.h>
+#include "Components.h"
 #include "ResourceManager.h"
 
 dae::TextureComponent::TextureComponent(const std::string& filename) : m_spTexture(nullptr)

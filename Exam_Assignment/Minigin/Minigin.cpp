@@ -45,6 +45,7 @@ void dae::Minigin::LoadGame() const
 	auto go = std::make_shared<GameObject>();
 	go->AddComponent(new TransformComponent());
 	go->AddComponent(new TextureComponent());
+	//go->AddComponent(new TextureComponent());
 	go->GetComponent<TextureComponent>()->SetTexture("background.jpg");
 	scene.Add(go);
 

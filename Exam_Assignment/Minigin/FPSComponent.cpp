@@ -1,13 +1,13 @@
 #include "MiniginPCH.h"
-#include "FPSComponent.h"
+#include "Components.h"
 #include "GameObject.h"
 
 void dae::FPSComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	m_Frames++;
+	
 	m_TotalTime += deltaTime;
-
+	m_Frames++;
 	m_FpsCounter++;
 
 	if (m_TotalTime >= 1000.0f)

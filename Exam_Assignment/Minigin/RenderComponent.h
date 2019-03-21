@@ -1,5 +1,4 @@
 #pragma once
-#include "Components.h"
 #include "Singleton.h"
 #include "Renderer.h"
 
@@ -18,7 +17,7 @@ namespace dae
 		RenderComponent(RenderComponent&& other) noexcept = delete;
 		RenderComponent& operator=(const RenderComponent& other) = delete;
 		RenderComponent& operator=(RenderComponent&& other) noexcept = delete;
-		RenderComponent();
+		RenderComponent() = default;
 		virtual ~RenderComponent() = default;
 
 		void Init(SDL_Window* window);

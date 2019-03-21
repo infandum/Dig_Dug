@@ -21,7 +21,7 @@ dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureCompone
 void dae::GameObject::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	for (auto component : m_pComponents)
+	for (auto& component : m_pComponents)
 	{
 		component->Update(deltaTime);
 		if (component && typeid(*component) == typeid(TransformComponent))
@@ -46,19 +46,16 @@ void dae::GameObject::SetName(std::string& name)
 	m_Name = name;
 }
 
-void dae::GameObject::SetTexture(const std::string& filename)
-{
-	mTexture = ResourceManager::GetInstance().LoadTexture(filename);
-}
-
-void dae::GameObject::SetTexture(std::shared_ptr<Texture2D> texture)
-{
-	mTexture = texture;
-}
-
 void dae::GameObject::AddComponent(BaseComponent* comp)
 {
 	//TODO: check duplicates
+	/*for(auto& component : m_pComponents)
+	{
+		if (component->GetType() == comp->GetType()) 		
+		{
+			return;
+		}
+	}*/
 	m_pComponents.push_back(comp);
 	std::shared_ptr<GameObject> owner;
 	owner.reset(this);
