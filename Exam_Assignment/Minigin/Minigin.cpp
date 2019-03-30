@@ -94,6 +94,7 @@ void dae::Minigin::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
+
 		auto doContinue = true;
 		auto lag{ 0.0f };
 		auto previousTime = GetCurrentTime();

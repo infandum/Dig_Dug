@@ -7,7 +7,6 @@ bool dae::InputManager::ProcessInput()
 {
 	ZeroMemory(&currentState, sizeof(XINPUT_STATE));
 	XInputGetState(0, &currentState);
-
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		if (e.type == SDL_QUIT) {
@@ -20,7 +19,6 @@ bool dae::InputManager::ProcessInput()
 			
 		}
 	}
-
 	return true;
 }
 

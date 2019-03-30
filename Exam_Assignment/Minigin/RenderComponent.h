@@ -1,6 +1,5 @@
 #pragma once
 #include "Singleton.h"
-#include "Renderer.h"
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -20,9 +19,9 @@ namespace dae
 		RenderComponent() = default;
 		virtual ~RenderComponent() = default;
 
-		void Init(SDL_Window* window);
-		void Render();
-		void Destroy();
+
+	protected:
+		virtual void Draw(float& deltaTime);
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;

@@ -5,7 +5,6 @@
 
 namespace dae
 {
-	static unsigned int m_NumberOfGameObjects{0};
 	class GameObject final : public SceneObject
 	{
 	public:
@@ -43,5 +42,6 @@ namespace dae
 		std::vector<BaseComponent*> m_pComponents{};
 		TransformComponent* m_pTransformComponent;
 		TextureComponent* m_pTextureComponent;
+		static unsigned int m_NumberOfGameObjects;
 	};
 }

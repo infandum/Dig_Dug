@@ -20,5 +20,4 @@ namespace dae
 	private:
 		XINPUT_STATE currentState{};
 	};
-
 }

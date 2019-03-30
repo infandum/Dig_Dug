@@ -4,19 +4,12 @@
 #include "Renderer.h"
 #include "Components.h"
 #include <complex>
+unsigned int dae::GameObject::m_NumberOfGameObjects = 0;
 
 dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureComponent(nullptr)
 {
 	++m_NumberOfGameObjects;
 }
-
-//dae::GameObject::~GameObject()
-//{
-//	for (auto& component : m_pComponents)
-//		component = nullptr;
-//
-//	m_pComponents.clear();
-//}
 
 void dae::GameObject::Update(float deltaTime)
 {
