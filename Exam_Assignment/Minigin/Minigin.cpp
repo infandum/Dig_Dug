@@ -10,6 +10,7 @@
 #include "GameObject.h"
 #include "Scene.h"
 #include "Components.h"
+#include "Scenes.h"
 
 
 void dae::Minigin::Initialize()
@@ -40,39 +41,12 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
-
-	auto go = std::make_shared<GameObject>();
-	go->AddComponent(new TransformComponent());
-	go->AddComponent(new TextureComponent());
-	//go->AddComponent(new TextureComponent());
-	go->GetComponent<TextureComponent>()->SetTexture("background.jpg");
-	scene.Add(go);
-
-	go = std::make_shared<GameObject>();
-	go->AddComponent(new TransformComponent());
-	go->AddComponent(new TextureComponent());
-	go->GetComponent<TextureComponent>()->SetTexture("logo.png");
-	go->GetComponent<TransformComponent>()->SetPosition(216, 180);
-	scene.Add(go);
-
-	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
-	go = std::make_shared<GameObject>();
-	go->AddComponent(new TransformComponent());
-	go->AddComponent(new TextureComponent());
-	go->AddComponent(new TextComponent("Programming 4 Assignment", font));
-	go->GetComponent<TransformComponent>()->SetPosition(80, 20);
-	scene.Add(go);
-
-	font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
-	go = std::make_shared<GameObject>();
-	go->AddComponent(new TransformComponent());
-	go->AddComponent(new TextureComponent());
-	go->AddComponent(new TextComponent("00FPS", font));
-	go->AddComponent(new FPSComponent());
-	const SDL_Color color{ 255, 255, 0 };
-	go->GetComponent<TextComponent>()->SetColor(color);
-	scene.Add(go);
+	
+	
+	
+	SceneManager::GetInstance().AddScene(std::shared_ptr<Scene>(new DemoScene()));
+	SceneManager::GetInstance().AddScene(std::shared_ptr<Scene>(new Level1()));
+	SceneManager::GetInstance().SetActive("Level1");
 }
 
 void dae::Minigin::Cleanup()
@@ -99,12 +73,15 @@ void dae::Minigin::Run()
 		auto lag{ 0.0f };
 		auto previousTime = GetCurrentTime();
 		const auto perUpdateTime{ float(msPerFrame) };
+		float aa = 0;
+		bool once = false;
 		while (doContinue)
 		{
 			const auto currentTime = GetCurrentTime();
 			const auto elapsedTime = currentTime - previousTime;
 			previousTime = currentTime;
 			lag += elapsedTime;
+			aa += elapsedTime;
 			doContinue = input.ProcessInput();
 			while (lag >= perUpdateTime)
 			{

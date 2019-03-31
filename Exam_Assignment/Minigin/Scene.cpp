@@ -13,6 +13,10 @@ void dae::Scene::Add(const std::shared_ptr<SceneObject>& object)
 	mObjects.push_back(object);
 }
 
+void dae::Scene::Initialize()
+{
+}
+
 void dae::Scene::Update(float deltaTime)
 {
 	for(auto gameObject : mObjects)
@@ -28,4 +32,3 @@ void dae::Scene::Render() const
 		gameObject->Render();
 	}
 }
-
