@@ -46,7 +46,7 @@ void dae::Minigin::LoadGame() const
 	
 	SceneManager::GetInstance().AddScene(std::shared_ptr<Scene>(new DemoScene()));
 	SceneManager::GetInstance().AddScene(std::shared_ptr<Scene>(new Level1()));
-	SceneManager::GetInstance().SetActive("Level1");
+	SceneManager::GetInstance().SetActive("Demo");
 }
 
 void dae::Minigin::Cleanup()
@@ -73,15 +73,12 @@ void dae::Minigin::Run()
 		auto lag{ 0.0f };
 		auto previousTime = GetCurrentTime();
 		const auto perUpdateTime{ float(msPerFrame) };
-		float aa = 0;
-		bool once = false;
 		while (doContinue)
 		{
 			const auto currentTime = GetCurrentTime();
 			const auto elapsedTime = currentTime - previousTime;
 			previousTime = currentTime;
 			lag += elapsedTime;
-			aa += elapsedTime;
 			doContinue = input.ProcessInput();
 			while (lag >= perUpdateTime)
 			{

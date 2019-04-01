@@ -30,7 +30,7 @@ void dae::GameObject::Render() const
 {
 	if (m_pTextureComponent != nullptr && m_pTransformComponent != nullptr)
 		if(m_pTextureComponent->GetTexture())
-			Renderer::GetInstance().RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y);
+			Renderer::GetInstance().RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, float(m_pTextureComponent->GetSize().x), float(m_pTextureComponent->GetSize().y));
 
 }
 
@@ -41,14 +41,14 @@ void dae::GameObject::SetName(std::string& name)
 
 void dae::GameObject::AddComponent(BaseComponent* comp)
 {
-	//TODO: check duplicates
-	/*for(auto& component : m_pComponents)
-	{
-		if (component->GetType() == comp->GetType()) 		
+	for (auto& component : m_pComponents)
+	{ 
+		if (typeid(*component) == typeid(*comp))
 		{
+			std::cout << "Component Duplicate: " << typeid(*comp).name() << " >> Already added!!"; 
 			return;
 		}
-	}*/
+	}
 	m_pComponents.push_back(comp);
 	std::shared_ptr<GameObject> owner;
 	owner.reset(this);

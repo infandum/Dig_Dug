@@ -103,8 +103,10 @@
     <ClInclude Include="DemoScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Level1.h" />
     <ClInclude Include="Scenes.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Level1.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
@@ -172,7 +174,9 @@
     <ClCompile Include="DemoScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Level1.cpp" />
+    <ClCompile Include="Level1.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc">
