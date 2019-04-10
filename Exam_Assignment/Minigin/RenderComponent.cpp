@@ -4,13 +4,14 @@
 #include "Renderer.h"
 #include "GameObject.h"
 #include "Texture2D.h"
-void dae::RenderComponent::Draw(float& deltaTime)
-{
-	UNREFERENCED_PARAMETER(deltaTime);
-	if (GetGameObject()->GetComponent<TextureComponent>())
-		if (GetGameObject()->GetComponent<TransformComponent>())
-	Renderer::GetInstance().RenderTexture(*GetGameObject()->GetComponent<TextureComponent>()->GetTexture(), GetGameObject()->GetComponent<TransformComponent>()->GetPosition().x, GetGameObject()->GetComponent<TransformComponent>()->GetPosition().y);
-}
+
+//void dae::RenderComponent::Draw(float& deltaTime)
+//{
+//	UNREFERENCED_PARAMETER(deltaTime);
+//	if (GetGameObject()->GetComponent<TextureComponent>())
+//		if (GetGameObject()->GetComponent<TransformComponent>())
+//	Renderer::GetInstance().RenderTexture(*GetGameObject()->GetComponent<TextureComponent>()->GetTexture(), GetGameObject()->GetComponent<TransformComponent>()->GetPosition().x, GetGameObject()->GetComponent<TransformComponent>()->GetPosition().y);
+//}
 
 //void dae::RenderComponent::RenderTexture(const Texture2D& texture, const float x, const float y) const
 //{

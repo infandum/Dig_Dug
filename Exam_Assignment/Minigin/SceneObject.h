@@ -1,4 +1,5 @@
 #pragma once
+
 namespace dae
 {
 	class SceneObject
@@ -12,6 +13,6 @@ namespace dae
 		SceneObject(const SceneObject& other) = delete;
 		SceneObject(SceneObject&& other) = delete;
 		SceneObject& operator=(const SceneObject& other) = delete;
-		SceneObject& operator=(SceneObject&& other) = delete;
+		SceneObject& operator=(SceneObject&& other) = delete;	
 	};
 }

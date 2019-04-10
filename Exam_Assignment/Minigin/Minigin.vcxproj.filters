@@ -5,9 +5,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Scenes">
-      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Components">
       <UniqueIdentifier>{044f382c-81e1-4419-b979-c847cd441123}</UniqueIdentifier>
     </Filter>
@@ -22,6 +19,12 @@
     </Filter>
     <Filter Include="Objects">
       <UniqueIdentifier>{b5fb3a28-b1b5-4795-876d-e6eea6efd7c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Scenes">
+      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Input">
+      <UniqueIdentifier>{4c81c308-e0e5-4eb1-8b27-9079bedc8971}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,13 +43,7 @@
     <ClInclude Include="MiniginPCH.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
@@ -92,7 +89,7 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Scenes</Filter>
+      <Filter>Managers\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="SceneObject.h">
       <Filter>Objects</Filter>
@@ -100,14 +97,20 @@
     <ClInclude Include="DataStructs.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="DemoScene.h">
-      <Filter>Scenes</Filter>
+    <ClInclude Include="SceneLoader.h">
+      <Filter>Managers\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes.h">
-      <Filter>Scenes</Filter>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Level1.h">
-      <Filter>Scenes</Filter>
+    <ClInclude Include="Command.h">
+      <Filter>Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Managers\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
+      <Filter>Managers\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -126,13 +129,7 @@
     <ClCompile Include="Log.cpp">
       <Filter>Base</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
@@ -166,16 +163,22 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Scenes</Filter>
+      <Filter>Managers\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Base</Filter>
     </ClCompile>
-    <ClCompile Include="DemoScene.cpp">
-      <Filter>Scenes</Filter>
+    <ClCompile Include="SceneLoader.cpp">
+      <Filter>Managers\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Level1.cpp">
-      <Filter>Scenes</Filter>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Managers\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
+      <Filter>Managers\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -7,15 +7,23 @@ bool dae::InputManager::ProcessInput()
 {
 	ZeroMemory(&currentState, sizeof(XINPUT_STATE));
 	XInputGetState(0, &currentState);
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		if (e.type == SDL_QUIT) {
+
+	
+	while (SDL_PollEvent(&m_Event)) {
+		if (m_Event.type == SDL_QUIT) {
 			return false;
 		}
-		if (e.type == SDL_KEYDOWN) {
-			
+		if (m_Event.type == SDL_KEYDOWN) {
+			m_IsKeyDown = true;
+			m_IsKeyUp = false;
+			m_Key = m_Event.key.keysym.sym;
 		}
-		if (e.type == SDL_MOUSEBUTTONDOWN) {
+		if (m_Event.type == SDL_KEYUP) {
+			m_IsKeyUp = true;
+			m_IsKeyDown = false;
+			m_Key = m_Event.key.keysym.sym;
+		}
+		if (m_Event.type == SDL_MOUSEBUTTONDOWN) {
 			
 		}
 	}
@@ -38,3 +46,31 @@ bool dae::InputManager::IsPressed(ControllerButton button) const
 	}
 }
 
+bool dae::InputManager::IsKeyDown(SDL_Keycode& key) const
+{
+	key = m_Key;
+	return m_IsKeyDown;
+}
+
+bool dae::InputManager::IsKeyUp(SDL_Keycode& key) const
+{
+	key = m_Key;
+	return m_IsKeyUp;
+}
+
+void dae::InputManager::AddCommand(Command* command, ControllerButton button)
+{
+	//Duplicate check
+	for (auto& com : m_pCommands)
+	{
+		if (typeid(*com) == typeid(*command) && com->GetButton() == button)
+		{
+			std::cout << "Duplicate Command >> " << typeid(*command).name() << std::endl;
+			delete command;
+			command = nullptr;
+			return;
+		}
+	}
+	m_pCommands.push_back(command);
+	m_pCommands.at(m_pCommands.size() - 1)->SetButton(button);
+}

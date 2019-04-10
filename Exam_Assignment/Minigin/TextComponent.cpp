@@ -34,11 +34,6 @@ void dae::TextComponent::Update(float& deltaTime)
 	}
 }
 
-void dae::TextComponent::Draw(float& deltaTime)
-{
-	UNREFERENCED_PARAMETER(deltaTime);
-}
-
 void dae::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;

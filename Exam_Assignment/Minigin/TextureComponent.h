@@ -23,6 +23,9 @@ namespace dae
 		std::shared_ptr<Texture2D>& GetTexture() { return m_spTexture; }
 		int2 GetSize() const { return m_size; }
 
+		/*void Initialize() override;*/
+		void Update(float& deltaTime) override;
+		/*void Draw(float& deltaTime) override;*/
 	private:
 		CompType m_Type = CompType::TEXTURECOMPONENT;
 		std::shared_ptr<Texture2D> m_spTexture{};

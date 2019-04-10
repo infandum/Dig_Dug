@@ -36,3 +36,8 @@ void dae::TextureComponent::SetTexture(std::shared_ptr<Texture2D> texture, int w
 		m_size.y = heigth;
 	}
 }
+
+void dae::TextureComponent::Update(float& deltaTime)
+{
+	UNREFERENCED_PARAMETER(deltaTime);
+}

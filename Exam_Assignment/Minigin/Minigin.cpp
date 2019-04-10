@@ -7,10 +7,11 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-#include "GameObject.h"
-#include "Scene.h"
-#include "Components.h"
-#include "Scenes.h"
+//#include "GameObject.h"
+//#include "Scene.h"
+//#include "Components.h"
+//#include "MapManager.h"
+#include "SceneLoader.h"
 
 
 void dae::Minigin::Initialize()
@@ -24,8 +25,8 @@ void dae::Minigin::Initialize()
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
-		640,
-		480,
+		448,
+		576,
 		SDL_WINDOW_OPENGL
 	);
 	if (window == nullptr) 
@@ -41,12 +42,7 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	
-	
-	
-	SceneManager::GetInstance().AddScene(std::shared_ptr<Scene>(new DemoScene()));
-	SceneManager::GetInstance().AddScene(std::shared_ptr<Scene>(new Level1()));
-	SceneManager::GetInstance().SetActive("Demo");
+	SceneLoader::GetInstance().InitScene(SceneList::LEVEL_1);
 }
 
 void dae::Minigin::Cleanup()

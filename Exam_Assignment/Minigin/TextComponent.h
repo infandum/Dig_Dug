@@ -22,9 +22,9 @@ namespace dae{
 
 		void SetText(const std::string& text);
 
-	protected:
+		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
-		void Draw(float& deltaTime) override;
+		/*void Draw(float& deltaTime) override;*/
 
 	private:
 		CompType m_Type = CompType::TEXTCOMPONENT;

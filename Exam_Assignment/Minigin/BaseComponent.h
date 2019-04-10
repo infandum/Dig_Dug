@@ -19,10 +19,9 @@ namespace dae
 		std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; }
 		CompType GetType() const { return m_Type; }
 
-	protected:
-		virtual void Initialize();
-		virtual void Update(float& deltaTime);
-		virtual void Draw(float& deltaTime);
+		//virtual void Initialize() = 0;
+		virtual void Update(float& deltaTime) = 0;
+		//virtual void Draw(float& deltaTime) = 0;
 
 		std::shared_ptr<GameObject> m_pGameObject{};
 	private:

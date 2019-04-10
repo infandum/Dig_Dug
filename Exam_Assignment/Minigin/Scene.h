@@ -6,13 +6,12 @@ namespace dae
 	class SceneObject;
 	class Scene
 	{
-		friend Scene& SceneManager::CreateScene(const std::string& name);
+		friend Scene;
 	public:
 		void Add(const std::shared_ptr<SceneObject>& object);
 		std::string GetName() const { return mName; }
 
-		
-		virtual void Initialize();
+		/*virtual void Initialize() = 0;*/
 		virtual void Update(float deltaTime);
 		virtual void Render() const;
 
@@ -22,11 +21,10 @@ namespace dae
 		Scene& operator=(const Scene& other) = delete;
 		Scene& operator=(Scene&& other) = delete;
 		
-	protected:
 		explicit Scene(const std::string& name);
 	private:
 		std::string mName{};
-		std::vector < std::shared_ptr<SceneObject>> mObjects{};
+		std::vector <std::shared_ptr<SceneObject>> mObjects{};
 
 		static unsigned int idCounter; 
 	};

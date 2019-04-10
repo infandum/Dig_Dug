@@ -19,9 +19,9 @@ namespace dae
 		RenderComponent() = default;
 		virtual ~RenderComponent() = default;
 
-
-	protected:
-		virtual void Draw(float& deltaTime);
+		/*void Initialize() override;*/
+		void Update(float& deltaTime) override;
+		/*void Draw(float& deltaTime) override;*/
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;

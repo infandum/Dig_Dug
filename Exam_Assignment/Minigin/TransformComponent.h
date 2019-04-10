@@ -7,6 +7,14 @@
 
 namespace dae
 {
+	enum class Direction
+	{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT
+	};
+
 	class TransformComponent final : public BaseComponent
 	{
 	public:
@@ -21,12 +29,21 @@ namespace dae
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(float x = 0, float y = 0, float z = 0);
 
-	protected:
+		glm::vec3 GetDirection() const { return m_Direction; }
+		void SetDirection(glm::vec3 & direction) { m_Direction = direction; }
+
+		bool MoveToTile(unsigned int x = 0, unsigned int y = 0);
+		bool isMoving = false;
+
+		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
-		void Draw(float& deltaTime) override;
+		/*void Draw(float& deltaTime) override;*/
 
 	private:
-		CompType m_Type = TRANSFROMCOMPONENT;
 		glm::vec3 m_Position;
+		glm::vec3 m_OffSet;
+		glm::vec3 m_Direction;
+
+		float m_Speed = 0.05f;
 	};
 }

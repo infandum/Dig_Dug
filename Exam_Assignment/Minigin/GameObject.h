@@ -20,7 +20,7 @@ namespace dae
 
 		static unsigned int GetObjectCount() { return m_NumberOfGameObjects; }
 
-		void SetName(std::string& name);
+		void SetName(std::string name);
 		std::string GetName() const { return m_Name; }
 
 		void AddComponent(BaseComponent* comp);

@@ -15,16 +15,17 @@ namespace dae
 		FPSComponent() = default;
 		virtual ~FPSComponent() = default;
 
-		int GetFramesPerSecond() const { return m_Fps; }
+		float GetFramesPerSecond() const { return m_Fps; }
 
 		static unsigned int GetTotalFrames() { return m_Frames; }
 
-	protected:
+		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
+		/*void Draw(float& deltaTime) override;*/
 
 	private:
 		CompType m_Type = CompType::FPSCOMPONENT;
-		int m_Fps = 0;
+		float m_Fps = 0;
 		int m_FpsCounter{};
 		float m_TotalTime{};
 	};
