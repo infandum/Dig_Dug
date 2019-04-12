@@ -82,8 +82,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_pPlayer->AddComponent(new InputComponent());
 		m_pPlayer->AddComponent(new TextureComponent());
 		m_pPlayer->GetComponent<TextureComponent>()->SetTexture("images/Player/Player.png");
-		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
-		m_pPlayer->GetComponent<TransformComponent>()->isMoving = true;
+		
+		m_pPlayer->GetComponent<TransformComponent>()->isStatic = false;
 		m_Scene->Add(m_pPlayer);
 		//map.SetPlayer(m_pPlayer);
 

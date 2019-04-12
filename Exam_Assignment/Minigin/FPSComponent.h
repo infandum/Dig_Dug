@@ -26,7 +26,6 @@ namespace dae
 	private:
 		CompType m_Type = CompType::FPSCOMPONENT;
 		float m_Fps = 0;
-		int m_FpsCounter{};
-		float m_TotalTime{};
+		float m_AccuTime{};
 	};
 }

@@ -4,15 +4,13 @@
 #include <thread>
 #include "InputManager.h"
 #include "SceneManager.h"
+#include "SceneLoader.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
-//#include "GameObject.h"
-//#include "Scene.h"
-//#include "Components.h"
-//#include "MapManager.h"
-#include "SceneLoader.h"
 
+
+extern const float g_MoveSpeed = 0.1f;
 
 void dae::Minigin::Initialize()
 {

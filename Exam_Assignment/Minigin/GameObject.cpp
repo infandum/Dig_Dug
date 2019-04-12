@@ -17,10 +17,10 @@ void dae::GameObject::Update(float deltaTime)
 	for (auto& component : m_pComponents)
 	{
 		component->Update(deltaTime);
-		if (component && typeid(*component) == typeid(TransformComponent) && !m_pTransformComponent)
+		if (component && typeid(*component) == typeid(TransformComponent) && m_pTransformComponent == nullptr)
 			m_pTransformComponent = static_cast<TransformComponent*>(component);
 
-		if (component && typeid(*component) == typeid(TextureComponent) && !m_pTextureComponent)
+		if (component && typeid(*component) == typeid(TextureComponent) && m_pTextureComponent == nullptr)
 			m_pTextureComponent = static_cast<TextureComponent*>(component);
 
 	}

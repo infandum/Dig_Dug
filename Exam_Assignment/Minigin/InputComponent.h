@@ -18,8 +18,8 @@ namespace dae {
 		InputComponent& operator=(InputComponent&& other) noexcept = delete;
 		InputComponent() = default;
 		virtual ~InputComponent() = default;
-		void KeyDown(SDL_Keycode key);
-		void KeyUp(SDL_Keycode key);
+		void KeyDown(SDL_Keycode key) const;
+		void KeyUp(SDL_Keycode key) const;
 
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;

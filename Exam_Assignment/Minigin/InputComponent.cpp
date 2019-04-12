@@ -1,12 +1,11 @@
 #include "MiniginPCH.h"
 #include "GameObject.h"
 #include "Components.h"
-//#include <SDL.h>
 #include "InputManager.h"
 
-void dae::InputComponent::KeyUp(SDL_Keycode key)
+void dae::InputComponent::KeyUp(SDL_Keycode key) const
 {
-	glm::vec3 dir = m_TransformComponent->GetDirection();
+	glm::vec3 dir = { 0.0f, 0.f, 0.f };
 	switch (key)
 	{
 	case SDLK_LEFT:
@@ -21,30 +20,33 @@ void dae::InputComponent::KeyUp(SDL_Keycode key)
 	case SDLK_DOWN:
 		m_TransformComponent->SetDirection(dir);
 		break;
+	default: ;
 	}
 }
 
-void dae::InputComponent::KeyDown(SDL_Keycode key)
+void dae::InputComponent::KeyDown(SDL_Keycode key) const
 {
-	glm::vec3 dir = { 0, 0, 0 };
+	glm::vec3 dir;
+	extern const float g_MoveSpeed;
 	switch (key)
 	{
 	case SDLK_LEFT:
-		dir = { -1, 0, 0 };
+		dir = { -g_MoveSpeed, 0, 0 };
 		m_TransformComponent->SetDirection(dir);
 		break;
 	case SDLK_RIGHT:
-		dir = { 1, 0, 0 };
+		dir = { g_MoveSpeed, 0, 0 };
 		m_TransformComponent->SetDirection(dir);
 		break;
 	case SDLK_UP:
-		dir = { 0, -1, 0 };
+		dir = { 0, -g_MoveSpeed, 0 };
 		m_TransformComponent->SetDirection(dir);
 		break;
 	case SDLK_DOWN:
-		dir = { 0, 1, 0 };
+		dir = { 0, g_MoveSpeed, 0 };
 		m_TransformComponent->SetDirection(dir);
 		break;
+	default: ;
 	}
 }
 
@@ -53,6 +55,7 @@ void dae::InputComponent::Update(float& deltaTime)
 	UNREFERENCED_PARAMETER(deltaTime);
 	if (!m_TransformComponent)
 		m_TransformComponent = GetGameObject()->GetComponent<TransformComponent>();
+
 	auto& input = InputManager::GetInstance();
 
 	SDL_Keycode key;

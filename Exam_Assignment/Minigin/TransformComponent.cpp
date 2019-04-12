@@ -1,99 +1,38 @@
 #include "MiniginPCH.h"
 #include "Components.h"
+#include <cmath>
+
+extern const float g_MoveSpeed;
 
 void dae::TransformComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	/*if (m_Position.x == 13 * 32)
-		isMoving = false;
-	if (m_Position.x == 0 * 32)
-		isMoving = false;
-	if (m_Position.x == 13 * 32)
-		isMoving = false;
-	if (m_Position.x == 13 * 32)
-		isMoving = false;*/
-	/*if (isMoving)
-	{ 
-		m_Position.x += ( m_OffSet.x * m_Speed ) * deltaTime;
-		m_Position.y += ( m_OffSet.y * m_Speed ) * deltaTime;
-	}*/
-
-	/*if (m_Direction.x != 0)
+	if(!isStatic)
 	{
-		m_Position.x += (deltaTime * m_Direction.x);
-	}
-	if (m_Direction.y != 0)
-	{
-		m_Position.y += (deltaTime * m_Direction.y);
-	}*/
+		glm::vec3 velocity{ 0 };
+		if (m_Direction.x != 0 || m_Direction.y != 0)
+			velocity = MoveDirection();
 
-	
-	glm::vec3 AdjustedVelocity = m_Direction;
-	//bool xAlligned = true;
-	//bool yAlligned = true;
-	//bool AdjustingY = false;
-	//bool AdjustingX = false;
-	//	// check allignment 
-	//	auto modulo = fmod(m_Position.y, 32);
-	//	if (modulo > 16)
-	//		modulo = 32 - modulo;
-	//	if (modulo > 2.f) {
-	//		yAlligned = false;
-	//		double intpart;
-	//		auto fracpart = modf(m_Position.y / 32, &intpart);
-	//		if (fracpart < 0.5) {
-	//			AdjustingY = true;
-	//			AdjustedVelocity.y = -1;
-	//			AdjustedVelocity.x = 0;
-	//		}
-	//		else {
-	//			AdjustedVelocity.y = 1;
-	//			AdjustedVelocity.x = 0;
-	//		}
 
-	//	}
+		double newPositionX = m_Position.x + round(deltaTime * velocity.x);
+		double newPositionY = m_Position.y + round(deltaTime * velocity.y);
 
-	//
-
-	////Check if able to turn
-	//	// check allignment 
-	//	modulo = fmod(m_Position.x, 32);
-	//	if (modulo > 16)
-	//		modulo = 32 - modulo;
-	//	if (modulo > 2.0f) {
-	//		xAlligned = false;
-	//		double intpart;
-	//		auto fracpart = modf(m_Position.x / 32, &intpart);
-	//		if (fracpart < 0.5) {
-	//			AdjustingX = true;
-	//			AdjustedVelocity.x = -1;
-	//			AdjustedVelocity.y = 0;
-	//		}
-	//		else {
-	//			AdjustedVelocity.x = 1;
-	//			AdjustedVelocity.y = 0;
-	//		}
-	//	}
-	//
-
-	//Boundary control
-	if(isMoving)
-	{
-		auto newPositionX = m_Position.x + (deltaTime * AdjustedVelocity.x);
-		auto newPositionY = m_Position.y + (deltaTime * AdjustedVelocity.y);
-		float MIN_POSITION_X = 0;
-		float MAX_POSITION_X = 448 - 32;
-		float MIN_POSITION_Y = (32 * (2));
-		float MAX_POSITION_Y = 576 - (32 + 32);
+		//BORDER CONTROL
+		const int MIN_POSITION_X = 0;
+		const int MAX_POSITION_X = 448 - 32;
+		const int MIN_POSITION_Y = 32;
+		const int MAX_POSITION_Y = 576 - (32 + 32);
 
 		if (newPositionX < MIN_POSITION_X)
 			newPositionX = MIN_POSITION_X;
-		if (newPositionX > MAX_POSITION_X)
+
+		if (newPositionX >= MAX_POSITION_X)
 			newPositionX = MAX_POSITION_X;
 		
 		if (newPositionY < MIN_POSITION_Y)
 			newPositionY = MIN_POSITION_Y;
-		if (newPositionY > MAX_POSITION_Y)
+
+		if (newPositionY >= MAX_POSITION_Y)
 			newPositionY = MAX_POSITION_Y;
 
 		m_Position = { newPositionX, newPositionY, m_Position.z };
@@ -106,9 +45,61 @@ void dae::TransformComponent::SetPosition(float x, float y, float z)
 }
 
 
+glm::vec3 dae::TransformComponent::MoveDirection()
+{
+	//TODO: Fix Minor freeze bug might be lag?
+	glm::vec3 velocity{ 0 };
+	if (m_Direction.x != 0)
+	{
+		//Check if object is Aligned with center of tile on the Y-axis
+		const auto modulo = fmod(round(m_Position.y), 32.0);
+		isYonTileCenter = true;
+		if (modulo > 1 && modulo < 31)
+			isYonTileCenter = false;
+		//IF not aligned first move object to aligned tile central Y-axis
+		//ELSE move to input direction
+		if (!isYonTileCenter)
+		{
+			if (modulo >= 16)
+				velocity.y = g_MoveSpeed;
+			else
+				velocity.y = -g_MoveSpeed;
+		}
+		else
+		{
+			velocity.x = m_Direction.x;
+			velocity.y = m_Direction.y;
+		}
+	}
+
+	if (m_Direction.y != 0)
+	{
+		//Check if object is Aligned with center of tile on the X-axis
+		const auto modulo = fmod(round(m_Position.x), 32.0);
+		//IF not aligned first move object to aligned tile central X-axis
+		//ELSE move to input direction
+		isXonTileCenter = true;
+		if (modulo > 1 && modulo < 31)
+			isXonTileCenter = false;
+		if (!isXonTileCenter)
+		{
+			if (modulo >= 16)
+				velocity.x = g_MoveSpeed;
+			else
+				velocity.x = -g_MoveSpeed;
+		}
+		else
+		{
+			velocity.x = m_Direction.x;
+			velocity.y = m_Direction.y;
+		}
+	}
+	return velocity;
+}
+
 bool dae::TransformComponent::MoveToTile(unsigned int x, unsigned int y)
 {
-	isMoving = true;
+	isStatic = true;
 
 	glm::vec3 newPos;
 	newPos.x = float(x) * 32;
@@ -127,7 +118,7 @@ bool dae::TransformComponent::MoveToTile(unsigned int x, unsigned int y)
 	if ((int(newPos.x) == int(m_Position.x) && newPos.y == m_Position.y)
 		/*||(m_Position.x <= 0 || m_Position.x >= 13*32 || m_Position.y <= 0 || m_Position.y >= 17 * 32)*/)
 	{
-		isMoving = false;  
+		isStatic = false;  
 		return true;
 	}
 	return false;

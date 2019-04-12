@@ -112,6 +112,12 @@
     <ClInclude Include="InputManager.h">
       <Filter>Managers\Input</Filter>
     </ClInclude>
+    <ClInclude Include="TileManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="TileComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp">
@@ -179,6 +185,12 @@
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="TileManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="TileComponent.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
