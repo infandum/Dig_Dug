@@ -42,6 +42,7 @@ namespace dae
 		std::vector<BaseComponent*> m_pComponents{};
 		TransformComponent* m_pTransformComponent;
 		TextureComponent* m_pTextureComponent;
+		CollisionComponent* m_pCollisionComponent;
 		TileComponent* m_pTileComponent;
 		static unsigned int m_NumberOfGameObjects;
 	};

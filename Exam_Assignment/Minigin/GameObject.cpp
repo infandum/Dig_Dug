@@ -6,7 +6,8 @@
 #include <complex>
 unsigned int dae::GameObject::m_NumberOfGameObjects = 0;
 
-dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureComponent(nullptr), m_pTileComponent(nullptr)
+dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureComponent(nullptr),
+                               m_pCollisionComponent(nullptr), m_pTileComponent(nullptr)
 {
 	++m_NumberOfGameObjects;
 }
@@ -22,8 +23,12 @@ void dae::GameObject::Update(float deltaTime)
 
 		if (component && typeid(*component) == typeid(TextureComponent) && m_pTextureComponent == nullptr)
 			m_pTextureComponent = static_cast<TextureComponent*>(component);
+
 		if (component && typeid(*component) == typeid(TileComponent) && m_pTileComponent == nullptr)
 			m_pTileComponent = static_cast<TileComponent*>(component);
+
+		if (component && typeid(*component) == typeid(CollisionComponent) && m_pCollisionComponent == nullptr)
+			m_pCollisionComponent = static_cast<CollisionComponent*>(component);
 	}
 }
 
@@ -40,26 +45,38 @@ void dae::GameObject::Render() const
 		{
 
 			int x = 32, y = 5;
-			auto ClosNZ = ResourceManager::GetInstance().GetTexture(10001);
-			SDL_QueryTexture(ClosNZ->GetSDLTexture(), nullptr, nullptr, &x, &y);
+			const auto Hwall = ResourceManager::GetInstance().GetTexture(10002);
+			SDL_QueryTexture(Hwall->GetSDLTexture(), nullptr, nullptr, &x, &y);
 
-			auto ClosEW = ResourceManager::GetInstance().GetTexture(10003);
-			SDL_QueryTexture(ClosEW->GetSDLTexture(), nullptr, nullptr, &y, &x);
+			const auto Vwall = ResourceManager::GetInstance().GetTexture(10004);
+			SDL_QueryTexture(Vwall->GetSDLTexture(), nullptr, nullptr, &y, &x);
 
-			if(m_pTileComponent->GetBorder(Direction::UP))
-				Renderer::GetInstance().RenderTexture(*ClosNZ, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 32.0f, 5.0f);
+			if(!m_pTileComponent->GetBorder(Direction::UP))
+				Renderer::GetInstance().RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 32.0f, 5.0f);
 			
 
-			if (m_pTileComponent->GetBorder(Direction::DOWN))
-				Renderer::GetInstance().RenderTexture(*ClosNZ, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y + 32 - 5, 32.0f, 5.0f);
+			if (!m_pTileComponent->GetBorder(Direction::DOWN))
+				Renderer::GetInstance().RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y + 32 - 5, 32.0f, 5.0f);
 			
 
-			if (m_pTileComponent->GetBorder(Direction::LEFT))
-				Renderer::GetInstance().RenderTexture(*ClosEW, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
+			if (!m_pTileComponent->GetBorder(Direction::LEFT))
+				Renderer::GetInstance().RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
 			
 
-			if (m_pTileComponent->GetBorder(Direction::RIGHT))
-				Renderer::GetInstance().RenderTexture(*ClosEW, m_pTransformComponent->GetPosition().x + 32 - 5, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
+			if (!m_pTileComponent->GetBorder(Direction::RIGHT))
+				Renderer::GetInstance().RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x + 32 - 5, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
+		}
+	}
+
+	if (m_pCollisionComponent != nullptr && m_pTransformComponent != nullptr)
+	{
+		if(m_pCollisionComponent->ShowCollisionBox())
+		{
+			int x = 32, y = 32;
+			const auto Collision = ResourceManager::GetInstance().GetTexture(10000);
+			SDL_QueryTexture(Collision->GetSDLTexture(), nullptr, nullptr, &x, &y);
+
+			Renderer::GetInstance().RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, (float)m_pCollisionComponent->GetSize().x, (float)m_pCollisionComponent->GetSize().y);
 		}
 	}
 }

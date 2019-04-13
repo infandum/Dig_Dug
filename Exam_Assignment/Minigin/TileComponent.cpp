@@ -1,6 +1,6 @@
 #include "MiniginPCH.h"
-#include "TileComponent.h"
 #include "GameObject.h"
+#include "Components.h"
 #include "TextureComponent.h"
 #include "TileManager.h"
 #include "ResourceManager.h"

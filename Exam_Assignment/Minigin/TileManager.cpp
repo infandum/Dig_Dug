@@ -1,7 +1,9 @@
 #include "MiniginPCH.h"
 #include "TileManager.h"
 #include "GameObject.h"
+
 extern const float g_MoveSpeed;
+
 void dae::TileManager::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
@@ -21,21 +23,31 @@ void dae::TileManager::Update(float deltaTime)
 				m_StartTile->SetTileState(TileState::DUG);
 		}
 
-		if (modX >= 4 && modX <= 28)
+		if (modX >= 6 && modX <= 29)
 		{
 			x = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x / 32));
+			//if(modX < 16)
+			//	//TODO: PLACE INNER WALL RIGHT
+			//else
+			//	//TODO: PLACE INNER WALL LEFT
+			
 		}
 		
-		if (modY >= 4 && modX <= 28)
+		if (modY >= 3 && modX <= 29)
 		{
 			y = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y / 32));
+			//if(modX < 16)
+			//	//TODO: PLACE INNER WALL DOWN
+			//else
+			//	//TODO: PLACE INNER WALL UP
 		}
 
 
 		const auto tile = GetTile(x, y);
-		if (tile != nullptr)
+		if (tile != nullptr){
 			if (tile != m_StartTile)
 			{		
+				//Check if Tiles are adjected
 				if(m_StartTile->GetPositionIndex().x + 1 == tile->GetPositionIndex().x || m_StartTile->GetPositionIndex().x - 1 == tile->GetPositionIndex().x
 				|| m_StartTile->GetPositionIndex().y + 1 == tile->GetPositionIndex().y || m_StartTile->GetPositionIndex().y - 1 == tile->GetPositionIndex().y)
 				{
@@ -46,6 +58,7 @@ void dae::TileManager::Update(float deltaTime)
 				}
 				m_StartTile = tile;
 			}
+		}
 	}
 }
 
@@ -82,25 +95,25 @@ void dae::TileManager::DigConnection(TileComponent* start, TileComponent* end, D
 	case Direction::UP:
 		start->SetBorder(Direction::UP, true);
 		end->SetBorder(Direction::DOWN, true);
-		std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::UP) << "," << static_cast<int>(Direction::DOWN) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
+		//std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::UP) << "," << static_cast<int>(Direction::DOWN) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
 
 		break;
 	case Direction::DOWN:
 		start->SetBorder(Direction::DOWN, true);
 		end->SetBorder(Direction::UP, true);
-		std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::DOWN) << "," << static_cast<int>(Direction::UP) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
+		//std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::DOWN) << "," << static_cast<int>(Direction::UP) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
 
 		break;
 	case Direction::LEFT:
 		start->SetBorder(Direction::LEFT, true);
 		end->SetBorder(Direction::RIGHT, true);
-		std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::LEFT) << "," << static_cast<int>(Direction::RIGHT) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
+		//std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::LEFT) << "," << static_cast<int>(Direction::RIGHT) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
 
 		break;
 	case Direction::RIGHT:
 		start->SetBorder(Direction::RIGHT, true);
 		end->SetBorder(Direction::LEFT, true);
-		std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::RIGHT) << "," << static_cast<int>(Direction::LEFT) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
+		//std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::RIGHT) << "," << static_cast<int>(Direction::LEFT) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
 
 		break;
 	}

@@ -18,7 +18,7 @@ namespace dae
 
 		void SetTexture(std::shared_ptr<Texture2D> texture, int width = { 0 }, int heigth = { 0 });
 		std::shared_ptr<Texture2D>& GetTexture() { return m_spTexture; }
-		int2 GetSize() const { return m_size; }
+		iVector2 GetSize() const { return m_Size; }
 
 	protected:
 		/*void Initialize() override;*/
@@ -28,6 +28,6 @@ namespace dae
 	private:
 		std::shared_ptr<Texture2D> m_spTexture{};
 
-		int2 m_size;
+		iVector2 m_Size {};
 	};
 }

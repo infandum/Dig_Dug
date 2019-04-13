@@ -28,11 +28,11 @@ namespace dae
 		void SetTileState(TileState state);
 		TileState GetTileState() const { return m_TileState; }
 
-		int2 GetPositionIndex() const { return m_TileIndex; }
+		iVector2 GetPositionIndex() const { return m_TileIndex; }
 
 		void SetBorder(Direction dir, bool isCrossed);
 		bool GetBorder(Direction dir) { return m_IsBorderCrossed[static_cast<int>(dir)]; }
-		bool m_IsBorderCrossed[4];
+		
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
@@ -41,7 +41,7 @@ namespace dae
 	private:
 		TileState m_TileState = TileState::EMPITY;
 		bool m_NeedsUpdate = false;
-		
-		int2 m_TileIndex{0};
+		bool m_IsBorderCrossed[4]{};
+		iVector2 m_TileIndex{};
 	};
 }

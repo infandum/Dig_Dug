@@ -30,7 +30,7 @@ namespace dae
 		void SetPosition(float x = 0, float y = 0, float z = 0);
 
 		glm::vec3 GetVelocity() const { return m_Velocity; }
-		void SetVelocity(glm::vec3 & direction) { m_Velocity = direction; }
+		void SetVelocity(glm::vec3 direction) { m_Velocity = direction; }
 
 		bool GetIsStatic() const { return m_IsStatic; }
 		void SetIsStatic(bool isStatic) { m_IsStatic = isStatic; }

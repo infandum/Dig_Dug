@@ -1,5 +1,6 @@
 #include "MiniginPCH.h"
 #include "Components.h"
+#include "GameObject.h"
 #include <cmath>
 
 extern const float g_MoveSpeed;
@@ -14,13 +15,8 @@ void dae::TransformComponent::Update(float& deltaTime)
 			velocity = MoveDirection();
 		if(m_IsMoving)
 		{
-
 			double newPositionX = m_Position.x + round(deltaTime * velocity.x);
 			double newPositionY = m_Position.y + round(deltaTime * velocity.y);
-
-			/*const auto modX = round(newPositionX / 32);
-			const auto modY = round(newPositionY / 32);
-			std::cout << std::to_string(modX) << " , " << std::to_string(modY) << std::endl;*/
 
 			//BORDER CONTROL
 			const int MIN_POSITION_X = 0;
@@ -40,7 +36,11 @@ void dae::TransformComponent::Update(float& deltaTime)
 			if (newPositionY >= MAX_POSITION_Y)
 				newPositionY = MAX_POSITION_Y;
 
+			
 			m_Position = { newPositionX, newPositionY, m_Position.z };
+
+			/*std::cout << newPositionX << ", " << newPositionY << '\n';
+			std::cout << round(newPositionX / 32 ) * 32 << ", " << round(newPositionY / 32) * 32 << '\n';*/
 			m_IsMoving = false;
 		}
 	}

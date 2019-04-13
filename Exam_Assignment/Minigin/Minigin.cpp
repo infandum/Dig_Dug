@@ -9,9 +9,11 @@
 #include "ResourceManager.h"
 #include <SDL.h>
 #include "TileManager.h"
+#include "CollisionManager.h"
 
 
-extern const float g_MoveSpeed = 0.1f;
+extern const float g_MoveSpeed = 0.09f;
+extern const float g_CollisionPadding = 1.0f;
 
 void dae::Minigin::Initialize()
 {
@@ -64,6 +66,8 @@ void dae::Minigin::Run()
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 		auto& tileManager = TileManager::GetInstance();
+		auto& collision = CollisionManager::GetInstance();
+		collision.ShowCollisionBox(true);
 
 		auto doContinue = true;
 		auto lag{ 0.0f };
@@ -80,6 +84,7 @@ void dae::Minigin::Run()
 			{
 				sceneManager.Update(float(deltatime));
 				tileManager.Update(float(deltatime));
+				collision.Update(float(deltatime));
 				lag -= perUpdateTime;
 			}
 			renderer.Render();

@@ -100,13 +100,24 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		m_pPlayer = std::make_shared<GameObject>();
 		m_pPlayer->SetName("Player");
+		m_pPlayer->AddComponent(new CollisionComponent());
 		m_pPlayer->AddComponent(new TransformComponent());
 		m_pPlayer->AddComponent(new InputComponent());
-		m_pPlayer->AddComponent(new TextureComponent());
+		m_pPlayer->AddComponent(new TextureComponent());		
 		m_pPlayer->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(02));
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
+		//m_pPlayer->GetComponent<CollisionComponent>()->ShowCollisionBox(true);
 		m_Scene->Add(m_pPlayer);
+
+		go = std::make_shared<GameObject>();
+		go->SetName("Rock");
+		go->AddComponent(new CollisionComponent());
+		go->AddComponent(new TransformComponent());
+		go->AddComponent(new TextureComponent());	
+		go->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(12));
+		go->GetComponent<TransformComponent>()->SetPosition(32*4, 32*6);
+		m_Scene->Add(go);
 		
 		tiles.SetPlayer(m_pPlayer);
 		tiles.CreateTunnel(12, 12, Direction::UP, 2);

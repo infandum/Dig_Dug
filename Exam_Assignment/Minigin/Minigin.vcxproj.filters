@@ -118,6 +118,12 @@
     <ClInclude Include="TileComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp">
@@ -190,6 +196,12 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="TileComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
