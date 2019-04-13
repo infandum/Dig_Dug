@@ -30,18 +30,48 @@ void dae::ResourceManager::Init(std::string&& dataPath)
 	}
 }
 
-std::shared_ptr<dae::Texture2D> dae::ResourceManager::LoadTexture(const std::string& file)
+std::shared_ptr<dae::Texture2D> dae::ResourceManager::LoadTexture(const std::string& file, unsigned int id)
 {
+	UNREFERENCED_PARAMETER(id);
+	//TODO: ADD ID MATCH TO TEXTURE LOADING
 	std::string fullPath = mDataPath + file;
 	SDL_Texture *texture = IMG_LoadTexture(Renderer::GetInstance().GetSDLRenderer(), fullPath.c_str());
 	if (texture == nullptr) 
 	{
 		throw std::runtime_error(std::string("Failed to load texture: ") + SDL_GetError());
 	}
-	return std::make_shared<Texture2D>(texture);
+	auto pTex = std::make_shared<Texture2D>(texture);
+	//m_pLoadedTextures.push_back(pTex);
+	for (std::pair<UINT, std::shared_ptr<Texture2D>> materialEntry : m_pLoadedTextures)
+	{
+		if (materialEntry.first == id)
+		{
+			std::cout << "ResourceManager::LoadTexture() > id %i is already used! " << id << '\n';
+			return nullptr;
+		}
+
+		if (materialEntry.second == pTex)
+		{
+			std::cout << "ResourceManager::LoadTexture() > Texture is already added to the manager (ID %i)! " << id << '\n';
+			return nullptr;
+		}
+	}
+	m_pLoadedTextures[id] = pTex;
+	return pTex;
 }
 
-std::shared_ptr<dae::Font> dae::ResourceManager::LoadFont(const std::string& file, unsigned int size)
+std::shared_ptr<dae::Font> dae::ResourceManager::LoadFont(const std::string& file, unsigned int size) const
 {
 	return std::make_shared<Font>(mDataPath + file, size);
+}
+
+std::shared_ptr<dae::Texture2D> dae::ResourceManager::GetTexture(UINT id)
+{
+	const auto it = m_pLoadedTextures.find(id);
+	if (it == m_pLoadedTextures.end())
+	{
+		std::cout << "ResourceManager::LoadTexture() > Material with ID %i not found! " << id << '\n';
+		return nullptr;
+	}
+	return it->second;
 }

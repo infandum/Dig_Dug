@@ -8,6 +8,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include <SDL.h>
+#include "TileManager.h"
 
 
 extern const float g_MoveSpeed = 0.1f;
@@ -62,6 +63,7 @@ void dae::Minigin::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
+		auto& tileManager = TileManager::GetInstance();
 
 		auto doContinue = true;
 		auto lag{ 0.0f };
@@ -70,13 +72,14 @@ void dae::Minigin::Run()
 		while (doContinue)
 		{
 			const auto currentTime = GetCurrentTime();
-			const auto elapsedTime = currentTime - previousTime;
+			const auto deltatime = currentTime - previousTime;
 			previousTime = currentTime;
-			lag += elapsedTime;
+			lag += deltatime;
 			doContinue = input.ProcessInput();
 			while (lag >= perUpdateTime)
 			{
-				sceneManager.Update(float(elapsedTime));
+				sceneManager.Update(float(deltatime));
+				tileManager.Update(float(deltatime));
 				lag -= perUpdateTime;
 			}
 			renderer.Render();

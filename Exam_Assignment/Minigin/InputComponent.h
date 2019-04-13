@@ -21,9 +21,11 @@ namespace dae {
 		void KeyDown(SDL_Keycode key) const;
 		void KeyUp(SDL_Keycode key) const;
 
+	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
+
 	private:
 		TransformComponent* m_TransformComponent{};
 		SDL_Event m_Event;

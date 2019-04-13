@@ -19,12 +19,12 @@ namespace dae
 
 		static unsigned int GetTotalFrames() { return m_Frames; }
 
+	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
 
 	private:
-		CompType m_Type = CompType::FPSCOMPONENT;
 		float m_Fps = 0;
 		float m_AccuTime{};
 	};

@@ -7,35 +7,42 @@ extern const float g_MoveSpeed;
 void dae::TransformComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	if(!isStatic)
+	if(!m_IsStatic)
 	{
 		glm::vec3 velocity{ 0 };
-		if (m_Direction.x != 0 || m_Direction.y != 0)
+		if (m_Velocity.x != 0 || m_Velocity.y != 0)
 			velocity = MoveDirection();
+		if(m_IsMoving)
+		{
 
+			double newPositionX = m_Position.x + round(deltaTime * velocity.x);
+			double newPositionY = m_Position.y + round(deltaTime * velocity.y);
 
-		double newPositionX = m_Position.x + round(deltaTime * velocity.x);
-		double newPositionY = m_Position.y + round(deltaTime * velocity.y);
+			/*const auto modX = round(newPositionX / 32);
+			const auto modY = round(newPositionY / 32);
+			std::cout << std::to_string(modX) << " , " << std::to_string(modY) << std::endl;*/
 
-		//BORDER CONTROL
-		const int MIN_POSITION_X = 0;
-		const int MAX_POSITION_X = 448 - 32;
-		const int MIN_POSITION_Y = 32;
-		const int MAX_POSITION_Y = 576 - (32 + 32);
+			//BORDER CONTROL
+			const int MIN_POSITION_X = 0;
+			const int MAX_POSITION_X = 448 - 32;
+			const int MIN_POSITION_Y = 32;
+			const int MAX_POSITION_Y = 576 - (32 + 32);
 
-		if (newPositionX < MIN_POSITION_X)
-			newPositionX = MIN_POSITION_X;
+			if (newPositionX < MIN_POSITION_X)
+				newPositionX = MIN_POSITION_X;
 
-		if (newPositionX >= MAX_POSITION_X)
-			newPositionX = MAX_POSITION_X;
-		
-		if (newPositionY < MIN_POSITION_Y)
-			newPositionY = MIN_POSITION_Y;
+			if (newPositionX >= MAX_POSITION_X)
+				newPositionX = MAX_POSITION_X;
+			
+			if (newPositionY < MIN_POSITION_Y)
+				newPositionY = MIN_POSITION_Y;
 
-		if (newPositionY >= MAX_POSITION_Y)
-			newPositionY = MAX_POSITION_Y;
+			if (newPositionY >= MAX_POSITION_Y)
+				newPositionY = MAX_POSITION_Y;
 
-		m_Position = { newPositionX, newPositionY, m_Position.z };
+			m_Position = { newPositionX, newPositionY, m_Position.z };
+			m_IsMoving = false;
+		}
 	}
 }
 
@@ -49,7 +56,8 @@ glm::vec3 dae::TransformComponent::MoveDirection()
 {
 	//TODO: Fix Minor freeze bug might be lag?
 	glm::vec3 velocity{ 0 };
-	if (m_Direction.x != 0)
+	m_IsMoving = true;
+	if (m_Velocity.x != 0)
 	{
 		//Check if object is Aligned with center of tile on the Y-axis
 		const auto modulo = fmod(round(m_Position.y), 32.0);
@@ -67,12 +75,12 @@ glm::vec3 dae::TransformComponent::MoveDirection()
 		}
 		else
 		{
-			velocity.x = m_Direction.x;
-			velocity.y = m_Direction.y;
+			velocity.x = m_Velocity.x;
+			velocity.y = m_Velocity.y;
 		}
 	}
 
-	if (m_Direction.y != 0)
+	if (m_Velocity.y != 0)
 	{
 		//Check if object is Aligned with center of tile on the X-axis
 		const auto modulo = fmod(round(m_Position.x), 32.0);
@@ -90,36 +98,51 @@ glm::vec3 dae::TransformComponent::MoveDirection()
 		}
 		else
 		{
-			velocity.x = m_Direction.x;
-			velocity.y = m_Direction.y;
+			velocity.x = m_Velocity.x;
+			velocity.y = m_Velocity.y;
 		}
 	}
 	return velocity;
 }
 
-bool dae::TransformComponent::MoveToTile(unsigned int x, unsigned int y)
+dae::Direction dae::TransformComponent::DirectionFromVelocity() const
 {
-	isStatic = true;
+	if (m_Velocity == glm::vec3{ 0, -g_MoveSpeed, 0 })
+		return Direction::UP;
 
+	if (m_Velocity == glm::vec3{ 0, g_MoveSpeed, 0 })
+		return Direction::DOWN;
+
+	if (m_Velocity == glm::vec3{ -g_MoveSpeed, 0, 0 })
+		return Direction::LEFT;
+
+	if (m_Velocity == glm::vec3{ g_MoveSpeed, 0, 0 })
+		return Direction::RIGHT;
+
+	return {};
+}
+
+glm::vec3 dae::TransformComponent::MoveToTile(unsigned int x, unsigned int y, bool canDig)
+{
+	glm::vec3 velocity{ 0 };
+	if(canDig)
+	{
+		m_IsMoving = true;
+
+	
 	glm::vec3 newPos;
 	newPos.x = float(x) * 32;
 	newPos.y = float(y) * 32;
 	m_OffSet = glm::vec3(0, 0, 0);
 
 	if (newPos.x > m_Position.y)
-		m_OffSet.x = 1;
+		velocity.x = g_MoveSpeed;
 	if (newPos.x < m_Position.y)
-		m_OffSet.x = -1;
+		velocity.x = -g_MoveSpeed;
 	if (newPos.y > m_Position.y)
-		m_OffSet.y = 1;
+		velocity.y = g_MoveSpeed;
 	if (newPos.x < m_Position.y)
-		m_OffSet.y = -1;
-
-	if ((int(newPos.x) == int(m_Position.x) && newPos.y == m_Position.y)
-		/*||(m_Position.x <= 0 || m_Position.x >= 13*32 || m_Position.y <= 0 || m_Position.y >= 17 * 32)*/)
-	{
-		isStatic = false;  
-		return true;
+		velocity.y = -g_MoveSpeed;
 	}
-	return false;
+	return velocity;
 }

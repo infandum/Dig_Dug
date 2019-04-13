@@ -5,6 +5,8 @@
 #include "RenderComponent.h"
 #include "TextureComponent.h"
 #include "TransformComponent.h"
+#include "InputComponent.h"
+#include "TileComponent.h"
 
 //Sub Components
 #include "TextComponent.h"

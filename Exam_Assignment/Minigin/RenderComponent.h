@@ -19,6 +19,7 @@ namespace dae
 		RenderComponent() = default;
 		virtual ~RenderComponent() = default;
 
+	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
@@ -28,6 +29,5 @@ namespace dae
 
 		SDL_Renderer* GetSDLRenderer() const { return mRenderer; }
 	private:
-		CompType m_Type = CompType::RENDERCOMPONENT;
 	};
 }
