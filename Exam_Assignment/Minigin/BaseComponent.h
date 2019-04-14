@@ -1,5 +1,4 @@
 #pragma once
-#include "DataStructs.h"
 
 namespace dae
 {
@@ -17,7 +16,6 @@ namespace dae
 		virtual ~BaseComponent() = default;
 
 		std::shared_ptr<GameObject> GetGameObject() const { return m_pGameObject; }
-		//CompType GetType() const { return m_Type; }
 
 	protected:
 		//virtual void Initialize() = 0;
@@ -25,7 +23,5 @@ namespace dae
 		//virtual void Draw(float& deltaTime) = 0;
 
 		std::shared_ptr<GameObject> m_pGameObject{};
-	private:
-		//CompType m_Type = CompType::BASECOMPONENT;
 	};
 }

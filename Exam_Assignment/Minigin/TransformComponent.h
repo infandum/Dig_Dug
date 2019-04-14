@@ -7,13 +7,7 @@
 
 namespace dae
 {
-	enum class Direction
-	{
-		UP		= 0,
-		DOWN	= 1,
-		LEFT	= 2,
-		RIGHT	= 3
-	};
+
 
 	class TransformComponent final : public BaseComponent
 	{
@@ -23,7 +17,8 @@ namespace dae
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
-		explicit TransformComponent(float x = 0, float y = 0, float z = 0) : m_Position(x, y, z) {};
+		TransformComponent();
+		TransformComponent(float x , float y , float z = 0);
 		virtual ~TransformComponent() = default;
 
 		const glm::vec3& GetPosition() const { return m_Position; }
@@ -33,7 +28,7 @@ namespace dae
 		void SetVelocity(glm::vec3 direction) { m_Velocity = direction; }
 
 		bool GetIsStatic() const { return m_IsStatic; }
-		void SetIsStatic(bool isStatic) { m_IsStatic = isStatic; }
+		void SetIsStatic(const bool isStatic) { m_IsStatic = isStatic; }
 
 		bool IsCentered() const { return isXonTileCenter && isYonTileCenter; }
 		
@@ -51,13 +46,11 @@ namespace dae
 	private:
 		bool m_IsMoving = false;
 		bool m_IsStatic = true;
-		glm::vec3 m_Position;
-		glm::vec3 m_OffSet;
-		glm::vec3 m_Velocity;
+		glm::vec3 m_Position {};
+		glm::vec3 m_OffSet {};
+		glm::vec3 m_Velocity {};
 
 		bool isXonTileCenter = true;
 		bool isYonTileCenter = true;
-
-		float m_Speed = 0.05f;
 	};
 }

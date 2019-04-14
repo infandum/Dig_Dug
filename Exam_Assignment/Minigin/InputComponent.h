@@ -4,10 +4,6 @@
 
 
 namespace dae {
-	enum class KeyBord
-	{
-		
-	};
 	class TransformComponent;
 	class InputComponent final : public BaseComponent
 	{
@@ -27,8 +23,8 @@ namespace dae {
 		/*void Draw(float& deltaTime) override;*/
 
 	private:
-		TransformComponent* m_TransformComponent{};
-		SDL_Event m_Event;
+		std::shared_ptr<TransformComponent> m_TransformComponent{};
+		/*SDL_Event m_Event{};*/
 	};
 
 }

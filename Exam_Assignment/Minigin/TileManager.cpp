@@ -7,62 +7,67 @@ extern const float g_MoveSpeed;
 void dae::TileManager::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	const auto modX = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x), 32.0);
-	const auto modY = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y), 32.0);
-
-	if (m_pPlayer->GetComponent<TransformComponent>()->IsCentered())
+	double modX = 0.0f;
+	double modY = 0.0f;
+	if(m_pPlayer)
 	{
-		int x = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x / 32.0f));
-		int y = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y / 32.0f));
-
-		if(m_StartTile == nullptr)
-		{ 
-			m_StartTile = GetTile(x, y);
-			//Dig out starting tile if player starts underground
-			if(m_StartTile->GetTileState() == TileState::DIRT)
-				m_StartTile->SetTileState(TileState::DUG);
-		}
-
-		if (modX >= 6 && modX <= 29)
+		modX = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x), 32.0);
+		modY = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y), 32.0);
+	
+		if (m_pPlayer->GetComponent<TransformComponent>()->IsCentered())
 		{
-			x = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x / 32));
-			//if(modX < 16)
-			//	//TODO: PLACE INNER WALL RIGHT
-			//else
-			//	//TODO: PLACE INNER WALL LEFT
+			int x = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x / 32.0f));
+			int y = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y / 32.0f));
+
+			if(m_StartTile == nullptr)
+			{ 
+				m_StartTile = GetTile(x, y);
+				//Dig out starting tile if player starts underground
+				if(m_StartTile->GetTileState() == TileState::DIRT)
+					m_StartTile->SetTileState(TileState::DUG);
+			}
+
+			if (modX >= 6 && modX <= 29)
+			{
+				x = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x / 32));
+				//if(modX < 16)
+				//	//TODO: PLACE INNER WALL RIGHT
+				//else
+				//	//TODO: PLACE INNER WALL LEFT
+				
+			}
 			
-		}
-		
-		if (modY >= 3 && modX <= 29)
-		{
-			y = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y / 32));
-			//if(modX < 16)
-			//	//TODO: PLACE INNER WALL DOWN
-			//else
-			//	//TODO: PLACE INNER WALL UP
-		}
+			if (modY >= 3 && modX <= 29)
+			{
+				y = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y / 32));
+				//if(modX < 16)
+				//	//TODO: PLACE INNER WALL DOWN
+				//else
+				//	//TODO: PLACE INNER WALL UP
+			}
 
 
-		const auto tile = GetTile(x, y);
-		if (tile != nullptr){
-			if (tile != m_StartTile)
-			{		
-				//Check if Tiles are adjected
-				if(m_StartTile->GetPositionIndex().x + 1 == tile->GetPositionIndex().x || m_StartTile->GetPositionIndex().x - 1 == tile->GetPositionIndex().x
-				|| m_StartTile->GetPositionIndex().y + 1 == tile->GetPositionIndex().y || m_StartTile->GetPositionIndex().y - 1 == tile->GetPositionIndex().y)
-				{
-					const Direction dir = m_pPlayer->GetComponent<TransformComponent>()->DirectionFromVelocity();
-					DigConnection(m_StartTile, tile, dir);
-					if(GetTile(x, y)->GetTileState() != TileState::EMPITY)
-						GetTile(x, y)->SetTileState(TileState::DUG);
+			const auto tile = GetTile(x, y);
+			if (tile != nullptr){
+				if (tile != m_StartTile)
+				{		
+					//Check if Tiles are adjected
+					if(m_StartTile->GetPositionIndex().x + 1 == tile->GetPositionIndex().x || m_StartTile->GetPositionIndex().x - 1 == tile->GetPositionIndex().x
+					|| m_StartTile->GetPositionIndex().y + 1 == tile->GetPositionIndex().y || m_StartTile->GetPositionIndex().y - 1 == tile->GetPositionIndex().y)
+					{
+						const Direction dir = m_pPlayer->GetComponent<TransformComponent>()->DirectionFromVelocity();
+						DigConnection(m_StartTile, tile, dir);
+						if(GetTile(x, y)->GetTileState() != TileState::EMPITY)
+							GetTile(x, y)->SetTileState(TileState::DUG);
+					}
+					m_StartTile = tile;
 				}
-				m_StartTile = tile;
 			}
 		}
 	}
 }
 
-void dae::TileManager::AddTile(TileComponent* tile)
+void dae::TileManager::AddTile(std::shared_ptr<TileComponent> tile)
 {
 	for (auto& component : m_pTileComponents)
 	{
@@ -75,7 +80,7 @@ void dae::TileManager::AddTile(TileComponent* tile)
 	m_pTileComponents.push_back(tile);
 }
 
-dae::TileComponent* dae::TileManager::GetTile(int x, int y)
+std::shared_ptr<dae::TileComponent> dae::TileManager::GetTile(int x, int y)
 {
 	for (auto& component : m_pTileComponents)
 	{
@@ -87,7 +92,7 @@ dae::TileComponent* dae::TileManager::GetTile(int x, int y)
 	return nullptr;
 }
 
-void dae::TileManager::DigConnection(TileComponent* start, TileComponent* end, Direction dir)
+void dae::TileManager::DigConnection(std::shared_ptr<TileComponent> start, std::shared_ptr<TileComponent> end, Direction dir)
 {
 
 	switch (dir)
@@ -133,7 +138,7 @@ void dae::TileManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int d
 	tile->SetTileState(TileState::DUG);
 	for(auto i = 0; i < distance; ++i)
 	{
-		TileComponent* nextTile = nullptr;
+		std::shared_ptr<TileComponent> nextTile = nullptr;
 		switch (dir)
 		{
 		case Direction::UP:

@@ -20,11 +20,14 @@
     <Filter Include="Objects">
       <UniqueIdentifier>{b5fb3a28-b1b5-4795-876d-e6eea6efd7c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Managers\Scenes">
-      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Managers\Input">
       <UniqueIdentifier>{4c81c308-e0e5-4eb1-8b27-9079bedc8971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Input\Commands">
+      <UniqueIdentifier>{7d4817d5-174e-446d-976c-4a719984bad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Scene">
+      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,9 +82,6 @@
     <ClInclude Include="RenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Content</Filter>
-    </ClInclude>
     <ClInclude Include="TextComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -89,7 +89,7 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Managers\Scenes</Filter>
+      <Filter>Managers\Scene</Filter>
     </ClInclude>
     <ClInclude Include="SceneObject.h">
       <Filter>Objects</Filter>
@@ -98,16 +98,13 @@
       <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="SceneLoader.h">
-      <Filter>Managers\Scenes</Filter>
+      <Filter>Managers\Scene</Filter>
     </ClInclude>
     <ClInclude Include="InputComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Managers\Input</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Managers\Scenes</Filter>
+      <Filter>Managers\Scene</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Managers\Input</Filter>
@@ -123,6 +120,24 @@
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Managers\Input\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Managers\Input\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackCommand.h">
+      <Filter>Managers\Input\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCommand.h">
+      <Filter>Managers\Input\Commands</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +180,6 @@
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Content</Filter>
-    </ClCompile>
     <ClCompile Include="TextComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -175,19 +187,19 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Managers\Scenes</Filter>
+      <Filter>Managers\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="SceneLoader.cpp">
-      <Filter>Managers\Scenes</Filter>
+      <Filter>Managers\Scene</Filter>
     </ClCompile>
     <ClCompile Include="InputComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>Managers\Scenes</Filter>
+      <Filter>Managers\Scene</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers\Input</Filter>
@@ -203,6 +215,18 @@
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackCommand.cpp">
+      <Filter>Managers\Input\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCommand.cpp">
+      <Filter>Managers\Input\Commands</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

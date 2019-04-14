@@ -19,16 +19,16 @@ void dae::GameObject::Update(float deltaTime)
 	{
 		component->Update(deltaTime);
 		if (component && typeid(*component) == typeid(TransformComponent) && m_pTransformComponent == nullptr)
-			m_pTransformComponent = static_cast<TransformComponent*>(component);
+			m_pTransformComponent = std::static_pointer_cast<TransformComponent>(component);
 
 		if (component && typeid(*component) == typeid(TextureComponent) && m_pTextureComponent == nullptr)
-			m_pTextureComponent = static_cast<TextureComponent*>(component);
+			m_pTextureComponent = std::static_pointer_cast<TextureComponent>(component);
 
 		if (component && typeid(*component) == typeid(TileComponent) && m_pTileComponent == nullptr)
-			m_pTileComponent = static_cast<TileComponent*>(component);
+			m_pTileComponent = std::static_pointer_cast<TileComponent>(component);
 
 		if (component && typeid(*component) == typeid(CollisionComponent) && m_pCollisionComponent == nullptr)
-			m_pCollisionComponent = static_cast<CollisionComponent*>(component);
+			m_pCollisionComponent = std::static_pointer_cast<CollisionComponent>(component);;
 	}
 }
 
@@ -40,10 +40,8 @@ void dae::GameObject::Render() const
 	
 	if (m_pTileComponent != nullptr && m_pTransformComponent != nullptr)
 	{
-
 		if (m_pTileComponent->GetTileState() == TileState::DUG)
 		{
-
 			int x = 32, y = 5;
 			const auto Hwall = ResourceManager::GetInstance().GetTexture(10002);
 			SDL_QueryTexture(Hwall->GetSDLTexture(), nullptr, nullptr, &x, &y);
@@ -86,7 +84,7 @@ void dae::GameObject::SetName(std::string name)
 	m_Name = name;
 }
 
-void dae::GameObject::AddComponent(BaseComponent* comp)
+void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> comp)
 {
 	for (auto& component : m_pComponents)
 	{ 
@@ -102,7 +100,7 @@ void dae::GameObject::AddComponent(BaseComponent* comp)
 	comp->m_pGameObject = owner;
 }
 
-void dae::GameObject::RemoveComponent(BaseComponent* pComp)
+void dae::GameObject::RemoveComponent(std::shared_ptr<BaseComponent> pComp)
 {
 	const auto comp = std::find(m_pComponents.begin(), m_pComponents.end(), pComp);
 	if (comp == m_pComponents.end())

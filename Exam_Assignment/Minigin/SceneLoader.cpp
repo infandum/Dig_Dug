@@ -7,12 +7,14 @@
 #include "ResourceManager.h"
 #include "Scene.h"
 #include "TileManager.h"
+#include "InputManager.h"
+#include "Commands.h"
 
 void dae::SceneLoader::InitScene(dae::SceneList scene)
 {
 	auto& tiles = TileManager::GetInstance();
 	auto& resource = ResourceManager::GetInstance();
-	
+
 	std::shared_ptr<GameObject> go;
 	std::shared_ptr<Font> font;
 	SDL_Color color;
@@ -26,33 +28,32 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 			resource.LoadTexture("images/Player/Player.png", 02);
 
 			go = std::make_shared<GameObject>();
-			go->AddComponent(new TransformComponent());
-			go->AddComponent(new TextureComponent());
-			go->AddComponent(new TextureComponent());
+			go->AddComponent(std::make_shared<TransformComponent>());
+			go->AddComponent(std::make_shared<TextureComponent>());
 			go->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(999));
 			m_Scene->Add(go);
 
 			go = std::make_shared<GameObject>();
-			go->AddComponent(new TransformComponent());
-			go->AddComponent(new TextureComponent());
+			go->AddComponent(std::make_shared<TransformComponent>());
+			go->AddComponent(std::make_shared<TextureComponent>());
 			go->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(998));
 			go->GetComponent<TransformComponent>()->SetPosition(216, 180);
 			m_Scene->Add(go);
 
 			font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 36);
 			go = std::make_shared<GameObject>();
-			go->AddComponent(new TransformComponent());
-			go->AddComponent(new TextureComponent());
-			go->AddComponent(new TextComponent("Programming 4 Assignment", font));
+			go->AddComponent(std::make_shared<TransformComponent>());
+			go->AddComponent(std::make_shared<TextureComponent>());
+			go->AddComponent(std::make_shared<TextComponent>("Programming 4 Assignment", font));
 			go->GetComponent<TransformComponent>()->SetPosition(80, 20);
 			m_Scene->Add(go);
 
 			font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 30);
 			go = std::make_shared<GameObject>();
-			go->AddComponent(new TransformComponent());
-			go->AddComponent(new TextureComponent());
-			go->AddComponent(new TextComponent("00FPS", font));
-			go->AddComponent(new FPSComponent());
+			go->AddComponent(std::make_shared<TransformComponent>());
+			go->AddComponent(std::make_shared<TextureComponent>());
+			go->AddComponent(std::make_shared<TextComponent>("00FPS", font));
+			go->AddComponent(std::make_shared<FPSComponent>());
 			color = { 255, 255, 0 };
 			go->GetComponent<TextComponent>()->SetColor(color);
 			m_Scene->Add(go);
@@ -75,8 +76,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		resource.LoadTexture("images/OpenWallEW.png", 10004);
 
 		go = std::make_shared<GameObject>();
-		go->AddComponent(new TransformComponent());
-		go->AddComponent(new TextureComponent());
+		go->AddComponent(std::make_shared<TransformComponent>());
+		go->AddComponent(std::make_shared<TextureComponent>());	
 		go->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(01));
 		m_Scene->Add(go);
 
@@ -85,9 +86,9 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 			for (auto y = 1; y < 17; ++y)
 			{
 				auto tile = std::make_shared<GameObject>();
-				tile->AddComponent(new TransformComponent());
-				tile->AddComponent(new TextureComponent());
-				tile->AddComponent(new TileComponent(TileState::EMPITY, x, y));
+				tile->AddComponent(std::make_shared<TransformComponent>());
+				tile->AddComponent(std::make_shared<TextureComponent>());
+				tile->AddComponent(std::make_shared<TileComponent>(TileState::EMPITY, x, y));
 				tile->GetComponent<TileComponent>()->SetTileState(TileState::EMPITY);
 				if (y <= 1)
 					tile->GetComponent<TileComponent>()->SetTileState(TileState::EMPITY);
@@ -100,10 +101,10 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		m_pPlayer = std::make_shared<GameObject>();
 		m_pPlayer->SetName("Player");
-		m_pPlayer->AddComponent(new CollisionComponent());
-		m_pPlayer->AddComponent(new TransformComponent());
-		m_pPlayer->AddComponent(new InputComponent());
-		m_pPlayer->AddComponent(new TextureComponent());		
+		m_pPlayer->AddComponent(std::make_shared<CollisionComponent>());
+		m_pPlayer->AddComponent(std::make_shared<TransformComponent>());
+		m_pPlayer->AddComponent(std::make_shared<InputComponent>());
+		m_pPlayer->AddComponent(std::make_shared<TextureComponent>());
 		m_pPlayer->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(02));
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
@@ -112,9 +113,9 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		go = std::make_shared<GameObject>();
 		go->SetName("Rock");
-		go->AddComponent(new CollisionComponent());
-		go->AddComponent(new TransformComponent());
-		go->AddComponent(new TextureComponent());	
+		go->AddComponent(std::make_shared <CollisionComponent>());
+		go->AddComponent(std::make_shared<TransformComponent>());
+		go->AddComponent(std::make_shared<TextureComponent>());
 		go->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(12));
 		go->GetComponent<TransformComponent>()->SetPosition(32*4, 32*6);
 		m_Scene->Add(go);
@@ -125,10 +126,10 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 25);
 		go = std::make_shared<GameObject>();
-		go->AddComponent(new TransformComponent());
-		go->AddComponent(new TextureComponent());
-		go->AddComponent(new TextComponent("00FPS", font));
-		go->AddComponent(new FPSComponent());
+		go->AddComponent(std::make_shared<TransformComponent>());
+		go->AddComponent(std::make_shared<TextureComponent>());
+		go->AddComponent(std::make_shared<TextComponent>("00FPS", font));
+		go->AddComponent(std::make_shared<FPSComponent>());
 		color = { 255, 255, 0 };
 		go->GetComponent<TextComponent>()->SetColor(color);
 		m_Scene->Add(go);

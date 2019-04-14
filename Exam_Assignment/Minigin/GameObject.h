@@ -10,6 +10,7 @@ namespace dae
 	public:
 		GameObject();
 		virtual ~GameObject() = default;
+
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
@@ -23,27 +24,27 @@ namespace dae
 		void SetName(std::string name);
 		std::string GetName() const { return m_Name; }
 
-		void AddComponent(BaseComponent* comp);
-		void RemoveComponent(BaseComponent* pComp);
+		void AddComponent(std::shared_ptr<BaseComponent> comp);
+		void RemoveComponent(std::shared_ptr<BaseComponent> pComp);
 
 		template <class T>
-		T* GetComponent()
+		std::shared_ptr<T> GetComponent()
 		{
-			const auto& ti = typeid(T);
-			for (auto &component : m_pComponents)
-			{		
-				if (component && typeid(*component) == ti)
-					return static_cast<T*>(component);
-			}
+			for (auto& component : m_pComponents)
+				if (component && typeid(*component.get()) == typeid(T))
+				{
+					return std::static_pointer_cast<T>(component);
+				}
 			return nullptr;
 		}
+
 	private:
 		std::string m_Name = "GameObject" + std::to_string(m_NumberOfGameObjects);
-		std::vector<BaseComponent*> m_pComponents{};
-		TransformComponent* m_pTransformComponent;
-		TextureComponent* m_pTextureComponent;
-		CollisionComponent* m_pCollisionComponent;
-		TileComponent* m_pTileComponent;
+		std::vector<std::shared_ptr<BaseComponent>> m_pComponents{};
+		std::shared_ptr<TransformComponent> m_pTransformComponent{};
+		std::shared_ptr<TextureComponent> m_pTextureComponent{};
+		std::shared_ptr<CollisionComponent> m_pCollisionComponent{};
+		std::shared_ptr<TileComponent> m_pTileComponent{};
 		static unsigned int m_NumberOfGameObjects;
 	};
 }

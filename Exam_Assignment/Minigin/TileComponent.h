@@ -1,19 +1,9 @@
 #pragma once
 #include "BaseComponent.h"
-#include "TransformComponent.h"
 
 namespace dae
 {
-	enum class TileState
-	{
-		DIRT,
-		DUG,
-		BLOCKED,
-		OCCUPIED,
-		EMPITY,
-		TILESTATE_MAX_COUNT
-	};
-
+	enum class TileState;
 	class TileComponent : public BaseComponent
 	{
 	public:

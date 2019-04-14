@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "InputManager.h"
+#include "Commands.h"
 
 void dae::InputComponent::KeyUp(SDL_Keycode key) const
 {
@@ -58,6 +59,13 @@ void dae::InputComponent::Update(float& deltaTime)
 
 	auto& input = InputManager::GetInstance();
 
+	//input.IsKeyDown()
+
+	/*std::shared_ptr<Command> command = input.HandleInput();
+	if (command)
+		command->Execute(*GetGameObject());*/
+
+	//SDL_Event e;
 	SDL_Keycode key;
 	if (input.IsKeyDown(key))
 		KeyDown(key);

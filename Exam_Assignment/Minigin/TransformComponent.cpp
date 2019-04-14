@@ -27,13 +27,13 @@ void dae::TransformComponent::Update(float& deltaTime)
 			if (newPositionX < MIN_POSITION_X)
 				newPositionX = MIN_POSITION_X;
 
-			if (newPositionX >= MAX_POSITION_X)
+			if (newPositionX > MAX_POSITION_X)
 				newPositionX = MAX_POSITION_X;
 			
 			if (newPositionY < MIN_POSITION_Y)
 				newPositionY = MIN_POSITION_Y;
 
-			if (newPositionY >= MAX_POSITION_Y)
+			if (newPositionY > MAX_POSITION_Y)
 				newPositionY = MAX_POSITION_Y;
 
 			
@@ -44,6 +44,16 @@ void dae::TransformComponent::Update(float& deltaTime)
 			m_IsMoving = false;
 		}
 	}
+}
+
+dae::TransformComponent::TransformComponent()
+{
+	m_Position = { 0,0,0 };
+}
+
+dae::TransformComponent::TransformComponent(float x, float y, float z)
+{
+	m_Position = { x, y, z };
 }
 
 void dae::TransformComponent::SetPosition(float x, float y, float z)

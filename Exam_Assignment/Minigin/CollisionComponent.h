@@ -25,8 +25,8 @@ namespace  dae
 		bool GetHasCollision() const { return m_HasCollision; }
 		void SetHasCollision(bool hasCollision) { m_HasCollision = hasCollision; }
 
-		CollisionComponent* GetCollision() const { return m_pOtherCollider; }
-		void SetCollision(CollisionComponent* pOtherCollider) { m_pOtherCollider = pOtherCollider; }
+		std::shared_ptr<CollisionComponent> GetCollision() const { return m_pOtherCollider; }
+		void SetCollision(std::shared_ptr<CollisionComponent> pOtherCollider) { m_pOtherCollider = pOtherCollider; }
 
 
 	protected:
@@ -38,11 +38,11 @@ namespace  dae
 		iVector2 m_offSet = { 0,0 };
 		iVector2 m_Size = { 0,0 };
 		glm::vec3 m_Position{};
-		TransformComponent* m_pTransformComponent{};
+		std::shared_ptr<TransformComponent> m_pTransformComponent{};
 		bool m_ShowCollisionBox = false;
 		std::shared_ptr<Texture2D> m_pCollisionBox{};
 
-		CollisionComponent* m_pOtherCollider{};
+		std::shared_ptr<CollisionComponent>m_pOtherCollider{};
 
 		bool m_HasCollision = false;
 	};

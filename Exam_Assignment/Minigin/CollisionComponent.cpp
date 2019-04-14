@@ -8,14 +8,18 @@ extern const float g_MoveSpeed;
 dae::CollisionComponent::CollisionComponent()
 {
 	auto& Collision = CollisionManager::GetInstance();
-	Collision.AddCollision(this);
+	std::shared_ptr<CollisionComponent> coll;
+	coll.reset(this);
+	Collision.AddCollision(coll);
 }
 
 dae::CollisionComponent::CollisionComponent(int x, int y)
 {
 	m_Size = {x,y};
 	auto& Collision = CollisionManager::GetInstance();
-	Collision.AddCollision(this);
+	std::shared_ptr<CollisionComponent> coll;
+	coll.reset(this);
+	Collision.AddCollision(coll);
 }
 
 void dae::CollisionComponent::SetPosition(float x, float y, float z)
@@ -52,25 +56,26 @@ void dae::CollisionComponent::Update(float& deltaTime)
 		m_Position.y = m_pTransformComponent->GetPosition().y - m_offSet.y / 2;
 	}
 
+	//TODO:: CHANGE PUSH OUT EFFECT, MAYBE PREVENT OBJECT MOVING INTO A COLLISION?
 	//Prevent Overlapping
 	if(GetCollision() != nullptr)
 	{
 		if(GetCollision()->GetGameObject()->GetComponent<TransformComponent>()->GetIsStatic())
 		{
 			if (m_Position.x < GetCollision()->GetPosition().x)
-				if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::RIGHT)
+				//if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::RIGHT)
 					GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ -g_MoveSpeed / 2, 0, 0 });
 
 			if (m_Position.x > GetCollision()->GetPosition().x)
-				if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::LEFT)
+				//if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::LEFT)
 					GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ g_MoveSpeed / 2, 0, 0 });
 
 			if (m_Position.y < GetCollision()->GetPosition().y)
-				if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::DOWN)
+				//if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::DOWN)
 					GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ 0, -g_MoveSpeed / 2, 0 });
 
 			if (m_Position.y > GetCollision()->GetPosition().y)
-				if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::UP)
+				//if (GetGameObject()->GetComponent<TransformComponent>()->DirectionFromVelocity() == Direction::UP)
 					GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ 0, g_MoveSpeed / 2, 0 });
 		}
 		

@@ -10,7 +10,9 @@ dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_T
 	auto& tiles = TileManager::GetInstance();
 	m_TileIndex.x = xIndex; 
 	m_TileIndex.y = yIndex;
-	tiles.AddTile(this);
+	std::shared_ptr<TileComponent> tile;
+	tile.reset(this);
+	tiles.AddTile(tile);
 }
 
 void dae::TileComponent::SetTileState(TileState state)

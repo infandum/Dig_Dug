@@ -1,22 +1,54 @@
 #pragma once
 namespace dae
 {
-	enum class CompType
-	{
-		BASECOMPONENT,
-		TRANSFROMCOMPONENT,
-		FPSCOMPONENT,
-		TEXTCOMPONENT,
-		RENDERCOMPONENT,
-		TEXTURECOMPONENT
-	};
-
 	enum class StatusCode
 	{
 		STATUS_SUCCES,
 		STATUS_ERROR
 	};
 
+	enum class Direction
+	{
+		UP = 0,
+		DOWN = 1,
+		LEFT = 2,
+		RIGHT = 3
+	};
+
+	enum InputTriggerState
+	{
+		Pressed,
+		Released,
+		Down
+	};
+
+	enum class TileState
+	{
+		DIRT,
+		DUG,
+		BLOCKED,
+		OCCUPIED,
+		EMPITY,
+		TILESTATE_MAX_COUNT
+	};
+
+	enum class ControllerButton
+	{
+		ButtonA = 0x1000,
+		ButtonB = 0x2000,
+		ButtonX = 0x4000,
+		ButtonY = 0x8000,
+		ButtonUp = 0x0001,
+		ButtonDown = 0x0002,
+		ButtonLeft = 0x0004,
+		ButtonRight = 0x0008,
+		ButtonStart = 0x0010,
+		ButtonSelect = 0x0020,
+		ButtonLeftThumb = 0x0040,
+		ButtonRightThumb = 0x0080,
+		ButtonLeftTrigger = 0x0100,
+		ButtonRightTrigger = 0x0200
+	};
 
 	//2D VECTORS
 	class fVector2
