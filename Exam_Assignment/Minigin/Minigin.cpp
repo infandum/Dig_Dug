@@ -7,13 +7,11 @@
 #include "SceneLoader.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include <SDL.h>
 #include "TileManager.h"
-#include "CollisionManager.h"
-#include "AttackCommand.h"
+#include "PhysicsManager.h"
+#include <SDL.h>
 
-
-extern const float g_MoveSpeed = 100.0f;
+extern const float g_MoveSpeed = 80.f;
 extern const float g_CollisionPadding = 1.0f;
 
 void dae::Minigin::Initialize()
@@ -67,7 +65,7 @@ void dae::Minigin::Run()
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 		auto& tileManager = TileManager::GetInstance();
-		auto& collision = CollisionManager::GetInstance();
+		auto& collision = PhysicsManager::GetInstance();
 		collision.ShowCollisionBox(true);
 		
 
@@ -75,7 +73,7 @@ void dae::Minigin::Run()
 		auto doContinue = true;
 		auto lag{ 0.0f };
 		auto previousTime = std::chrono::high_resolution_clock::now();
-		const auto perUpdateTime{ float(msPerFrame) };
+		//const auto perUpdateTime{ float(msPerFrame) };
 		while (doContinue)
 		{
 			const auto currentTime = std::chrono::high_resolution_clock::now();
@@ -92,10 +90,11 @@ void dae::Minigin::Run()
 				lag -= perUpdateTime;
 			}
 			renderer.Render();*/
-
-			sceneManager.Update(float(deltatime));
-			tileManager.Update(float(deltatime));
 			collision.Update(float(deltatime));
+			tileManager.Update(float(deltatime));
+			sceneManager.Update(float(deltatime));
+			
+			
 
 			t += std::chrono::milliseconds(msPerFrame);
 			std::this_thread::sleep_until(t);

@@ -1,11 +1,11 @@
 #include "MiniginPCH.h"
-#include "CollisionManager.h"
+#include "PhysicsManager.h"
 #include "GameObject.h"
 #include "Components.h"
 
 extern const float g_CollisionPadding;
 
-void dae::CollisionManager::Update(float deltaTime)
+void dae::PhysicsManager::Update(float deltaTime)
 {
 	//TODO: ENTER COLLISION
 	//TODO: LEAVE COLLISION
@@ -16,8 +16,7 @@ void dae::CollisionManager::Update(float deltaTime)
 		if(!component->ShowCollisionBox())
 			component->ShowCollisionBox(ShowCollisionBox());
 
-		auto isOverlapping = false;
-
+		
 		/*const glm::vec3 firstPos = component->GetPosition();*/
 
 		for (auto& otherComponent : m_pCollisionComponents)
@@ -25,7 +24,8 @@ void dae::CollisionManager::Update(float deltaTime)
 			if(component == otherComponent)
 				continue;
 
-			
+			auto isOverlapping = false;
+
 			/*glm::vec3 SecondPos = otherComponent->GetPosition();*/
 			isOverlapping = IsOverlapping(component, otherComponent);
 			
@@ -53,7 +53,7 @@ void dae::CollisionManager::Update(float deltaTime)
 	}
 }
 
-void dae::CollisionManager::AddCollision(std::shared_ptr<CollisionComponent> collision)
+void dae::PhysicsManager::AddCollision(std::shared_ptr<CollisionComponent> collision)
 {
 	for (auto& component : m_pCollisionComponents)
 	{
@@ -66,7 +66,7 @@ void dae::CollisionManager::AddCollision(std::shared_ptr<CollisionComponent> col
 	m_pCollisionComponents.push_back(collision);
 }
 
-std::shared_ptr<dae::CollisionComponent> dae::CollisionManager::GetCollision(std::shared_ptr<GameObject> owner)
+std::shared_ptr<dae::CollisionComponent> dae::PhysicsManager::GetCollision(std::shared_ptr<GameObject> owner)
 {
 	for (auto& component : m_pCollisionComponents)
 	{
@@ -78,7 +78,7 @@ std::shared_ptr<dae::CollisionComponent> dae::CollisionManager::GetCollision(std
 	return nullptr;
 }
 
-bool dae::CollisionManager::IsOverlapping(std::shared_ptr<CollisionComponent> firstComp, std::shared_ptr<CollisionComponent> secondComp)
+bool dae::PhysicsManager::IsOverlapping(std::shared_ptr<CollisionComponent> firstComp, std::shared_ptr<CollisionComponent> secondComp)
 {
 	auto IsXOverlap = false;
 	auto IsYOverlap = false;

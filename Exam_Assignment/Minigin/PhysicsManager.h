@@ -6,10 +6,10 @@ namespace dae
 {
 	class CollisionComponent;
 
-	class CollisionManager final : public dae::Singleton<CollisionManager>
+	class PhysicsManager final : public dae::Singleton<PhysicsManager>
 	{
 	public:
-		CollisionManager() = default;
+		PhysicsManager() = default;
 
 		void Update(float deltaTime);
 

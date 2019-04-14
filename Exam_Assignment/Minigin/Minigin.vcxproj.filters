@@ -118,9 +118,6 @@
     <ClInclude Include="CollisionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -136,8 +133,8 @@
     <ClInclude Include="AttackCommand.h">
       <Filter>Managers\Input\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="MoveCommand.h">
-      <Filter>Managers\Input\Commands</Filter>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -213,9 +210,6 @@
     <ClCompile Include="CollisionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -225,8 +219,8 @@
     <ClCompile Include="AttackCommand.cpp">
       <Filter>Managers\Input\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="MoveCommand.cpp">
-      <Filter>Managers\Input\Commands</Filter>
+    <ClCompile Include="PhysicsManager.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

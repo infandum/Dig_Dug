@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "InputManager.h"
-#include "Commands.h"
+//#include "Commands.h"
 
 void dae::InputComponent::KeyUp(SDL_Keycode key) const
 {
@@ -27,6 +27,7 @@ void dae::InputComponent::KeyUp(SDL_Keycode key) const
 
 void dae::InputComponent::KeyDown(SDL_Keycode key) const
 {
+	std::cout << "Mdir\n";
 	glm::vec3 dir;
 	extern const float g_MoveSpeed;
 	switch (key)
@@ -58,17 +59,21 @@ void dae::InputComponent::Update(float& deltaTime)
 		m_TransformComponent = GetGameObject()->GetComponent<TransformComponent>();
 
 	auto& input = InputManager::GetInstance();
+	SDL_Keycode key;
 
-	//input.IsKeyDown()
+	if(input.IsKeyDown())
+		m_TransformComponent->SetVelocity({0,0,0});
+
+	if (input.IsKeyDown(key))
+		KeyDown(key);
+	if (input.IsKeyUp(key))
+		KeyUp(key);
+
 
 	/*std::shared_ptr<Command> command = input.HandleInput();
 	if (command)
 		command->Execute(*GetGameObject());*/
 
 	//SDL_Event e;
-	SDL_Keycode key;
-	if (input.IsKeyDown(key))
-		KeyDown(key);
-	else if (input.IsKeyUp(key))
-		KeyUp(key);
+	
 }

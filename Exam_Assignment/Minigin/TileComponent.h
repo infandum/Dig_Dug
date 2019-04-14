@@ -21,7 +21,7 @@ namespace dae
 		iVector2 GetPositionIndex() const { return m_TileIndex; }
 
 		void SetBorder(Direction dir, bool isCrossed);
-		bool GetBorder(Direction dir) { return m_IsBorderCrossed[static_cast<int>(dir)]; }
+		bool GetBorder(Direction dir) { return m_IsBorderConnected[static_cast<int>(dir)]; }
 		
 	protected:
 		/*void Initialize() override;*/
@@ -30,8 +30,12 @@ namespace dae
 		
 	private:
 		TileState m_TileState = TileState::EMPITY;
+
 		bool m_NeedsUpdate = false;
-		bool m_IsBorderCrossed[4]{};
+
+		bool m_IsBorderConnected[4]{};
+		bool m_IsBorderDug[4]{};
+
 		iVector2 m_TileIndex{};
 	};
 }

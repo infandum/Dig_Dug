@@ -16,6 +16,7 @@ namespace dae
 		bool IsPressed(ControllerButton button) const;
 		bool IsPressed(SDL_Keycode key) const;
 
+		bool IsKeyDown() const;
 		bool IsKeyDown(SDL_Keycode& key) const;
 		bool IsKeyUp(SDL_Keycode& key) const;
 

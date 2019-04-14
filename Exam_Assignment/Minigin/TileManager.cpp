@@ -7,27 +7,41 @@ extern const float g_MoveSpeed;
 void dae::TileManager::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	double modX = 0.0f;
-	double modY = 0.0f;
+
 	if(m_pPlayer)
 	{
-		modX = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x), 32.0);
-		modY = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y), 32.0);
+		//TODO: IS PLAYER MOVING
+			//TODO: GET PLAYER CURRENT TILE
+			//TODO: GET PLAYER CURRENT DIRECTION
+			//TODO: CHECK IF PLAYER IS LEAVING CURRENT TILE
+				//TODO: REMOVE CURRENT TILE WALL: CURRENT TILE->m_IsBorderDug
+			//TODO: CHECK IF PLAYER IS ENTERING NEXT TILE
+				//TODO: REMOVE NEXT TILE WALL: NEXT TILE->m_IsBorderDug
+			//TODO: CHECK IF PLAYER HAS CROSSED ONTO NEW TILE
+				//TODO: CREATE TUNNEL
+				//TODO: SET NEXT TILE STATE
+				//TODO: SWAP PLAYER CURRENT TILE
+
+		double modX = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x), 32.0);
+		double modY = fmod(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y), 32.0);
 	
 		if (m_pPlayer->GetComponent<TransformComponent>()->IsCentered())
 		{
 			int x = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x / 32.0f));
 			int y = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().y / 32.0f));
 
+			
 			if(m_StartTile == nullptr)
 			{ 
 				m_StartTile = GetTile(x, y);
+				m_pPlayer->GetComponent<TransformComponent>()->SetPositionIndex({x, y});
 				//Dig out starting tile if player starts underground
 				if(m_StartTile->GetTileState() == TileState::DIRT)
 					m_StartTile->SetTileState(TileState::DUG);
 			}
+			
 
-			if (modX >= 6 && modX <= 29)
+			if (modX >= 3 && modX <= 29)
 			{
 				x = static_cast<int>(round(m_pPlayer->GetComponent<TransformComponent>()->GetPosition().x / 32));
 				//if(modX < 16)
@@ -55,10 +69,14 @@ void dae::TileManager::Update(float deltaTime)
 					if(m_StartTile->GetPositionIndex().x + 1 == tile->GetPositionIndex().x || m_StartTile->GetPositionIndex().x - 1 == tile->GetPositionIndex().x
 					|| m_StartTile->GetPositionIndex().y + 1 == tile->GetPositionIndex().y || m_StartTile->GetPositionIndex().y - 1 == tile->GetPositionIndex().y)
 					{
-						const Direction dir = m_pPlayer->GetComponent<TransformComponent>()->DirectionFromVelocity();
-						DigConnection(m_StartTile, tile, dir);
-						if(GetTile(x, y)->GetTileState() != TileState::EMPITY)
-							GetTile(x, y)->SetTileState(TileState::DUG);
+						const auto dir = m_pPlayer->GetComponent<TransformComponent>()->GetDirectionFromVelocity();
+						if(dir != Direction::NONE)
+						{
+							DigConnection(m_StartTile, tile, dir);
+							m_pPlayer->GetComponent<TransformComponent>()->SetPositionIndex({x, y});
+							if(GetTile(x, y)->GetTileState() != TileState::EMPITY)
+								GetTile(x, y)->SetTileState(TileState::DUG);
+						}
 					}
 					m_StartTile = tile;
 				}
@@ -121,6 +139,7 @@ void dae::TileManager::DigConnection(std::shared_ptr<TileComponent> start, std::
 		//std::cout << start->GetPositionIndex().x << ", " << start->GetPositionIndex().y << " <" << static_cast<int>(Direction::RIGHT) << "," << static_cast<int>(Direction::LEFT) << "> " << end->GetPositionIndex().x << ", " << end->GetPositionIndex().y << std::endl;
 
 		break;
+	default: ;
 	}
 	
 }
@@ -153,6 +172,7 @@ void dae::TileManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int d
 		case Direction::RIGHT:
 			nextTile = GetTile(tile->GetPositionIndex().x + 1, tile->GetPositionIndex().y);
 			break;
+		default: ;
 		}
 
 		if(nextTile == nullptr)

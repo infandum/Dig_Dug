@@ -2,6 +2,7 @@
 #include "Components.h"
 #include "GameObject.h"
 #include <cmath>
+#include "InputManager.h"
 
 extern const float g_MoveSpeed;
 
@@ -13,8 +14,10 @@ void dae::TransformComponent::Update(float& deltaTime)
 		glm::vec3 velocity{ 0 };
 		if (m_Velocity.x != 0 || m_Velocity.y != 0)
 			velocity = MoveDirection();
+
 		if(m_IsMoving)
 		{
+			//TODO: CHECK IF NEXT TILE IS LEGAL MOVE
 			double newPositionX = m_Position.x + round(deltaTime * velocity.x);
 			double newPositionY = m_Position.y + round(deltaTime * velocity.y);
 
@@ -38,9 +41,6 @@ void dae::TransformComponent::Update(float& deltaTime)
 
 			
 			m_Position = { newPositionX, newPositionY, m_Position.z };
-
-			/*std::cout << newPositionX << ", " << newPositionY << '\n';
-			std::cout << round(newPositionX / 32 ) * 32 << ", " << round(newPositionY / 32) * 32 << '\n';*/
 			m_IsMoving = false;
 		}
 	}
@@ -64,6 +64,7 @@ void dae::TransformComponent::SetPosition(float x, float y, float z)
 
 glm::vec3 dae::TransformComponent::MoveDirection()
 {
+	
 	//TODO: Fix Minor freeze bug might be lag?
 	glm::vec3 velocity{ 0 };
 	m_IsMoving = true;
@@ -115,21 +116,21 @@ glm::vec3 dae::TransformComponent::MoveDirection()
 	return velocity;
 }
 
-dae::Direction dae::TransformComponent::DirectionFromVelocity() const
+dae::Direction dae::TransformComponent::GetDirectionFromVelocity() const
 {
-	if (m_Velocity == glm::vec3{ 0, -g_MoveSpeed, 0 })
+	if (m_Velocity.y < 0.0f)
 		return Direction::UP;
 
-	if (m_Velocity == glm::vec3{ 0, g_MoveSpeed, 0 })
+	if (m_Velocity.y > 0.0f)
 		return Direction::DOWN;
 
-	if (m_Velocity == glm::vec3{ -g_MoveSpeed, 0, 0 })
+	if (m_Velocity.x < 0.0f)
 		return Direction::LEFT;
 
-	if (m_Velocity == glm::vec3{ g_MoveSpeed, 0, 0 })
+	if (m_Velocity.x > 0.0f)
 		return Direction::RIGHT;
 
-	return {};
+	return Direction::NONE;
 }
 
 glm::vec3 dae::TransformComponent::MoveToTile(unsigned int x, unsigned int y, bool canDig)
