@@ -23,9 +23,6 @@
     <Filter Include="Managers\Input">
       <UniqueIdentifier>{4c81c308-e0e5-4eb1-8b27-9079bedc8971}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Managers\Input\Commands">
-      <UniqueIdentifier>{7d4817d5-174e-446d-976c-4a719984bad3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Managers\Scene">
       <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
     </Filter>
@@ -109,9 +106,6 @@
     <ClInclude Include="InputManager.h">
       <Filter>Managers\Input</Filter>
     </ClInclude>
-    <ClInclude Include="TileManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="TileComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -121,20 +115,17 @@
     <ClInclude Include="AnimationComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Managers\Input\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="Commands.h">
-      <Filter>Managers\Input\Commands</Filter>
-    </ClInclude>
-    <ClInclude Include="AttackCommand.h">
-      <Filter>Managers\Input\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsManager.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Managers\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -201,9 +192,6 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers\Input</Filter>
     </ClCompile>
-    <ClCompile Include="TileManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="TileComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -216,11 +204,11 @@
     <ClCompile Include="Renderer.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="AttackCommand.cpp">
-      <Filter>Managers\Input\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsManager.cpp">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

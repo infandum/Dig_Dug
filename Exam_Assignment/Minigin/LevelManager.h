@@ -5,10 +5,10 @@ namespace dae {
 	enum class Direction;
 	class GameObject;
 	class TileComponent;
-	class TileManager final : public Singleton<TileManager>
+	class LevelManager final : public Singleton<LevelManager>
 	{
 	public:
-		TileManager() = default;
+		LevelManager() = default;
 
 		void Update(float deltaTime);
 
@@ -22,8 +22,7 @@ namespace dae {
 	private:
 		
 		std::vector<std::shared_ptr<TileComponent>> m_pTileComponents{};
-		std::shared_ptr<GameObject> m_pPlayer{};
+		std::shared_ptr<GameObject> m_pPlayer {};
 		std::shared_ptr<TileComponent> m_StartTile {};
-		std::shared_ptr<TileComponent> m_EndTile{};
 	};
 }

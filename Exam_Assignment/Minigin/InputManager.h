@@ -17,8 +17,7 @@ namespace dae
 		bool IsPressed(SDL_Keycode key) const;
 
 		bool IsKeyDown() const;
-		bool IsKeyDown(SDL_Keycode& key) const;
-		bool IsKeyUp(SDL_Keycode& key) const;
+		bool IsKeyUp() const;
 
 		void AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key);
 	private:

@@ -2,12 +2,12 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "TextureComponent.h"
-#include "TileManager.h"
+#include "LevelManager.h"
 #include "ResourceManager.h"
 
 dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_TileState(state) 
 {
-	auto& tiles = TileManager::GetInstance();
+	auto& tiles = LevelManager::GetInstance();
 	m_TileIndex.x = xIndex; 
 	m_TileIndex.y = yIndex;
 	std::shared_ptr<TileComponent> tile;
@@ -66,7 +66,7 @@ void dae::TileComponent::Update(float& deltaTime)
 				break;
 			case TileState::OCCUPIED:
 				if (GetGameObject()->GetComponent<TextureComponent>())
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(std::make_shared<Texture2D>(nullptr));
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(13));
 				break;
 			case TileState::EMPITY:
 				if (GetGameObject()->GetComponent<TextureComponent>())

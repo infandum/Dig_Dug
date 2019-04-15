@@ -24,6 +24,11 @@ namespace dae
 		void SetName(std::string name);
 		std::string GetName() const { return m_Name; }
 
+		std::shared_ptr<TransformComponent> GetTransform() const { return m_pTransformComponent; }
+		std::shared_ptr<TextureComponent> GetTexture() const { return m_pTextureComponent; }
+		std::shared_ptr<CollisionComponent> GetCollision() const { return m_pCollisionComponent; }
+		std::shared_ptr<TileComponent> GetTile() const { return m_pTileComponent; }
+
 		void AddComponent(std::shared_ptr<BaseComponent> comp);
 		void RemoveComponent(std::shared_ptr<BaseComponent> pComp);
 

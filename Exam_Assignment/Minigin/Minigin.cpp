@@ -7,11 +7,12 @@
 #include "SceneLoader.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "TileManager.h"
+#include "LevelManager.h"
 #include "PhysicsManager.h"
 #include <SDL.h>
 
-extern const float g_MoveSpeed = 80.f;
+extern const float g_MoveSpeed = 90.f;
+extern const float g_TileCenterPadding = 1.0f;
 extern const float g_CollisionPadding = 1.0f;
 
 void dae::Minigin::Initialize()
@@ -64,7 +65,7 @@ void dae::Minigin::Run()
 		auto& renderer = Renderer::GetInstance();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
-		auto& tileManager = TileManager::GetInstance();
+		auto& tileManager = LevelManager::GetInstance();
 		auto& collision = PhysicsManager::GetInstance();
 		collision.ShowCollisionBox(true);
 		
@@ -80,7 +81,8 @@ void dae::Minigin::Run()
 			const auto deltatime = std::chrono::duration<float>(currentTime - previousTime).count();
 			previousTime = currentTime;
 			lag += deltatime;
-			doContinue = input.ProcessInput();
+			//doContinue = input.ProcessInput();
+			input.ProcessInput();
 
 			/*while (lag >= perUpdateTime)
 			{

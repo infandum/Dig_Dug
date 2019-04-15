@@ -3,11 +3,21 @@
 #include "GameObject.h"
 #include <cmath>
 #include "InputManager.h"
+#include "LevelManager.h"
 
-extern const float g_MoveSpeed;
+extern  const float g_MoveSpeed;
+extern const float g_TileCenterPadding;
 
 void dae::TransformComponent::Update(float& deltaTime)
 {
+
+	if(m_IsStatic)
+	{
+		const auto tile = LevelManager::GetInstance().GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
+		if (tile->GetTileState() != TileState::OCCUPIED)
+			tile->SetTileState(TileState::OCCUPIED);
+	}
+
 	UNREFERENCED_PARAMETER(deltaTime);
 	if(!m_IsStatic)
 	{
@@ -15,9 +25,17 @@ void dae::TransformComponent::Update(float& deltaTime)
 		if (m_Velocity.x != 0 || m_Velocity.y != 0)
 			velocity = MoveDirection();
 
-		if(m_IsMoving)
+		if (m_IsMoving)
 		{
-			//TODO: CHECK IF NEXT TILE IS LEGAL MOVE
+			//CHECK IF NEXT TILE IS LEGAL MOVE
+			m_NextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
+			const auto nextTile = LevelManager::GetInstance().GetTile(m_NextTileIndex.x, m_NextTileIndex.y);
+			if ((nextTile != nullptr && nextTile->GetTileState() == TileState::OCCUPIED) && IsCentered())
+			{
+				//std::cout << "NEXT TILE IS OCCUPIED\n";
+				return;
+			}
+
 			double newPositionX = m_Position.x + round(deltaTime * velocity.x);
 			double newPositionY = m_Position.y + round(deltaTime * velocity.y);
 
@@ -42,6 +60,7 @@ void dae::TransformComponent::Update(float& deltaTime)
 			
 			m_Position = { newPositionX, newPositionY, m_Position.z };
 			m_IsMoving = false;
+
 		}
 	}
 }
@@ -59,12 +78,12 @@ dae::TransformComponent::TransformComponent(float x, float y, float z)
 void dae::TransformComponent::SetPosition(float x, float y, float z)
 {
 	m_Position = glm::vec3(x, y, z);
+	SetPositionIndex({int( x / 32), int(y / 32) });
 }
 
 
 glm::vec3 dae::TransformComponent::MoveDirection()
 {
-	
 	//TODO: Fix Minor freeze bug might be lag?
 	glm::vec3 velocity{ 0 };
 	m_IsMoving = true;
@@ -116,6 +135,21 @@ glm::vec3 dae::TransformComponent::MoveDirection()
 	return velocity;
 }
 
+bool dae::TransformComponent::IsCentered() const
+{
+	//from top
+	bool XisCenter = false;
+	bool YisCenter = false;
+
+	if (m_Position.x >= m_CurrentTileIndex.x * 32 - g_TileCenterPadding && m_Position.x <= m_CurrentTileIndex.x * 32 + g_TileCenterPadding)
+		XisCenter = true;							  
+													  
+	if (m_Position.y >= m_CurrentTileIndex.y * 32 - g_TileCenterPadding && m_Position.y <= m_CurrentTileIndex.y * 32 + g_TileCenterPadding)
+		YisCenter = true;
+
+	return XisCenter && YisCenter;
+}
+
 dae::Direction dae::TransformComponent::GetDirectionFromVelocity() const
 {
 	if (m_Velocity.y < 0.0f)
@@ -131,6 +165,18 @@ dae::Direction dae::TransformComponent::GetDirectionFromVelocity() const
 		return Direction::RIGHT;
 
 	return Direction::NONE;
+}
+
+dae::iVector2 dae::TransformComponent::GetNextTileDirectionFromVelocity() const
+{
+	iVector2 dir{ 0,0 };
+
+	if (m_Velocity.x != 0)
+		dir.x = static_cast<int>(m_Velocity.x) / abs(static_cast<int>(m_Velocity.x));
+	if (m_Velocity.y != 0)
+		dir.y = static_cast<int>(m_Velocity.y) / abs(static_cast<int>(m_Velocity.y));
+
+	return dir;
 }
 
 glm::vec3 dae::TransformComponent::MoveToTile(unsigned int x, unsigned int y, bool canDig)

@@ -30,9 +30,9 @@ void dae::CollisionComponent::SetPosition(float x, float y, float z)
 void dae::CollisionComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	if (!m_pTransformComponent && m_pTransformComponent == nullptr)
+	if (!m_pTransformComponent && m_pTransformComponent == nullptr && GetGameObject()->GetTransform() != nullptr)
 	{
-		m_pTransformComponent = GetGameObject()->GetComponent<TransformComponent>();
+		m_pTransformComponent = GetGameObject()->GetTransform();
 		m_Position = m_pTransformComponent->GetPosition();	
 	}
 

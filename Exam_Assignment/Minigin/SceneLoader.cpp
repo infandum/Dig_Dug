@@ -6,14 +6,20 @@
 #include <SDL.h>
 #include "ResourceManager.h"
 #include "Scene.h"
-#include "TileManager.h"
+#include "LevelManager.h"
 #include "InputManager.h"
-#include "Commands.h"
+#include "Command.h"
 
 void dae::SceneLoader::InitScene(dae::SceneList scene)
 {
-	auto& tiles = TileManager::GetInstance();
+	auto& tiles = LevelManager::GetInstance();
 	auto& resource = ResourceManager::GetInstance();
+	auto& input = InputManager::GetInstance();
+	input.AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_UP);
+	input.AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_DOWN);
+	input.AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_LEFT);
+	input.AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT);
+	input.AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_x);
 
 	std::shared_ptr<GameObject> go;
 	std::shared_ptr<Font> font;
@@ -83,7 +89,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		for (auto x = 0; x < 14; ++x)
 		{
-			for (auto y = 1; y < 17; ++y)
+			for (auto y = 0; y < 17; ++y)
 			{
 				auto tile = std::make_shared<GameObject>();
 				tile->AddComponent(std::make_shared<TransformComponent>());
@@ -118,6 +124,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		go->AddComponent(std::make_shared<TextureComponent>());
 		go->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(12));
 		go->GetComponent<TransformComponent>()->SetPosition(32*4, 32*6);
+		go->GetComponent<TransformComponent>()->SetIsStatic(true);
 		m_Scene->Add(go);
 		
 		tiles.SetPlayer(m_pPlayer);

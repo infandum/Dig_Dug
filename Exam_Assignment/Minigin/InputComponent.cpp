@@ -2,11 +2,12 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "InputManager.h"
-//#include "Commands.h"
+#include "Command.h"
 
 void dae::InputComponent::KeyUp(SDL_Keycode key) const
 {
 	glm::vec3 dir = { 0.0f, 0.f, 0.f };
+	UNREFERENCED_PARAMETER(key);
 	switch (key)
 	{
 	case SDLK_LEFT:
@@ -27,15 +28,15 @@ void dae::InputComponent::KeyUp(SDL_Keycode key) const
 
 void dae::InputComponent::KeyDown(SDL_Keycode key) const
 {
-	std::cout << "Mdir\n";
 	glm::vec3 dir;
-	extern const float g_MoveSpeed;
+	UNREFERENCED_PARAMETER(key);
 	switch (key)
 	{
 	case SDLK_LEFT:
 		dir = { -g_MoveSpeed, 0, 0 };
 		m_TransformComponent->SetVelocity(dir);
 		break;
+		
 	case SDLK_RIGHT:
 		dir = { g_MoveSpeed, 0, 0 };
 		m_TransformComponent->SetVelocity(dir);
@@ -59,21 +60,7 @@ void dae::InputComponent::Update(float& deltaTime)
 		m_TransformComponent = GetGameObject()->GetComponent<TransformComponent>();
 
 	auto& input = InputManager::GetInstance();
-	SDL_Keycode key;
-
-	if(input.IsKeyDown())
-		m_TransformComponent->SetVelocity({0,0,0});
-
-	if (input.IsKeyDown(key))
-		KeyDown(key);
-	if (input.IsKeyUp(key))
-		KeyUp(key);
-
-
-	/*std::shared_ptr<Command> command = input.HandleInput();
-	if (command)
-		command->Execute(*GetGameObject());*/
-
-	//SDL_Event e;
-	
+	std::shared_ptr<Command> command = input.HandleInput();
+	if (command != nullptr)
+		command->Execute(*GetGameObject());
 }
