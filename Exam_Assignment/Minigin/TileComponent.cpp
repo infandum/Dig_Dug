@@ -4,6 +4,7 @@
 #include "TextureComponent.h"
 #include "LevelManager.h"
 #include "ResourceManager.h"
+#include "State.h"
 
 dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_TileState(state) 
 {
@@ -17,6 +18,7 @@ dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_T
 
 void dae::TileComponent::SetTileState(TileState state)
 {
+	m_pState = std::make_shared<DirtState>();
 	m_TileState = state;
 	m_NeedsUpdate = true;
 }
@@ -37,6 +39,7 @@ void dae::TileComponent::SetBorder(Direction dir, bool isCrossed)
 	case Direction::RIGHT:
 		m_IsBorderConnected[3] = isCrossed;
 		break;
+	default: ;
 	}
 	//m_IsBorderConnected[static_cast<int>(dir)] = isCrossed;
 }
@@ -44,6 +47,13 @@ void dae::TileComponent::SetBorder(Direction dir, bool isCrossed)
 void dae::TileComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
+
+	const auto state = m_pState->Swap(*GetGameObject());
+	if (state != nullptr)
+	{
+		m_pState = state;
+	}
+
 	auto& resource = ResourceManager::GetInstance();
 	if(m_NeedsUpdate)
 	{ 

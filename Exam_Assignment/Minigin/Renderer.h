@@ -7,7 +7,7 @@ struct SDL_Renderer;
 namespace dae
 {
 	class Texture2D;
-	class Renderer final : public Singleton<Renderer>
+	class Renderer final /*: public Singleton<Renderer>*/
 	{
 		SDL_Renderer* mRenderer = nullptr;
 

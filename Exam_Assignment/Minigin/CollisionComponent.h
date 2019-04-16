@@ -11,7 +11,7 @@ namespace  dae
 		CollisionComponent& operator=(CollisionComponent&& other) noexcept = delete;
 		
 		CollisionComponent();
-		CollisionComponent(int x, int y);
+		explicit CollisionComponent(int x, int y);
 		virtual ~CollisionComponent() = default;
 
 		iVector2 GetSize() const { return m_Size; }
@@ -37,7 +37,7 @@ namespace  dae
 	private:
 		iVector2 m_offSet = { 0,0 };
 		iVector2 m_Size = { 0,0 };
-		glm::vec3 m_Position{};
+		glm::vec3 m_Position {0};
 		std::shared_ptr<TransformComponent> m_pTransformComponent{};
 		bool m_ShowCollisionBox = false;
 		std::shared_ptr<Texture2D> m_pCollisionBox{};

@@ -18,7 +18,7 @@ namespace dae
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
 		TransformComponent();
-		TransformComponent(float x , float y , float z = 0);
+		explicit TransformComponent(float x , float y , float z = 0);
 		virtual ~TransformComponent() = default;
 
 		const glm::vec3& GetPosition() const { return m_Position; }

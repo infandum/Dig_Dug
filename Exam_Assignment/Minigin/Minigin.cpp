@@ -9,7 +9,9 @@
 #include "ResourceManager.h"
 #include "LevelManager.h"
 #include "PhysicsManager.h"
+
 #include <SDL.h>
+#include "ServiceLocator.h"
 
 extern const float g_MoveSpeed = 90.f;
 extern const float g_TileCenterPadding = 1.0f;
@@ -34,8 +36,15 @@ void dae::Minigin::Initialize()
 	{
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
+	ServiceLocator::InitRenderer(new Renderer());
+	ServiceLocator::InitSceneManager(new SceneManager());
+	ServiceLocator::InitPhysicsManager(new PhysicsManager());
+	ServiceLocator::InitInputManager(new InputManager());
+	ServiceLocator::InitLevelManager(new LevelManager());
 
-	Renderer::GetInstance().Init(window);
+	//ServiceLocator::GetRenderer()->Init(window);
+	ServiceLocator::GetRenderer()->Init(window);
+
 }
 
 /**
@@ -48,7 +57,7 @@ void dae::Minigin::LoadGame() const
 
 void dae::Minigin::Cleanup()
 {
-	Renderer::GetInstance().Destroy();
+	ServiceLocator::GetRenderer()->Destroy();
 	SDL_DestroyWindow(window);
 	window = nullptr;
 	SDL_Quit();
@@ -62,7 +71,7 @@ void dae::Minigin::Run()
 	ResourceManager::GetInstance().Init("../Data/");
 	LoadGame();
 	{
-		auto& renderer = Renderer::GetInstance();
+		auto renderer = ServiceLocator::GetRenderer();
 		auto& sceneManager = SceneManager::GetInstance();
 		auto& input = InputManager::GetInstance();
 		auto& tileManager = LevelManager::GetInstance();
@@ -81,27 +90,16 @@ void dae::Minigin::Run()
 			const auto deltatime = std::chrono::duration<float>(currentTime - previousTime).count();
 			previousTime = currentTime;
 			lag += deltatime;
-			//doContinue = input.ProcessInput();
-			input.ProcessInput();
+			doContinue = input.ProcessInput();
 
-			/*while (lag >= perUpdateTime)
-			{
-				sceneManager.Update(float(deltatime));
-				tileManager.Update(float(deltatime));
-				collision.Update(float(deltatime));
-				lag -= perUpdateTime;
-			}
-			renderer.Render();*/
 			collision.Update(float(deltatime));
 			tileManager.Update(float(deltatime));
-			sceneManager.Update(float(deltatime));
-			
-			
+			sceneManager.Update(float(deltatime));		
 
 			t += std::chrono::milliseconds(msPerFrame);
 			std::this_thread::sleep_until(t);
 
-			renderer.Render();
+			renderer->Render();
 		}
 	}
 	Cleanup();

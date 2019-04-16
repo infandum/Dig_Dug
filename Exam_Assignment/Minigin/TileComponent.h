@@ -1,9 +1,11 @@
 #pragma once
 #include "BaseComponent.h"
 
+
 namespace dae
 {
 	enum class TileState;
+	class BaseState;
 	class TileComponent : public BaseComponent
 	{
 	public:
@@ -30,6 +32,7 @@ namespace dae
 		
 	private:
 		TileState m_TileState = TileState::EMPITY;
+		std::shared_ptr<BaseState> m_pState{};
 
 		bool m_NeedsUpdate = false;
 

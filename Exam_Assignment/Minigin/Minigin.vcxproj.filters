@@ -43,9 +43,6 @@
     <ClInclude Include="MiniginPCH.h">
       <Filter>Base</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Content</Filter>
     </ClInclude>
@@ -74,9 +71,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="TextComponent.h">
@@ -112,20 +106,32 @@
     <ClInclude Include="CollisionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsManager.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="LevelManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
       <Filter>Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="State.h">
+      <Filter>Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Service.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerState.h">
+      <Filter>Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -144,9 +150,6 @@
     <ClCompile Include="Log.cpp">
       <Filter>Base</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>Content</Filter>
     </ClCompile>
@@ -163,9 +166,6 @@
       <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="TextComponent.cpp">
@@ -198,16 +198,19 @@
     <ClCompile Include="CollisionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsManager.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
+    <ClCompile Include="PhysicsManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
   </ItemGroup>

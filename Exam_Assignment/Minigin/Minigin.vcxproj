@@ -191,7 +191,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="PhysicsManager.h" />
@@ -206,7 +205,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Log.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
-    <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="SceneObject.h" />
@@ -214,7 +213,10 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Service.h" />
+    <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="State.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="TextObject.h" />
@@ -226,7 +228,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />
@@ -245,12 +246,12 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MiniginPCH.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="Texture2D.cpp" />
