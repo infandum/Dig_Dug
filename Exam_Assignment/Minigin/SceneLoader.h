@@ -1,5 +1,5 @@
 #pragma once
-#include "Singleton.h"
+#include "Service.h"
 
 namespace dae
 {
@@ -11,15 +11,11 @@ namespace dae
 	};
 	class GameObject;
 	class Scene;
-	class SceneLoader : public Singleton<SceneLoader>
+	class SceneLoader : public Service
 	{
 	public:
-		void InitScene(dae::SceneList scene);
-		/*void AddGameObject(const std::string & tex, const Vec2 pos);
-		void AddFPSObject(const Vec2 pos, const std::string & fontname);
-		void AddTextGameObject(const std::string & text, const std::string & fontname, const int fontsize, const Vec2 pos);
-		void AddControllableGameObject(const std::string & tex, const Vec2 pos);*/
+		void InitScene(SceneList scene);
 		std::shared_ptr<GameObject> m_pPlayer{};
-		std::shared_ptr<Scene> m_Scene;
+		std::shared_ptr<Scene> m_Scene{};
 	};
 }

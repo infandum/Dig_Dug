@@ -2,24 +2,25 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "PhysicsManager.h"
+#include "ServiceLocator.h"
 
 extern const float g_MoveSpeed;
 
 dae::CollisionComponent::CollisionComponent()
 {
-	auto& Collision = PhysicsManager::GetInstance();
+	auto Collision = ServiceLocator::GetPhysicsManager();
 	std::shared_ptr<CollisionComponent> coll;
 	coll.reset(this);
-	Collision.AddCollision(coll);
+	Collision->AddCollision(coll);
 }
 
 dae::CollisionComponent::CollisionComponent(int x, int y)
 {
 	m_Size = {x,y};
-	auto& Collision = PhysicsManager::GetInstance();
+	auto Collision = ServiceLocator::GetPhysicsManager();
 	std::shared_ptr<CollisionComponent> coll;
 	coll.reset(this);
-	Collision.AddCollision(coll);
+	Collision->AddCollision(coll);
 }
 
 void dae::CollisionComponent::SetPosition(float x, float y, float z)
@@ -64,34 +65,6 @@ void dae::CollisionComponent::Update(float& deltaTime)
 		{
 			std::cout << "PUSHOUT" << std::endl;
 			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
-
-			//if (m_Position.x < GetCollision()->GetPosition().x)
-			//{
-			//	////if (GetGameObject()->GetComponent<TransformComponent>()->GetDirectionFromVelocity() == Direction::RIGHT)
-			//	//	GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ -g_MoveSpeed / 3, 0, 0 });
-			//GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
-			//}
-			//if (m_Position.x > GetCollision()->GetPosition().x)
-			//{ 
-			//	//if (GetGameObject()->GetComponent<TransformComponent>()->GetDirectionFromVelocity() == Direction::LEFT)
-			//		//GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ g_MoveSpeed / 3, 0, 0 });
-			//	GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
-
-			//}
-			//if (m_Position.y < GetCollision()->GetPosition().y)
-			//{
-			//	//if (GetGameObject()->GetComponent<TransformComponent>()->GetDirectionFromVelocity() == Direction::DOWN)
-			//		//GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ 0, -g_MoveSpeed / 3, 0 });
-			//	GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
-
-			//}
-			//if (m_Position.y > GetCollision()->GetPosition().y)
-			//{
-			//	//if (GetGameObject()->GetComponent<TransformComponent>()->GetDirectionFromVelocity() == Direction::UP)}
-			//		//GetGameObject()->GetComponent<TransformComponent>()->SetVelocity(glm::vec3{ 0, g_MoveSpeed / 3, 0 });
-			//	GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
-
-			//}
 		}	
 	}
 }

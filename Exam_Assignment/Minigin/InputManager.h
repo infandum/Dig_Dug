@@ -1,13 +1,13 @@
 #pragma once
 #include <XInput.h>
-#include "Singleton.h"
 #include <SDL.h>
+#include "Service.h"
 
 namespace dae
 {
 	enum class ControllerButton;
 	class Command;
-	class InputManager final : public Singleton<InputManager>
+	class InputManager final : public Service
 	{
 	public:
 		bool ProcessInput();

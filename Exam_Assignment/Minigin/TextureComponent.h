@@ -4,7 +4,7 @@
 
 namespace dae
 {
-	class TextureComponent :public BaseComponent
+	class TextureComponent : public BaseComponent
 	{
 	public:
 		TextureComponent(const TextureComponent& other) = delete;
@@ -16,7 +16,7 @@ namespace dae
 		explicit TextureComponent(std::shared_ptr<Texture2D> texture);
 		virtual ~TextureComponent() = default;
 
-		void SetTexture(std::shared_ptr<Texture2D> texture, int width = { 0 }, int heigth = { 0 });
+		void SetTexture(std::shared_ptr<Texture2D> texture, int width = { 0 }, int height = { 0 });
 		std::shared_ptr<Texture2D>& GetTexture() { return m_spTexture; }
 		iVector2 GetSize() const { return m_Size; }
 

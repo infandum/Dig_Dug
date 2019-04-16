@@ -3,22 +3,23 @@
 #include "Components.h"
 #include "TextureComponent.h"
 #include "LevelManager.h"
-#include "ResourceManager.h"
-#include "State.h"
+
+#include "States.h"
+#include "ServiceLocator.h"
 
 dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_TileState(state) 
 {
-	auto& tiles = LevelManager::GetInstance();
+	auto tiles = ServiceLocator::GetLevelManager();
 	m_TileIndex.x = xIndex; 
 	m_TileIndex.y = yIndex;
 	std::shared_ptr<TileComponent> tile;
 	tile.reset(this);
-	tiles.AddTile(tile);
+	tiles->AddTile(tile);
 }
 
 void dae::TileComponent::SetTileState(TileState state)
 {
-	m_pState = std::make_shared<DirtState>();
+	/*m_pState = std::make_shared<DirtState>();*/
 	m_TileState = state;
 	m_NeedsUpdate = true;
 }
@@ -48,13 +49,14 @@ void dae::TileComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
 
-	const auto state = m_pState->Swap(*GetGameObject());
+	//TODO:: TILE STATE
+	/*const auto state = m_pState->Swap(*GetGameObject());
 	if (state != nullptr)
 	{
 		m_pState = state;
-	}
+	}*/
 
-	auto& resource = ResourceManager::GetInstance();
+	const auto resource = ServiceLocator::GetResourceManager();
 	if(m_NeedsUpdate)
 	{ 
 		if (GetGameObject())
@@ -68,15 +70,15 @@ void dae::TileComponent::Update(float& deltaTime)
 				break;
 			case TileState::DUG:
 				if (GetGameObject()->GetComponent<TextureComponent>())
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(11));
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(11));
 				break;
 			case TileState::BLOCKED:
 				if (GetGameObject()->GetComponent<TextureComponent>())
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(12));
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(12));
 				break;
 			case TileState::OCCUPIED:
 				if (GetGameObject()->GetComponent<TextureComponent>())
-					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource.GetTexture(13));
+					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(13));
 				break;
 			case TileState::EMPITY:
 				if (GetGameObject()->GetComponent<TextureComponent>())

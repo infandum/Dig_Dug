@@ -7,6 +7,7 @@
 #include "InputComponent.h"
 #include "TileComponent.h"
 #include "CollisionComponent.h"
+#include "SpriteComponent.h"
 
 //Sub Components
 #include "TextComponent.h"

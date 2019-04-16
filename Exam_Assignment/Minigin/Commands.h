@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL_keycode.h>
 #include "GameObject.h"
+#include "ServiceLocator.h"
 
 extern  const float g_MoveSpeed;
 
@@ -25,6 +26,7 @@ namespace dae
 		//std::shared_ptr<GameObject> m_GameObject{};
 		ControllerButton m_Button{};
 		SDL_Keycode m_Key{};
+		const InputManager* m_Input = ServiceLocator::GetInputManager();
 	};
 
 	class UpCommand : public Command
@@ -35,12 +37,12 @@ namespace dae
 
 	inline void UpCommand::Execute(GameObject& gameObject)
 	{
-		auto& input = InputManager::GetInstance();
+		
 		if (gameObject.GetTransform())
 		{
-			if (input.IsKeyDown())
+			if (m_Input->IsKeyDown())
 				gameObject.GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
-			if (input.IsKeyUp())
+			if (m_Input->IsKeyUp())
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
 		}
 	}
@@ -53,12 +55,11 @@ namespace dae
 
 	inline void DownCommand::Execute(GameObject& gameObject)
 	{
-		auto& input = InputManager::GetInstance();
 		if (gameObject.GetTransform())
 		{
-			if (input.IsKeyDown())
+			if (m_Input->IsKeyDown())
 				gameObject.GetTransform()->SetVelocity({ 0, g_MoveSpeed, 0 });
-			if (input.IsKeyUp())
+			if (m_Input->IsKeyUp())
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
 		}
 	}
@@ -71,12 +72,11 @@ namespace dae
 
 	inline void LeftCommand::Execute(GameObject& gameObject)
 	{
-		auto& input = InputManager::GetInstance();
 		if (gameObject.GetTransform())
 		{
-			if (input.IsKeyDown())
+			if (m_Input->IsKeyDown())
 				gameObject.GetTransform()->SetVelocity({ -g_MoveSpeed, 0, 0 });
-			if (input.IsKeyUp())
+			if (m_Input->IsKeyUp())
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
 		}
 	}
@@ -89,12 +89,11 @@ namespace dae
 
 	inline void RightCommand::Execute(GameObject& gameObject)
 	{
-		auto& input = InputManager::GetInstance();
 		if (gameObject.GetTransform())
 		{
-			if (input.IsKeyDown())
+			if (m_Input->IsKeyDown())
 				gameObject.GetTransform()->SetVelocity({ g_MoveSpeed, 0, 0 });
-			if (input.IsKeyUp())
+			if (m_Input->IsKeyUp())
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
 		}
 	}

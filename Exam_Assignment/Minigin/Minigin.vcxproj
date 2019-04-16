@@ -193,8 +193,9 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
   <ItemGroup>
     <ClInclude Include="BaseComponent.h" />
     <ClInclude Include="CollisionComponent.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="PhysicsManager.h" />
-    <ClInclude Include="Command.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="DataStructs.h" />
     <ClInclude Include="Font.h" />
@@ -205,7 +206,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Log.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
-    <ClInclude Include="PlayerState.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneLoader.h" />
     <ClInclude Include="SceneObject.h" />
@@ -216,7 +216,9 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="Service.h" />
     <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="State.h" />
+    <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="States.h" />
+    <ClInclude Include="Subject.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TextComponent.h" />
     <ClInclude Include="TextObject.h" />
@@ -252,6 +254,8 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="SceneLoader.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
+    <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="States.cpp" />
     <ClCompile Include="TextComponent.cpp" />
     <ClCompile Include="TextObject.cpp" />
     <ClCompile Include="Texture2D.cpp" />

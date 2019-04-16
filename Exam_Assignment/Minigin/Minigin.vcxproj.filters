@@ -26,6 +26,12 @@
     <Filter Include="Managers\Scene">
       <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Managers\Game">
+      <UniqueIdentifier>{555d38c8-52f0-40dc-8502-b58cfaa51240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Managers\Engine">
+      <UniqueIdentifier>{6158519a-934e-40e5-8935-8a04f8fe3ca2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
@@ -106,32 +112,38 @@
     <ClInclude Include="CollisionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="LevelManager.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Managers\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="State.h">
-      <Filter>Managers\Input</Filter>
-    </ClInclude>
     <ClInclude Include="ServiceLocator.h">
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Service.h">
       <Filter>Managers</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerState.h">
-      <Filter>Managers\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>Managers</Filter>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Managers\Game</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsManager.h">
+      <Filter>Managers\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Managers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>Managers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Subject.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="States.h">
+      <Filter>Managers\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Managers\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -198,20 +210,26 @@
     <ClCompile Include="CollisionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>Managers</Filter>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Managers\Game</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsManager.cpp">
-      <Filter>Managers</Filter>
+      <Filter>Managers\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Managers\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>Managers\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="States.cpp">
+      <Filter>Managers\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -59,7 +59,7 @@ void dae::LevelManager::Update(float deltaTime)
 			const auto nextTile = GetTile(x, y);
 			if (nextTile != nullptr && nextTile != m_StartTile)
 			{
-				const auto dir = m_pPlayer->GetTransform()->GetDirectionFromVelocity();
+				const auto dir = m_pPlayer->GetTransform()->GetCurrentDirection();
 				if (dir != Direction::NONE)
 				{
 					//TODO: FALSE POSITIVE TUNNEL CONNECTION (DIRECTION IS PROBALY BUGGY)

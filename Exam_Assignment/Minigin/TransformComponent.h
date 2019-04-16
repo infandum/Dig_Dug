@@ -28,22 +28,18 @@ namespace dae
 		void SetPositionIndex(iVector2 index) { std::cout << index.x << "," << index.y << '\n'; m_CurrentTileIndex = index; }
 
 		glm::vec3 GetVelocity() const { return m_Velocity; }
-		void SetVelocity(glm::vec3 direction) { m_Velocity = direction; }
+		void SetVelocity(glm::vec3 direction) { m_Velocity = direction; if(GetDirectionFromVelocity() != Direction::NONE) m_CurrentDirection = GetDirectionFromVelocity(); }
+
+		Direction GetDirectionFromVelocity() const;
+		iVector2 GetNextTileDirectionFromVelocity() const;
+		Direction GetCurrentDirection() const { return m_CurrentDirection; }
 
 		bool GetIsStatic() const { return m_IsStatic; }
 		void SetIsStatic(const bool isStatic) { m_IsStatic = isStatic; }
 
 		bool IsCentered() const;
 
-		Direction GetDirectionFromVelocity() const;
-		iVector2 GetNextTileDirectionFromVelocity() const;
-
-		bool GetIsMoving() const { return m_IsMoving; }
-
 		glm::vec3 MoveToTile(unsigned int x = 0, unsigned int y = 0, bool canDig = false);
-
-		iVector2 m_CurrentTileIndex{};
-		iVector2 m_NextTileIndex{};
 		
 	protected:
 		/*void Initialize() override;*/
@@ -55,9 +51,14 @@ namespace dae
 		bool m_IsMoving = false;
 		bool m_IsStatic = false;
 
+		iVector2 m_CurrentTileIndex{};
+		Direction m_CurrentDirection = Direction::NONE;
+
 		glm::vec3 m_Position {};
 		glm::vec3 m_OffSet {};
 		glm::vec3 m_Velocity {};
+
+
 
 		
 

@@ -1,11 +1,11 @@
 #pragma once
-#include "Singleton.h"
+#include "Service.h"
 
 namespace dae {
 	enum class Direction;
 	class GameObject;
 	class TileComponent;
-	class LevelManager final : public Singleton<LevelManager>
+	class LevelManager final : public Service
 	{
 	public:
 		LevelManager() = default;

@@ -1,9 +1,10 @@
 #include "MiniginPCH.h"
 #include "GameObject.h"
-#include "ResourceManager.h"
 #include "Renderer.h"
 #include "Components.h"
 #include <complex>
+#include "ServiceLocator.h"
+
 unsigned int dae::GameObject::m_NumberOfGameObjects = 0;
 
 dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureComponent(nullptr),
@@ -36,33 +37,33 @@ void dae::GameObject::Render() const
 {
 	if (m_pTextureComponent != nullptr && m_pTransformComponent != nullptr)
 		if(m_pTextureComponent->GetTexture())
-			Renderer::GetInstance().RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, float(m_pTextureComponent->GetSize().x), float(m_pTextureComponent->GetSize().y));
+			ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, float(m_pTextureComponent->GetSize().x), float(m_pTextureComponent->GetSize().y));
 	
 	if (m_pTileComponent != nullptr && m_pTransformComponent != nullptr)
 	{
 		if (m_pTileComponent->GetTileState() == TileState::DUG)
 		{
 			int x = 32, y = 5;
-			const auto Hwall = ResourceManager::GetInstance().GetTexture(10002);
+			const auto Hwall = ServiceLocator::GetResourceManager()->GetTexture(10002);
 			SDL_QueryTexture(Hwall->GetSDLTexture(), nullptr, nullptr, &x, &y);
 
-			const auto Vwall = ResourceManager::GetInstance().GetTexture(10004);
+			const auto Vwall = ServiceLocator::GetResourceManager()->GetTexture(10004);
 			SDL_QueryTexture(Vwall->GetSDLTexture(), nullptr, nullptr, &y, &x);
 
 			if(!m_pTileComponent->GetBorder(Direction::UP))
-				Renderer::GetInstance().RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 32.0f, 5.0f);
+				ServiceLocator::GetRenderer()->RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 32.0f, 5.0f);
 			
 
 			if (!m_pTileComponent->GetBorder(Direction::DOWN))
-				Renderer::GetInstance().RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y + 32 - 5, 32.0f, 5.0f);
+				ServiceLocator::GetRenderer()->RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y + 32 - 5, 32.0f, 5.0f);
 			
 
 			if (!m_pTileComponent->GetBorder(Direction::LEFT))
-				Renderer::GetInstance().RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
+				ServiceLocator::GetRenderer()->RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
 			
 
 			if (!m_pTileComponent->GetBorder(Direction::RIGHT))
-				Renderer::GetInstance().RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x + 32 - 5, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
+				ServiceLocator::GetRenderer()->RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x + 32 - 5, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
 		}
 	}
 
@@ -71,10 +72,10 @@ void dae::GameObject::Render() const
 		if(m_pCollisionComponent->ShowCollisionBox())
 		{
 			int x = 32, y = 32;
-			const auto Collision = ResourceManager::GetInstance().GetTexture(10000);
+			const auto Collision = ServiceLocator::GetResourceManager()->GetTexture(10000);
 			SDL_QueryTexture(Collision->GetSDLTexture(), nullptr, nullptr, &x, &y);
 
-			Renderer::GetInstance().RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, (float)m_pCollisionComponent->GetSize().x, (float)m_pCollisionComponent->GetSize().y);
+			ServiceLocator::GetRenderer()->RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, (float)m_pCollisionComponent->GetSize().x, (float)m_pCollisionComponent->GetSize().y);
 		}
 	}
 }

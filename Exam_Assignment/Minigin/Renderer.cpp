@@ -1,8 +1,8 @@
 #include "MiniginPCH.h"
 #include "Renderer.h"
 #include <SDL.h>
-#include "SceneManager.h"
 #include "Texture2D.h"
+#include "ServiceLocator.h"
 
 void dae::Renderer::Init(SDL_Window * window)
 {
@@ -17,7 +17,7 @@ void dae::Renderer::Render()
 {
 	SDL_RenderClear(mRenderer);
 
-	SceneManager::GetInstance().Render();
+	ServiceLocator::GetSceneManager()->Render();
 	
 	SDL_RenderPresent(mRenderer);
 }
@@ -36,8 +36,12 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	SDL_Rect dst;
 	dst.x = static_cast<int>(x);
 	dst.y = static_cast<int>(y);
+	SDL_Point center;
+	center.x = 32;
+	center.y = 32;
 	SDL_QueryTexture(texture.GetSDLTexture(), nullptr, nullptr, &dst.w, &dst.h);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	//SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_RenderCopyEx(GetSDLRenderer(), texture.GetSDLTexture(),nullptr, &dst, 0, nullptr, SDL_FLIP_VERTICAL);
 }
 
 void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const float y, const float width, const float height) const

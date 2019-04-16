@@ -1,7 +1,7 @@
 #include "MiniginPCH.h"
 #include "InputManager.h"
 #include "DataStructs.h"
-#include "Command.h"
+#include "Commands.h"
 
 bool dae::InputManager::ProcessInput()
 {

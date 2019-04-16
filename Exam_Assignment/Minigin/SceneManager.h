@@ -1,10 +1,10 @@
 #pragma once
-#include "Singleton.h"
+#include "Service.h"
 
 namespace dae
 {
 	class Scene;
-	class SceneManager final : public Singleton<SceneManager>
+	class SceneManager final : public Service
 	{
 	public:
 		std::shared_ptr<Scene> CreateScene(const std::string& name);

@@ -7,6 +7,7 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "Components.h"
+#include "ServiceLocator.h"
 
 dae::TextObject::TextObject(const std::string& text, std::shared_ptr<Font> font) 
 	: mNeedsUpdate(true), mText(text), mFont(font), mTexture(nullptr)
@@ -23,7 +24,7 @@ void dae::TextObject::Update(float deltaTime)
 		{
 			throw std::runtime_error(std::string("Render text failed: ") + SDL_GetError());
 		}
-		auto texture = SDL_CreateTextureFromSurface(Renderer::GetInstance().GetSDLRenderer(), surf);
+		auto texture = SDL_CreateTextureFromSurface(ServiceLocator::GetRenderer()->GetSDLRenderer(), surf);
 		if (texture == nullptr) 
 		{
 			throw std::runtime_error(std::string("Create text texture from surface failed: ") + SDL_GetError());
@@ -38,7 +39,7 @@ void dae::TextObject::Render() const
 	if (mTexture != nullptr)
 	{
 		const auto pos = mTransform.GetPosition();
-		Renderer::GetInstance().RenderTexture(*mTexture, pos.x, pos.y);
+		ServiceLocator::GetRenderer()->RenderTexture(*mTexture, pos.x, pos.y);
 	}
 }
 

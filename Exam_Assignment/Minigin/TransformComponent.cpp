@@ -4,6 +4,7 @@
 #include <cmath>
 #include "InputManager.h"
 #include "LevelManager.h"
+#include "ServiceLocator.h"
 
 extern  const float g_MoveSpeed;
 extern const float g_TileCenterPadding;
@@ -13,7 +14,7 @@ void dae::TransformComponent::Update(float& deltaTime)
 
 	if(m_IsStatic)
 	{
-		const auto tile = LevelManager::GetInstance().GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
+		const auto tile = ServiceLocator::GetLevelManager()->GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
 		if (tile->GetTileState() != TileState::OCCUPIED)
 			tile->SetTileState(TileState::OCCUPIED);
 	}
@@ -28,8 +29,8 @@ void dae::TransformComponent::Update(float& deltaTime)
 		if (m_IsMoving)
 		{
 			//CHECK IF NEXT TILE IS LEGAL MOVE
-			m_NextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
-			const auto nextTile = LevelManager::GetInstance().GetTile(m_NextTileIndex.x, m_NextTileIndex.y);
+			const iVector2 nextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
+			const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
 			if ((nextTile != nullptr && nextTile->GetTileState() == TileState::OCCUPIED) && IsCentered())
 			{
 				//std::cout << "NEXT TILE IS OCCUPIED\n";

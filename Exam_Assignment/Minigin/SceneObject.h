@@ -1,8 +1,9 @@
 #pragma once
+#include "Subject.h"
 
 namespace dae
 {
-	class SceneObject
+	class SceneObject : public Subject
 	{
 	public:
 		virtual void Update(float deltaTime) = 0;

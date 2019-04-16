@@ -2,7 +2,7 @@
 #include "GameObject.h"
 #include "Components.h"
 #include "InputManager.h"
-#include "Command.h"
+#include "Commands.h"
 
 void dae::InputComponent::KeyUp(SDL_Keycode key) const
 {
@@ -59,8 +59,8 @@ void dae::InputComponent::Update(float& deltaTime)
 	if (m_TransformComponent == nullptr)
 		m_TransformComponent = GetGameObject()->GetComponent<TransformComponent>();
 
-	auto& input = InputManager::GetInstance();
-	std::shared_ptr<Command> command = input.HandleInput();
+	auto input = ServiceLocator::GetInputManager();
+	std::shared_ptr<Command> command = input->HandleInput();
 	if (command != nullptr)
 		command->Execute(*GetGameObject());
 }

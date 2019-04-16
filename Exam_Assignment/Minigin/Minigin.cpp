@@ -6,7 +6,7 @@
 #include "SceneManager.h"
 #include "SceneLoader.h"
 #include "Renderer.h"
-#include "ResourceManager.h"
+
 #include "LevelManager.h"
 #include "PhysicsManager.h"
 
@@ -37,12 +37,20 @@ void dae::Minigin::Initialize()
 		throw std::runtime_error(std::string("SDL_CreateWindow Error: ") + SDL_GetError());
 	}
 	ServiceLocator::InitRenderer(new Renderer());
-	ServiceLocator::InitSceneManager(new SceneManager());
-	ServiceLocator::InitPhysicsManager(new PhysicsManager());
-	ServiceLocator::InitInputManager(new InputManager());
-	ServiceLocator::InitLevelManager(new LevelManager());
+	
+	ServiceLocator::InitResourceManager(new ResourceManager());
 
-	//ServiceLocator::GetRenderer()->Init(window);
+	ServiceLocator::InitPhysicsManager(new PhysicsManager());
+
+	ServiceLocator::InitSceneManager(new SceneManager());
+
+	ServiceLocator::InitSceneLoader(new SceneLoader());
+
+	ServiceLocator::InitInputManager(new InputManager());
+
+	ServiceLocator::InitLevelManager(new LevelManager());
+	
+
 	ServiceLocator::GetRenderer()->Init(window);
 
 }
@@ -52,7 +60,7 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	SceneLoader::GetInstance().InitScene(SceneList::LEVEL_1);
+	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_1);
 }
 
 void dae::Minigin::Cleanup()
@@ -68,15 +76,15 @@ void dae::Minigin::Run()
 	Initialize();
 
 	// tell the resource manager where he can find the game data
-	ResourceManager::GetInstance().Init("../Data/");
+	ServiceLocator::GetResourceManager()->Init("../Data/");
 	LoadGame();
 	{
 		auto renderer = ServiceLocator::GetRenderer();
-		auto& sceneManager = SceneManager::GetInstance();
-		auto& input = InputManager::GetInstance();
-		auto& tileManager = LevelManager::GetInstance();
-		auto& collision = PhysicsManager::GetInstance();
-		collision.ShowCollisionBox(true);
+		auto sceneManager = ServiceLocator::GetSceneManager();
+		auto input = ServiceLocator::GetInputManager();
+		auto tileManager = ServiceLocator::GetLevelManager();
+		auto physics = ServiceLocator::GetPhysicsManager();
+		physics->ShowCollisionBox(true);
 		
 
 		auto t = std::chrono::high_resolution_clock::now();
@@ -90,11 +98,11 @@ void dae::Minigin::Run()
 			const auto deltatime = std::chrono::duration<float>(currentTime - previousTime).count();
 			previousTime = currentTime;
 			lag += deltatime;
-			doContinue = input.ProcessInput();
+			doContinue = input->ProcessInput();
 
-			collision.Update(float(deltatime));
-			tileManager.Update(float(deltatime));
-			sceneManager.Update(float(deltatime));		
+			physics->Update(float(deltatime));
+			tileManager->Update(float(deltatime));
+			sceneManager->Update(float(deltatime));		
 
 			t += std::chrono::milliseconds(msPerFrame);
 			std::this_thread::sleep_until(t);

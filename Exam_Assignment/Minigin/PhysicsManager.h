@@ -1,12 +1,12 @@
 #pragma once
-#include "Singleton.h"
 #include "GameObject.h"
+#include "Service.h"
 
 namespace dae
 {
 	class CollisionComponent;
 
-	class PhysicsManager final : public dae::Singleton<PhysicsManager>
+	class PhysicsManager final : public Service
 	{
 	public:
 		PhysicsManager() = default;
