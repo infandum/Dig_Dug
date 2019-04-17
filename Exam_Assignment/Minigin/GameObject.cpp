@@ -29,7 +29,10 @@ void dae::GameObject::Update(float deltaTime)
 			m_pTileComponent = std::static_pointer_cast<TileComponent>(component);
 
 		if (component && typeid(*component) == typeid(CollisionComponent) && m_pCollisionComponent == nullptr)
-			m_pCollisionComponent = std::static_pointer_cast<CollisionComponent>(component);;
+			m_pCollisionComponent = std::static_pointer_cast<CollisionComponent>(component);
+
+		if (component && typeid(*component) == typeid(SpriteComponent) && m_pSpriteComponent == nullptr)
+			m_pSpriteComponent = std::static_pointer_cast<SpriteComponent>(component);;
 	}
 }
 
@@ -37,7 +40,12 @@ void dae::GameObject::Render() const
 {
 	if (m_pTextureComponent != nullptr && m_pTransformComponent != nullptr)
 		if(m_pTextureComponent->GetTexture())
-			ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, float(m_pTextureComponent->GetSize().x), float(m_pTextureComponent->GetSize().y));
+		{
+			auto flip = SDL_FLIP_NONE;
+			if (GetSprite())
+				flip = GetSprite()->GetFlipSprite();
+			ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, float(m_pTextureComponent->GetSize().x), float(m_pTextureComponent->GetSize().y), flip);
+		}
 	
 	if (m_pTileComponent != nullptr && m_pTransformComponent != nullptr)
 	{
@@ -74,8 +82,7 @@ void dae::GameObject::Render() const
 			int x = 32, y = 32;
 			const auto Collision = ServiceLocator::GetResourceManager()->GetTexture(10000);
 			SDL_QueryTexture(Collision->GetSDLTexture(), nullptr, nullptr, &x, &y);
-
-			ServiceLocator::GetRenderer()->RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, (float)m_pCollisionComponent->GetSize().x, (float)m_pCollisionComponent->GetSize().y);
+			ServiceLocator::GetRenderer()->RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, static_cast<float>(m_pCollisionComponent->GetSize().x), static_cast<float>(m_pCollisionComponent->GetSize().y));
 		}
 	}
 }

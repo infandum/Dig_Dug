@@ -31,7 +31,6 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 			resource->LoadTexture("background.jpg", 999);
 			resource->LoadTexture("logo.png", 998);
-			resource->LoadTexture("images/Player/Player.png", 02);
 
 			go = std::make_shared<GameObject>();
 			go->AddComponent(std::make_shared<TransformComponent>());
@@ -68,7 +67,6 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	case SceneList::LEVEL_1:
 		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level 1");
 		resource->LoadTexture("images/background@2x.png", 01);
-		resource->LoadTexture("images/Player/Player.png", 02);
 				
 		resource->LoadTexture("images/Dirt.png", 10);
 		resource->LoadTexture("images/Free.png", 11);
@@ -130,7 +128,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_pPlayer->AddComponent(std::make_shared<InputComponent>());
 		m_pPlayer->AddComponent(std::make_shared<TextureComponent>());
 		m_pPlayer->AddComponent(std::make_shared<SpriteComponent>());
-		m_pPlayer->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(02));
+		m_pPlayer->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(1101));
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
 		//m_pPlayer->GetComponent<CollisionComponent>()->ShowCollisionBox(true);

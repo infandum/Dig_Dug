@@ -12,6 +12,14 @@ namespace dae
 		virtual void Update(float& deltaTime, GameObject& gameObject) = 0;
 	};
 
+	class DirectionState : public BaseState
+	{
+	public:
+		virtual ~DirectionState() = default;
+		std::shared_ptr<BaseState> Swap(GameObject& gameObject) override;
+		void Update(float& deltaTime, GameObject& gameObject) override;
+	};
+
 	class UpState : public BaseState
 	{
 	public:

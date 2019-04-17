@@ -17,11 +17,19 @@ namespace dae
 
 		void Swap();
 
+		std::shared_ptr<BaseState> GetCurrentDirectionState() const { return m_DirState; }
+
+		void SetFlipSprite(const SDL_RendererFlip flip) { m_FlipDirection = flip; }
+		SDL_RendererFlip GetFlipSprite() const { return m_FlipDirection; }
+
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
 	private:
-		std::shared_ptr<BaseState> m_DirState = std::make_shared<RightState>();
+		std::shared_ptr<BaseState> m_DirState = std::make_shared<DirectionState>();
+		std::shared_ptr<BaseState> m_ActionState = std::make_shared<RightState>();
+
+		SDL_RendererFlip m_FlipDirection = SDL_FLIP_NONE;
 	};
 }

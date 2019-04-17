@@ -28,6 +28,7 @@ namespace dae
 		std::shared_ptr<TextureComponent> GetTexture() const { return m_pTextureComponent; }
 		std::shared_ptr<CollisionComponent> GetCollision() const { return m_pCollisionComponent; }
 		std::shared_ptr<TileComponent> GetTile() const { return m_pTileComponent; }
+		std::shared_ptr<SpriteComponent> GetSprite() const { return m_pSpriteComponent; }
 
 		void AddComponent(std::shared_ptr<BaseComponent> comp);
 		void RemoveComponent(std::shared_ptr<BaseComponent> pComp);
@@ -50,6 +51,7 @@ namespace dae
 		std::shared_ptr<TextureComponent> m_pTextureComponent{};
 		std::shared_ptr<CollisionComponent> m_pCollisionComponent{};
 		std::shared_ptr<TileComponent> m_pTileComponent{};
+		std::shared_ptr<SpriteComponent> m_pSpriteComponent{};
 		static unsigned int m_NumberOfGameObjects;
 	};
 }

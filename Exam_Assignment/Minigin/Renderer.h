@@ -1,5 +1,6 @@
 #pragma once
 #include "Service.h"
+#include <SDL.h>
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -16,8 +17,8 @@ namespace dae
 		void Render();
 		void Destroy();
 
-		void RenderTexture(const Texture2D& texture, float x, float y) const;
-		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
+		void RenderTexture(const Texture2D& texture, float x, float y, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
+		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height, SDL_RendererFlip flip = SDL_FLIP_NONE) const;
 
 		SDL_Renderer* GetSDLRenderer() const { return mRenderer; }
 	};

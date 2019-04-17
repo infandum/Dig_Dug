@@ -151,6 +151,19 @@ bool dae::TransformComponent::IsCentered() const
 	return XisCenter && YisCenter;
 }
 
+void dae::TransformComponent::SetVelocity(glm::vec3 direction)
+{
+	m_Velocity = direction; 
+	if (GetDirectionFromVelocity() != Direction::NONE) 
+	{
+		/*if (m_PreviousDirection != m_CurrentDirection)*/
+			m_PreviousDirection = m_CurrentDirection;
+
+		m_CurrentDirection = GetDirectionFromVelocity();
+	}
+}
+
+
 dae::Direction dae::TransformComponent::GetDirectionFromVelocity() const
 {
 	if (m_Velocity.y < 0.0f)
