@@ -20,6 +20,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_LEFT);
 	input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT);
 	input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_x);
+	auto animations = ServiceLocator::GetAnimationManager();
 
 	std::shared_ptr<GameObject> go;
 	std::shared_ptr<Font> font;
@@ -96,6 +97,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		resource->LoadTexture("images/Player/Player_Dig_22.png", 1222);
 		resource->LoadTexture("images/Player/Player_Dig_31.png", 1231);
 		resource->LoadTexture("images/Player/Player_Dig_32.png", 1232);
+		
+		
 
 		go = std::make_shared<GameObject>();
 		go->AddComponent(std::make_shared<TransformComponent>());
@@ -131,6 +134,11 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_pPlayer->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(1101));
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
+
+		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1100, 2, true), 1);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdleState>());
+		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1200, 2, true), 2);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<DigState>());
 		//m_pPlayer->GetComponent<CollisionComponent>()->ShowCollisionBox(true);
 		m_Scene->Add(m_pPlayer);
 

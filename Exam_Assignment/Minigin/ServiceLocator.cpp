@@ -10,3 +10,4 @@ std::unique_ptr<dae::PhysicsManager> dae::ServiceLocator::m_pPhysicsManager = nu
 std::unique_ptr<dae::InputManager>  dae::ServiceLocator::m_pInputManager = nullptr;
 std::unique_ptr<dae::LevelManager>  dae::ServiceLocator::m_pLevelManager = nullptr;
 std::unique_ptr<dae::ResourceManager>  dae::ServiceLocator::m_pResourceManager = nullptr;
+std::unique_ptr<dae::AnimationManager>  dae::ServiceLocator::m_pAnimationManager = nullptr;

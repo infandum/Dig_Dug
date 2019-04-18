@@ -7,6 +7,7 @@
 #include "InputManager.h"
 #include "LevelManager.h"
 #include "ResourceManager.h"
+#include "AnimationManager.h"
 
 namespace  dae 
 {
@@ -31,6 +32,8 @@ namespace  dae
 
 		static void InitResourceManager(ResourceManager* resourceManager) { m_pResourceManager.reset(resourceManager); }
 
+		static void InitAnimationManager(AnimationManager* animationManager) { m_pAnimationManager.reset(animationManager); }
+
 		static Renderer* GetRenderer() { return m_pRenderer.get(); }
 		static SceneManager* GetSceneManager() { return m_pSceneManager.get(); }
 		static SceneLoader* GetSceneLoader() { return m_pSceneLoader.get(); }
@@ -38,6 +41,7 @@ namespace  dae
 		static InputManager* GetInputManager() { return m_pInputManager.get(); }
 		static LevelManager* GetLevelManager() { return m_pLevelManager.get(); }
 		static ResourceManager* GetResourceManager() { return m_pResourceManager.get(); }
+		static AnimationManager* GetAnimationManager() { return m_pAnimationManager.get(); }
 
 	private:
 		static std::map<UINT, std::unique_ptr<Service>> m_pServices;
@@ -48,5 +52,6 @@ namespace  dae
 		static std::unique_ptr<InputManager > m_pInputManager;
 		static std::unique_ptr<LevelManager> m_pLevelManager;
 		static std::unique_ptr<ResourceManager> m_pResourceManager;
+		static std::unique_ptr<AnimationManager> m_pAnimationManager;
 	};
 }

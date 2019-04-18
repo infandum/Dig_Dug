@@ -10,6 +10,14 @@ namespace dae
 		virtual ~BaseState() = default;
 		virtual std::shared_ptr<BaseState> Swap(GameObject& gameObject) = 0;
 		virtual void Update(float& deltaTime, GameObject& gameObject) = 0;
+		
+		virtual void Animated(GameObject& gameObject) = 0;
+		virtual void SetStateAnimClip(UINT id) { m_StateAnimClipId = id; }
+		virtual UINT GetStateAnimClip() const { return m_StateAnimClipId; }
+
+	protected:
+		virtual void SpriteFlip(GameObject& gameObject) const = 0;
+		UINT m_StateAnimClipId = 0;
 	};
 
 	class DirectionState : public BaseState
@@ -18,34 +26,29 @@ namespace dae
 		virtual ~DirectionState() = default;
 		std::shared_ptr<BaseState> Swap(GameObject& gameObject) override;
 		void Update(float& deltaTime, GameObject& gameObject) override;
+		void Animated(GameObject& gameObject) override;
+	protected:
+		void SpriteFlip(GameObject& gameObject) const override;
 	};
 
-	class UpState : public BaseState
+	class IdleState : public DirectionState
 	{
 	public:
+		virtual ~IdleState() = default;
 		std::shared_ptr<BaseState> Swap(GameObject& gameObject) override;
-		void Update(float& deltaTime, GameObject& gameObject) override;
-		virtual ~UpState() = default;
+		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};
 
-	class DownState : public BaseState
+	class DigState : public DirectionState
 	{
+	public:
+		virtual ~DigState() = default;
 		std::shared_ptr<BaseState> Swap(GameObject& gameObject) override;
-		void Update(float& deltaTime, GameObject& gameObject) override;
+		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};
 
 
-	class LeftState : public BaseState
-	{
-		std::shared_ptr<BaseState> Swap(GameObject& gameObject) override;
-		void Update(float& deltaTime, GameObject& gameObject) override;
-	};
-
-	class RightState : public BaseState
-	{
-		std::shared_ptr<BaseState> Swap(GameObject& gameObject) override;
-		void Update(float& deltaTime, GameObject& gameObject) override;
-	};
+	/*
 
 	class DugState : public BaseState
 	{
@@ -73,5 +76,5 @@ namespace dae
 	public:
 		std::shared_ptr<BaseState> Swap(GameObject& gameObject) override;
 		void Update(float& deltaTime, GameObject& gameObject) override;
-	};
+	};*/
 }

@@ -145,6 +145,9 @@
     <ClInclude Include="Commands.h">
       <Filter>Managers\Input</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationManager.h">
+      <Filter>Managers\Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseComponent.cpp">
@@ -230,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="States.cpp">
       <Filter>Managers\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationManager.cpp">
+      <Filter>Managers\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

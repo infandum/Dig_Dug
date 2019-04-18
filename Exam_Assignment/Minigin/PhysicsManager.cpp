@@ -3,8 +3,6 @@
 #include "GameObject.h"
 #include "Components.h"
 
-extern const float g_CollisionPadding;
-
 void dae::PhysicsManager::Update(float deltaTime)
 {
 	//TODO: ENTER COLLISION
@@ -16,25 +14,12 @@ void dae::PhysicsManager::Update(float deltaTime)
 		if(!component->ShowCollisionBox())
 			component->ShowCollisionBox(ShowCollisionBox());
 
-		
-		/*const glm::vec3 firstPos = component->GetPosition();*/
-
 		for (auto& otherComponent : m_pCollisionComponents)
 		{
 			if(component == otherComponent)
 				continue;
 
-			auto isOverlapping = false;
-
-			/*glm::vec3 SecondPos = otherComponent->GetPosition();*/
-			isOverlapping = IsOverlapping(component, otherComponent);
-			
-			/*std::cout << component->GetGameObject()->GetName() << "<>" <<otherComponent->GetGameObject()->GetName() << std::endl;
-			if(isOverlapping)
-				std::cout << "COLLISION!!" << std::endl;
-			else
-				std::cout << "NO COLLISION!!" << std::endl;*/
-
+			const auto isOverlapping = IsOverlapping(component, otherComponent);
 			if(isOverlapping)
 			{
 				component->SetHasCollision(isOverlapping);
@@ -78,21 +63,21 @@ std::shared_ptr<dae::CollisionComponent> dae::PhysicsManager::GetCollision(std::
 	return nullptr;
 }
 
-bool dae::PhysicsManager::IsOverlapping(std::shared_ptr<CollisionComponent> firstComp, std::shared_ptr<CollisionComponent> secondComp)
+bool dae::PhysicsManager::IsOverlapping(std::shared_ptr<CollisionComponent> firstComp, std::shared_ptr<CollisionComponent> secondComp) const
 {
 	auto IsXOverlap = false;
 	auto IsYOverlap = false;
 
 	if (firstComp->GetPosition().x >= secondComp->GetPosition().x)
 	{
-		if (firstComp->GetPosition().x - (firstComp->GetSize().x / 2) + g_CollisionPadding < secondComp->GetPosition().x + (secondComp->GetSize().x / 2) - g_CollisionPadding)
+		if (firstComp->GetPosition().x - (firstComp->GetSize().x / 2) + m_CollisionPadding < secondComp->GetPosition().x + (secondComp->GetSize().x / 2) - m_CollisionPadding)
 		{
 			IsXOverlap = true;
 		}
 	}
 	else
 	{
-		if (firstComp->GetPosition().x + (firstComp->GetSize().x / 2) - g_CollisionPadding > secondComp->GetPosition().x - (secondComp->GetSize().x / 2) + g_CollisionPadding)
+		if (firstComp->GetPosition().x + (firstComp->GetSize().x / 2) - m_CollisionPadding > secondComp->GetPosition().x - (secondComp->GetSize().x / 2) + m_CollisionPadding)
 		{
 			IsXOverlap = true;
 		}
@@ -100,14 +85,14 @@ bool dae::PhysicsManager::IsOverlapping(std::shared_ptr<CollisionComponent> firs
 
 	if (firstComp->GetPosition().y >= secondComp->GetPosition().y)
 	{
-		if (firstComp->GetPosition().y - (firstComp->GetSize().y / 2) + g_CollisionPadding < secondComp->GetPosition().y + (secondComp->GetSize().y / 2) - g_CollisionPadding)
+		if (firstComp->GetPosition().y - (firstComp->GetSize().y / 2) + m_CollisionPadding < secondComp->GetPosition().y + (secondComp->GetSize().y / 2) - m_CollisionPadding)
 		{
 			IsYOverlap = true;
 		}
 	}
 	else
 	{
-		if (firstComp->GetPosition().y + (firstComp->GetSize().y / 2) - g_CollisionPadding > secondComp->GetPosition().y - (secondComp->GetSize().y / 2) + g_CollisionPadding)
+		if (firstComp->GetPosition().y + (firstComp->GetSize().y / 2) - m_CollisionPadding > secondComp->GetPosition().y - (secondComp->GetSize().y / 2) + m_CollisionPadding)
 		{
 			IsYOverlap = true;
 		}

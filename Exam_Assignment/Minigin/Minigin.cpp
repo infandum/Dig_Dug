@@ -49,7 +49,8 @@ void dae::Minigin::Initialize()
 	ServiceLocator::InitInputManager(new InputManager());
 
 	ServiceLocator::InitLevelManager(new LevelManager());
-	
+
+	ServiceLocator::InitAnimationManager(new AnimationManager());
 
 	ServiceLocator::GetRenderer()->Init(window);
 
