@@ -23,7 +23,9 @@ namespace dae
 		virtual SDL_Keycode GetKey() { return m_Key; }
 
 	protected:
-		//std::shared_ptr<GameObject> m_GameObject{};
+
+		virtual void notify(GameObject& gameObject, NotifyEvent event) const;
+
 		ControllerButton m_Button{};
 		SDL_Keycode m_Key{};
 		const InputManager* m_Input = ServiceLocator::GetInputManager();
@@ -35,15 +37,37 @@ namespace dae
 		void Execute(GameObject& gameObject) override;
 	};
 
+	inline void Command::notify(GameObject& gameObject, NotifyEvent event) const
+	{
+		if(gameObject.GetSprite())
+			gameObject.GetSprite()->onNotify(event);
+		if (gameObject.GetInput())
+			gameObject.GetInput()->onNotify(event);
+	}
+
 	inline void UpCommand::Execute(GameObject& gameObject)
 	{
-		
 		if (gameObject.GetTransform())
 		{
 			if (m_Input->IsKeyDown())
+			{
+				/*if (gameObject.GetTransform()->isSwappingTile == false)
+					notify(gameObject, NotifyEvent::EVENT_MOVE);
+				else
+					notify(gameObject, NotifyEvent::EVENT_DIG);*/
+
+				notify(gameObject, NotifyEvent::EVENT_MOVE);
+
 				gameObject.GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
+			}
+
 			if (m_Input->IsKeyUp())
+			{
+				notify(gameObject, NotifyEvent::EVENT_IDLE);
+
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+			}
+
 		}
 	}
 
@@ -58,9 +82,24 @@ namespace dae
 		if (gameObject.GetTransform())
 		{
 			if (m_Input->IsKeyDown())
+			{
+				/*if (gameObject.GetTransform()->isSwappingTile == false)
+					notify(gameObject, NotifyEvent::EVENT_MOVE);
+				else
+					notify(gameObject, NotifyEvent::EVENT_DIG);*/
+
+				notify(gameObject, NotifyEvent::EVENT_MOVE);
+
 				gameObject.GetTransform()->SetVelocity({ 0, g_MoveSpeed, 0 });
+			}
+
 			if (m_Input->IsKeyUp())
+			{
+				notify(gameObject, NotifyEvent::EVENT_IDLE);
+
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+			}
+
 		}
 	}
 
@@ -75,9 +114,24 @@ namespace dae
 		if (gameObject.GetTransform())
 		{
 			if (m_Input->IsKeyDown())
+			{
+				/*if (gameObject.GetTransform()->isSwappingTile == false)
+					notify(gameObject, NotifyEvent::EVENT_MOVE);
+				else
+					notify(gameObject, NotifyEvent::EVENT_DIG);*/
+
+				notify(gameObject, NotifyEvent::EVENT_MOVE);
+
 				gameObject.GetTransform()->SetVelocity({ -g_MoveSpeed, 0, 0 });
+			}
+
 			if (m_Input->IsKeyUp())
+			{
+				notify(gameObject, NotifyEvent::EVENT_IDLE);
+
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+			}
+
 		}
 	}
 
@@ -89,12 +143,28 @@ namespace dae
 
 	inline void RightCommand::Execute(GameObject& gameObject)
 	{
+		
 		if (gameObject.GetTransform())
 		{
 			if (m_Input->IsKeyDown())
+			{
+				/*if (gameObject.GetTransform()->isSwappingTile == false)
+					notify(gameObject, NotifyEvent::EVENT_MOVE);
+				else
+					notify(gameObject, NotifyEvent::EVENT_DIG);*/
+
+				notify(gameObject, NotifyEvent::EVENT_MOVE);
+
 				gameObject.GetTransform()->SetVelocity({ g_MoveSpeed, 0, 0 });
+			}
+				
 			if (m_Input->IsKeyUp())
+			{
+				notify(gameObject, NotifyEvent::EVENT_IDLE);
+
 				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+			}
+				
 		}
 	}
 
@@ -106,6 +176,15 @@ namespace dae
 
 	inline void AttackCommand::Execute(GameObject& gameObject)
 	{
-		std::cout << gameObject.GetName() << '\n';
+		std::cout << gameObject.GetName() << ">> ATTACKING" << '\n';
+		if (m_Input->IsKeyDown())
+		{
+			notify(gameObject, NotifyEvent::EVENT_ATTACK);
+		}
+
+		if (m_Input->IsKeyUp())
+		{
+			notify(gameObject, NotifyEvent::EVENT_IDLE);
+		}
 	}
 };

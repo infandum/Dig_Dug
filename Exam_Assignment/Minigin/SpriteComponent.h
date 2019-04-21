@@ -26,17 +26,18 @@ namespace dae
 
 		void SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state);
 
+		void onNotify(NotifyEvent event) { m_Event = event; }
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
 
 		void SetActiveAnimationFrame(float& deltaTime);
-		UINT GetAnimationForState(std::shared_ptr<BaseState> state);
+		UINT GetAnimationIDForState(std::shared_ptr<BaseState> state);
 	private:
-		std::shared_ptr<BaseState> m_DirState = std::make_shared<DigState>();
-		//std::shared_ptr<BaseState> m_ActionState = std::make_shared<RightState>();
+		std::shared_ptr<BaseState> m_DirState = std::make_shared<IdleState>();
 
+		NotifyEvent m_Event = NotifyEvent::EVENT_IDLE;
 		SDL_RendererFlip m_FlipDirection = SDL_FLIP_NONE;
 
 		double m_FrameTime = 0;

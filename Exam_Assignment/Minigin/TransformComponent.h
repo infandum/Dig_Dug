@@ -42,7 +42,9 @@ namespace dae
 		bool IsCentered() const;
 
 		glm::vec3 MoveToTile(unsigned int x = 0, unsigned int y = 0, bool canDig = false);
-		
+
+		bool isSwappingTile = false;
+
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
@@ -60,8 +62,6 @@ namespace dae
 		glm::vec3 m_Position {};
 		glm::vec3 m_OffSet {};
 		glm::vec3 m_Velocity {};
-
-
 
 		
 

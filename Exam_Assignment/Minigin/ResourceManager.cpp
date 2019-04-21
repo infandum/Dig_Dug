@@ -70,7 +70,7 @@ std::shared_ptr<dae::Texture2D> dae::ResourceManager::GetTexture(UINT id)
 	const auto it = m_pLoadedTextures.find(id);
 	if (it == m_pLoadedTextures.end())
 	{
-		std::cout << "ResourceManager::LoadTexture() > Material with ID %i not found! " << id << '\n';
+		std::cout << "ResourceManager::GetTexture() > Material with ID %i not found! " << id << '\n';
 		return nullptr;
 	}
 	return it->second;

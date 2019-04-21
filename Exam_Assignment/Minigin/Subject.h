@@ -15,7 +15,7 @@ namespace dae
 			{
 				if (typeid(*observ) == typeid(*pObserver))
 				{
-					std::cout << "Component Duplicate: " << typeid(*pObserver).name() << " >> Already added!!";
+					std::cout << "Observer::AddObserver > Duplicate: " << typeid(*pObserver).name() << " >> Already added!!";
 					return;
 				}
 			}
@@ -28,7 +28,7 @@ namespace dae
 			const auto comp = std::find(m_pObservers.begin(), m_pObservers.end(), pObserver);
 			if (comp == m_pObservers.end())
 			{
-				std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+				std::wcout << L"Observer::RemoveObserver > Observer is not attached to this GameObject!" << std::endl;
 				return;
 			}
 			m_pObservers.erase(comp);

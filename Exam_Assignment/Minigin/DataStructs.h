@@ -1,10 +1,24 @@
 #pragma once
+#include "MiniginPCH.h"
+#include <windows.h>
 namespace dae
 {
 	enum class StatusCode
 	{
 		STATUS_SUCCES,
 		STATUS_ERROR
+	};
+
+	enum class NotifyEvent
+	{
+		EVENT_SPAWN,
+		EVENT_IDLE,
+		EVENT_MOVE,
+		EVENT_DIG,
+		EVENT_ATTACK,
+		EVENT_HIT,
+		EVENT_DEAD,
+		EVENT_CRUSHED,
 	};
 
 	enum class Direction
@@ -49,6 +63,15 @@ namespace dae
 		ButtonRightThumb = 0x0080,
 		ButtonLeftTrigger = 0x0100,
 		ButtonRightTrigger = 0x0200
+	};
+
+	struct AnimationClip
+	{
+		UINT id = 0;
+		std::vector<std::vector<UINT>> TextureList;
+		UINT frames = 1;
+		bool hasUpDown = false;
+		bool isLooping = false;
 	};
 
 	//2D VECTORS

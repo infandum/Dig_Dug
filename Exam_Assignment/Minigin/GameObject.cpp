@@ -32,7 +32,10 @@ void dae::GameObject::Update(float deltaTime)
 			m_pCollisionComponent = std::static_pointer_cast<CollisionComponent>(component);
 
 		if (component && typeid(*component) == typeid(SpriteComponent) && m_pSpriteComponent == nullptr)
-			m_pSpriteComponent = std::static_pointer_cast<SpriteComponent>(component);;
+			m_pSpriteComponent = std::static_pointer_cast<SpriteComponent>(component);
+
+		if (component && typeid(*component) == typeid(InputComponent) && m_pInputComponent == nullptr)
+			m_pInputComponent = std::static_pointer_cast<InputComponent>(component);
 	}
 }
 

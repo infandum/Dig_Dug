@@ -22,34 +22,53 @@ void dae::LevelManager::Update(float deltaTime)
 		double modX = fmod(round(m_pPlayer->GetTransform()->GetPosition().x), 32.0);
 		double modY = fmod(round(m_pPlayer->GetTransform()->GetPosition().y), 32.0);
 		bool isSwappingTile = false;
+		bool isEnteringLeft = false;
+		bool isEnterRight = false;
+		bool isEnteringUp = false;
+		bool isEnterDown = false;
 
 		if(modX >= 2 && modX < 14)
 		{
 			//std::cout << "LEAVING TILE TO THE RIGHT\n";
+			/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::RIGHT)
+				m_pPlayer->GetTransform()->isSwappingTile = true;*/
+			isEnteringLeft = true;
 		}
 		else if (modX >= 14 && modX <= 18)
 		{
 			//std::cout << "CENTER\n";
+			//m_pPlayer->GetTransform()->isSwappingTile = true;
 			isSwappingTile = true;
 			
 		}
 		else if( modX > 18 && modX <= 30)
 		{
 			//std::cout << "LEAVING TILE TO THE LEFT\n";
+			/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::LEFT)
+				m_pPlayer->GetTransform()->isSwappingTile = true;*/
+			isEnterRight = true;
 		}
 
 		if (modY >= 2 && modY < 14)
 		{
 			//std::cout << "LEAVING TILE TO THE DOWN\n";
+			/*if(m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::DOWN)
+				m_pPlayer->GetTransform()->isSwappingTile = true;*/
+			isEnteringUp = true;
 		}
 		else if (modY >= 14 && modY <= 18)
 		{
 			//std::cout << "CENTER\n";
+			
+			/*m_pPlayer->GetTransform()->isSwappingTile = true;*/
 			isSwappingTile = true;
 		}
 		else if (modY > 18 && modY <= 30)
 		{
 			//std::cout << "LEAVING TILE TO THE UP\n";
+			/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::UP)
+				m_pPlayer->GetTransform()->isSwappingTile = true;*/
+			isEnterDown = true;
 		}
 
 		if(isSwappingTile)

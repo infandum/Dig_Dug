@@ -1,10 +1,11 @@
 #include "MiniginPCH.h"
 #include "AnimationManager.h"
 
-std::vector<std::vector<UINT>> dae::AnimationManager::BuildAnimationStateClip(UINT textureIdStart, UINT frames,	bool hasUpDown)
+dae::AnimationClip dae::AnimationManager::BuildAnimationStateClip(UINT textureIdStart, UINT frames,	bool hasUpDown , bool isLooping)
 {
 	auto TextureId = textureIdStart;
 	std::vector<std::vector<UINT>> Stateclip;
+	AnimationClip clip;
 	for(UINT dir = 0; dir < static_cast<UINT>(Direction::NONE); dir++)
 	{
 		std::vector<UINT> animationClip;
@@ -17,34 +18,33 @@ std::vector<std::vector<UINT>> dae::AnimationManager::BuildAnimationStateClip(UI
 		}
 		Stateclip.push_back(animationClip);
 	}
-	return Stateclip;
+	clip.TextureList = Stateclip;
+	clip.frames = frames;
+	clip.hasUpDown = hasUpDown;
+	clip.isLooping = isLooping;
+	return clip;
 }
 
-void dae::AnimationManager::LoadAnimationClips(std::vector<std::vector<UINT>> TextureList, UINT id)
+void dae::AnimationManager::LoadAnimationClips(AnimationClip animClip, UINT id)
 {
-	for (std::pair<UINT, std::vector<std::vector<UINT>>> Entry : m_pLoadedAnimations)
+	for (const std::pair<UINT, AnimationClip> Entry : m_pLoadedAnimations)
 	{
 		if (Entry.first == id)
 		{
-			std::cout << "ResourceManager::LoadTexture() > id %i is already used! " << id << '\n';
-			return;
-		}
-
-		if (Entry.second == TextureList)
-		{
-			std::cout << "ResourceManager::LoadTexture() > Texture is already added to the manager (ID %i)! " << id << '\n';
+			std::cout << "AnimationManager::LoadAnimationClips() > id %i is already used! " << id << '\n';
 			return;
 		}
 	}
-	m_pLoadedAnimations[id] = TextureList;
+	animClip.id = id;
+	m_pLoadedAnimations[id] = animClip;
 }
 
-std::vector<std::vector<UINT>> dae::AnimationManager::GetAnimationClips(UINT id)
+dae::AnimationClip dae::AnimationManager::GetAnimationClips(UINT id)
 {
 	const auto it = m_pLoadedAnimations.find(id);
 	if (it == m_pLoadedAnimations.end())
 	{
-		std::cout << "ResourceManager::LoadTexture() > Material with ID %i not found! " << id << '\n';
+		std::cout << "AnimationManager::GetAnimationClips() > Animation clip with ID %i not found! " << id << '\n';
 		return {};
 	}
 	return it->second;

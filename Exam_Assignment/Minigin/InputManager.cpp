@@ -7,15 +7,6 @@ bool dae::InputManager::ProcessInput()
 {
 	ZeroMemory(&currentState, sizeof(XINPUT_STATE));
 	XInputGetState(0, &currentState);
-
-	//for (auto& command : m_pCommands)
-	//{
-	//	if (IsPressed(command->GetButton()) || IsPressed(command->GetKey()))
-	//	{
-	//		if (command)
-	//		return true;
-	//	}
-	//}
 	
 	m_IsKeyUp = false;
 	m_IsKeyDown = false;

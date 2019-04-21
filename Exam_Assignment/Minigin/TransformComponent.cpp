@@ -19,23 +19,40 @@ void dae::TransformComponent::Update(float& deltaTime)
 			tile->SetTileState(TileState::OCCUPIED);
 	}
 
+	
+
 	UNREFERENCED_PARAMETER(deltaTime);
 	if(!m_IsStatic)
 	{
 		glm::vec3 velocity{ 0 };
 		if (m_Velocity.x != 0 || m_Velocity.y != 0)
 			velocity = MoveDirection();
+		
 
 		if (m_IsMoving)
 		{
+			isSwappingTile = false;
 			//CHECK IF NEXT TILE IS LEGAL MOVE
 			const iVector2 nextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
+			const auto currTile = ServiceLocator::GetLevelManager()->GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
 			const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
-			if ((nextTile != nullptr && nextTile->GetTileState() == TileState::OCCUPIED) && IsCentered())
+			if (nextTile != nullptr)
 			{
-				//std::cout << "NEXT TILE IS OCCUPIED\n";
-				return;
+				if(nextTile->GetTileState() == TileState::OCCUPIED && IsCentered())
+				{
+					//std::cout << "NEXT TILE IS OCCUPIED\n";
+					isSwappingTile = false;
+					return;
+				}
+				if (nextTile->GetTileState() == TileState::DIRT && currTile->GetBorder(GetCurrentDirection()) == false)
+				{
+					isSwappingTile = true;
+				}
 			}
+
+				
+				
+			
 
 			double newPositionX = m_Position.x + round(deltaTime * velocity.x);
 			double newPositionY = m_Position.y + round(deltaTime * velocity.y);
@@ -60,8 +77,7 @@ void dae::TransformComponent::Update(float& deltaTime)
 
 			
 			m_Position = { newPositionX, newPositionY, m_Position.z };
-			m_IsMoving = false;
-
+			m_IsMoving = false;	
 		}
 	}
 }

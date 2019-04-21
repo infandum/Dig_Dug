@@ -67,7 +67,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		break;
 	case SceneList::LEVEL_1:
 		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level 1");
-		resource->LoadTexture("images/background@2x.png", 01);
+		resource->LoadTexture("images/DigDug_BackGround.png", 01);
 				
 		resource->LoadTexture("images/Dirt.png", 10);
 		resource->LoadTexture("images/Free.png", 11);
@@ -97,6 +97,15 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		resource->LoadTexture("images/Player/Player_Dig_22.png", 1222);
 		resource->LoadTexture("images/Player/Player_Dig_31.png", 1231);
 		resource->LoadTexture("images/Player/Player_Dig_32.png", 1232);
+
+		resource->LoadTexture("images/Player/Player_Dig_01.png",  1301);
+		resource->LoadTexture("images/Player/Player_Shoot_0.png", 1302);
+		resource->LoadTexture("images/Player/Player_Dig_11.png",  1311);
+		resource->LoadTexture("images/Player/Player_Shoot_1.png", 1312);
+		resource->LoadTexture("images/Player/Player_Dig_21.png",  1321);
+		resource->LoadTexture("images/Player/Player_Shoot_2.png", 1322);
+		resource->LoadTexture("images/Player/Player_Dig_31.png",  1331);
+		resource->LoadTexture("images/Player/Player_Shoot_3.png", 1332);
 		
 		
 
@@ -135,10 +144,14 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
 
-		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1100, 2, true), 1);
+		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1100, 1, true, false), 1);
 		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdleState>());
+		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1100, 2, true), 4);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<MoveState>());
 		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1200, 2, true), 2);
 		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<DigState>());
+		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1300, 2, true, false), 3);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<AttackState>());
 		//m_pPlayer->GetComponent<CollisionComponent>()->ShowCollisionBox(true);
 		m_Scene->Add(m_pPlayer);
 

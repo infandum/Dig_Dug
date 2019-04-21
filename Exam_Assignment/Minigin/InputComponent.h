@@ -14,8 +14,8 @@ namespace dae {
 		InputComponent& operator=(InputComponent&& other) noexcept = delete;
 		InputComponent() = default;
 		virtual ~InputComponent() = default;
-		void KeyDown(SDL_Keycode key) const;
-		void KeyUp(SDL_Keycode key) const;
+
+		void onNotify(NotifyEvent event);
 
 	protected:
 		/*void Initialize() override;*/
