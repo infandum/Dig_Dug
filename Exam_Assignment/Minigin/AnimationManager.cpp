@@ -49,3 +49,28 @@ dae::AnimationClip dae::AnimationManager::GetAnimationClips(UINT id)
 	}
 	return it->second;
 }
+
+void dae::AnimationManager::LoadSpriteClip(SpriteClip spriteClip, UINT id)
+{
+	for (const std::pair<UINT, SpriteClip> Entry : m_pLoadedSprites)
+	{
+		if (Entry.first == id)
+		{
+			std::cout << "AnimationManager::LoadAnimationClips() > id %i is already used! " << id << '\n';
+			return;
+		}
+	}
+	spriteClip.id = id;
+	m_pLoadedSprites[id] = spriteClip;
+}
+
+dae::SpriteClip dae::AnimationManager::GetSpriteClip(UINT id)
+{
+	const auto it = m_pLoadedSprites.find(id);
+	if (it == m_pLoadedSprites.end())
+	{
+		std::cout << "AnimationManager::GetAnimationClips() > Animation clip with ID %i not found! " << id << '\n';
+		return {};
+	}
+	return it->second;
+}

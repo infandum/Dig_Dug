@@ -28,16 +28,16 @@ void dae::TileComponent::SetBorder(Direction dir, bool isCrossed)
 {
 	switch (dir)
 	{
-	case Direction::UP:
+	case Direction::RIGHT:
 		m_IsBorderConnected[0] = isCrossed;
 		break;
-	case Direction::DOWN:
+	case Direction::UP:
 		m_IsBorderConnected[1] = isCrossed;
 		break;
 	case Direction::LEFT:
 		m_IsBorderConnected[2] = isCrossed;
 		break;
-	case Direction::RIGHT:
+	case Direction::DOWN:
 		m_IsBorderConnected[3] = isCrossed;
 		break;
 	default: ;

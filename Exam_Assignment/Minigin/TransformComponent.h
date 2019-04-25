@@ -25,7 +25,7 @@ namespace dae
 		void SetPosition(float x = 0, float y = 0, float z = 0);
 	
 		const iVector2& GetPositionIndex() const { return m_CurrentTileIndex; }
-		void SetPositionIndex(iVector2 index) { std::cout << index.x << "," << index.y << '\n'; m_CurrentTileIndex = index; }
+		void SetPositionIndex(iVector2 index) { /*std::cout << index.x << "," << index.y << '\n';*/ m_CurrentTileIndex = index; }
 
 		glm::vec3 GetVelocity() const { return m_Velocity; }
 		void SetVelocity(glm::vec3 direction);

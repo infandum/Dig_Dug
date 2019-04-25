@@ -14,11 +14,11 @@ namespace dae
 
 		
 		virtual void Animated(GameObject& gameObject) = 0;
-		virtual void SetStateAnimClip(AnimationClip clip) { m_Clip = clip; }
+		virtual void SetStateAnimClip(SpriteClip clip) { m_Clip = clip; }
 
 	protected:
 		virtual void SpriteFlip(GameObject& gameObject) const = 0;
-		AnimationClip m_Clip;
+		SpriteClip m_Clip;
 	};
 
 	class DirectionState : public BaseState

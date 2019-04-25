@@ -44,7 +44,7 @@ void dae::TransformComponent::Update(float& deltaTime)
 					isSwappingTile = false;
 					return;
 				}
-				if (nextTile->GetTileState() == TileState::DIRT && currTile->GetBorder(GetCurrentDirection()) == false)
+				if (nextTile->GetTileState() == TileState::DIRT/* && currTile->GetBorder(GetCurrentDirection()) == false*/)
 				{
 					isSwappingTile = true;
 				}

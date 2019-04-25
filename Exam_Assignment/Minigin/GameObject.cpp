@@ -46,20 +46,24 @@ void dae::GameObject::Render() const
 		{
 			auto flip = SDL_FLIP_NONE;
 			if (GetSprite())
+			{ 
 				flip = GetSprite()->GetFlipSprite();
-			ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, float(m_pTextureComponent->GetSize().x), float(m_pTextureComponent->GetSize().y), flip);
+				auto x = GetSprite()->GetCurrentUV().x;
+				ServiceLocator::GetRenderer()->RenderSprite(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, static_cast<float>(x), static_cast<float>(GetSprite()->GetCurrentUV().y), static_cast<float>(GetSprite()->GetCurrentUV().w), static_cast<float>(GetSprite()->GetCurrentUV().h), flip);
+			}
+			else
+			{
+				ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, (float)(m_pTextureComponent->GetSize().x), (float)(m_pTextureComponent->GetSize().y), flip);
+			}
 		}
 	
 	if (m_pTileComponent != nullptr && m_pTransformComponent != nullptr)
 	{
 		if (m_pTileComponent->GetTileState() == TileState::DUG)
 		{
-			int x = 32, y = 5;
 			const auto Hwall = ServiceLocator::GetResourceManager()->GetTexture(10002);
-			SDL_QueryTexture(Hwall->GetSDLTexture(), nullptr, nullptr, &x, &y);
 
 			const auto Vwall = ServiceLocator::GetResourceManager()->GetTexture(10004);
-			SDL_QueryTexture(Vwall->GetSDLTexture(), nullptr, nullptr, &y, &x);
 
 			if(!m_pTileComponent->GetBorder(Direction::UP))
 				ServiceLocator::GetRenderer()->RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 32.0f, 5.0f);
@@ -82,9 +86,7 @@ void dae::GameObject::Render() const
 	{
 		if(m_pCollisionComponent->ShowCollisionBox())
 		{
-			int x = 32, y = 32;
 			const auto Collision = ServiceLocator::GetResourceManager()->GetTexture(10000);
-			SDL_QueryTexture(Collision->GetSDLTexture(), nullptr, nullptr, &x, &y);
 			ServiceLocator::GetRenderer()->RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, static_cast<float>(m_pCollisionComponent->GetSize().x), static_cast<float>(m_pCollisionComponent->GetSize().y));
 		}
 	}

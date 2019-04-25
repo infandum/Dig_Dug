@@ -68,7 +68,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	case SceneList::LEVEL_1:
 		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level 1");
 		resource->LoadTexture("images/DigDug_BackGround.png", 01);
-				
+		resource->LoadTexture("images/SpriteSheet.png", 02);
+
 		resource->LoadTexture("images/Dirt.png", 10);
 		resource->LoadTexture("images/Free.png", 11);
 		resource->LoadTexture("images/Rock.png", 12);
@@ -80,32 +81,32 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		resource->LoadTexture("images/ClossWallEW.png", 10003);
 		resource->LoadTexture("images/OpenWallEW.png", 10004);
 
-		resource->LoadTexture("images/Player/Player_Idle_01.png", 1101);
-		resource->LoadTexture("images/Player/Player_Idle_02.png", 1102);
-		resource->LoadTexture("images/Player/Player_Idle_11.png", 1111);
-		resource->LoadTexture("images/Player/Player_Idle_12.png", 1112);
-		resource->LoadTexture("images/Player/Player_Idle_21.png", 1121);
-		resource->LoadTexture("images/Player/Player_Idle_22.png", 1122);
-		resource->LoadTexture("images/Player/Player_Idle_31.png", 1131);
-		resource->LoadTexture("images/Player/Player_Idle_32.png", 1132);
+		//resource->LoadTexture("images/Player/Player_Idle_01.png", 1101);
+		//resource->LoadTexture("images/Player/Player_Idle_02.png", 1102);
+		//resource->LoadTexture("images/Player/Player_Idle_11.png", 1111);
+		//resource->LoadTexture("images/Player/Player_Idle_12.png", 1112);
+		//resource->LoadTexture("images/Player/Player_Idle_21.png", 1121);
+		//resource->LoadTexture("images/Player/Player_Idle_22.png", 1122);
+		//resource->LoadTexture("images/Player/Player_Idle_31.png", 1131);
+		//resource->LoadTexture("images/Player/Player_Idle_32.png", 1132);
 
-		resource->LoadTexture("images/Player/Player_Dig_01.png", 1201);
-		resource->LoadTexture("images/Player/Player_Dig_02.png", 1202);
-		resource->LoadTexture("images/Player/Player_Dig_11.png", 1211);
-		resource->LoadTexture("images/Player/Player_Dig_12.png", 1212);
-		resource->LoadTexture("images/Player/Player_Dig_21.png", 1221);
-		resource->LoadTexture("images/Player/Player_Dig_22.png", 1222);
-		resource->LoadTexture("images/Player/Player_Dig_31.png", 1231);
-		resource->LoadTexture("images/Player/Player_Dig_32.png", 1232);
+		//resource->LoadTexture("images/Player/Player_Dig_01.png", 1201);
+		//resource->LoadTexture("images/Player/Player_Dig_02.png", 1202);
+		//resource->LoadTexture("images/Player/Player_Dig_11.png", 1211);
+		//resource->LoadTexture("images/Player/Player_Dig_12.png", 1212);
+		//resource->LoadTexture("images/Player/Player_Dig_21.png", 1221);
+		//resource->LoadTexture("images/Player/Player_Dig_22.png", 1222);
+		//resource->LoadTexture("images/Player/Player_Dig_31.png", 1231);
+		//resource->LoadTexture("images/Player/Player_Dig_32.png", 1232);
 
-		resource->LoadTexture("images/Player/Player_Dig_01.png",  1301);
-		resource->LoadTexture("images/Player/Player_Shoot_0.png", 1302);
-		resource->LoadTexture("images/Player/Player_Dig_11.png",  1311);
-		resource->LoadTexture("images/Player/Player_Shoot_1.png", 1312);
-		resource->LoadTexture("images/Player/Player_Dig_21.png",  1321);
-		resource->LoadTexture("images/Player/Player_Shoot_2.png", 1322);
-		resource->LoadTexture("images/Player/Player_Dig_31.png",  1331);
-		resource->LoadTexture("images/Player/Player_Shoot_3.png", 1332);
+		//resource->LoadTexture("images/Player/Player_Dig_01.png",  1301);
+		//resource->LoadTexture("images/Player/Player_Shoot_0.png", 1302);
+		//resource->LoadTexture("images/Player/Player_Dig_11.png",  1311);
+		//resource->LoadTexture("images/Player/Player_Shoot_1.png", 1312);
+		//resource->LoadTexture("images/Player/Player_Dig_21.png",  1321);
+		//resource->LoadTexture("images/Player/Player_Shoot_2.png", 1322);
+		//resource->LoadTexture("images/Player/Player_Dig_31.png",  1331);
+		//resource->LoadTexture("images/Player/Player_Shoot_3.png", 1332);
 		
 		
 
@@ -140,19 +141,20 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_pPlayer->AddComponent(std::make_shared<InputComponent>());
 		m_pPlayer->AddComponent(std::make_shared<TextureComponent>());
 		m_pPlayer->AddComponent(std::make_shared<SpriteComponent>());
-		m_pPlayer->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(1101));
+		m_pPlayer->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(02));
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
 
-		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1100, 1, true, false), 1);
+		//animations->LoadAnimationClips(animations->BuildAnimationStateClip(1100, 1, true, false), 1);
+		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,0}, 1, 2, true, true }, 1);
 		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdleState>());
-		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1100, 2, true), 4);
-		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<MoveState>());
-		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1200, 2, true), 2);
-		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<DigState>());
-		animations->LoadAnimationClips(animations->BuildAnimationStateClip(1300, 2, true, false), 3);
-		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<AttackState>());
-		//m_pPlayer->GetComponent<CollisionComponent>()->ShowCollisionBox(true);
+		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,0}, 1, 2, true, true }, 2);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<MoveState>());
+		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,32}, 1, 2, true, true }, 3);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<DigState>());
+		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,64}, 0, 1, true, false }, 4);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackState>());
+
 		m_Scene->Add(m_pPlayer);
 
 		go = std::make_shared<GameObject>();

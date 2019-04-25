@@ -18,7 +18,45 @@ void dae::DirectionState::Update(float& deltaTime, GameObject& gameObject)
 
 void dae::DirectionState::Animated(GameObject& gameObject)
 {
-	if(m_Clip.TextureList.size() > 0)
+	/*auto resource = ServiceLocator::GetResourceManager();*/
+	SpriteFlip(gameObject);
+	if (gameObject.GetTransform())
+		switch (gameObject.GetTransform()->GetCurrentDirection())
+		{
+		case Direction::RIGHT:
+			if (gameObject.GetSprite())
+			{
+				gameObject.GetSprite()->SetCurrentUV((32 * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x), m_Clip.UV.y);
+			}
+			break;
+		case Direction::UP:
+			if (gameObject.GetSprite() && m_Clip.hasUpDown)
+			{
+				if (gameObject.GetSprite()->GetFlipSprite())
+					gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames))), m_Clip.UV.y);
+				else
+					gameObject.GetSprite()->SetCurrentUV((32 * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames)), m_Clip.UV.y);
+			}
+			break;
+		case Direction::LEFT:
+			if (gameObject.GetSprite())
+			{
+				gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 2)), m_Clip.UV.y);
+			}
+			break;
+		case Direction::DOWN:
+			if (gameObject.GetSprite() && m_Clip.hasUpDown)
+			{
+				if (gameObject.GetSprite()->GetFlipSprite())
+					gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 3))), m_Clip.UV.y);
+				else
+					gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 3)), m_Clip.UV.y);
+			}
+			break;
+		default:
+			;
+		}
+	/*if(m_Clip.TextureList.size() > 0)
 	{	
 		auto resource = ServiceLocator::GetResourceManager();	
 		SpriteFlip(gameObject);
@@ -70,7 +108,7 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 			default:
 				;
 			}
-	}
+	}*/
 }
 
 void dae::DirectionState::SpriteFlip(GameObject & gameObject) const

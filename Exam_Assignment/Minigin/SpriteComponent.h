@@ -24,6 +24,9 @@ namespace dae
 
 		UINT GetActiveAnimationFrame() const { return m_ActiveFrame; }
 
+		void SetCurrentUV(int x, int y, int w = 32, int h = 32) { m_SpriteUV.x = x; m_SpriteUV.y = y; m_SpriteUV.w = w; m_SpriteUV.h = h; }
+		SDL_Rect GetCurrentUV() const { return m_SpriteUV; }
+
 		void SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state);
 
 		void onNotify(NotifyEvent event) { m_Event = event; }
@@ -42,6 +45,7 @@ namespace dae
 
 		double m_FrameTime = 0;
 		UINT m_ActiveFrame = 0;
+		SDL_Rect m_SpriteUV = { 0 , 0, 32, 32};
 
 		std::map<UINT, std::shared_ptr<BaseState>> m_StateClips;
 	};

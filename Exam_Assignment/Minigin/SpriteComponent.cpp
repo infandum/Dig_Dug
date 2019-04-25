@@ -9,18 +9,19 @@ void dae::SpriteComponent::Swap()
 	auto anim = ServiceLocator::GetAnimationManager();
 
 	if(GetAnimationIDForState(m_DirState))
-		m_DirState->SetStateAnimClip(anim->GetAnimationClips(GetAnimationIDForState(m_DirState)));
-	if (state != nullptr /*&& typeid(*m_DirState) != typeid(*state)*/)
+		m_DirState->SetStateAnimClip(anim->GetSpriteClip(GetAnimationIDForState(m_DirState)));
+	if (state != nullptr && typeid(*m_DirState) != typeid(*state))
 	{
+		m_ActiveFrame = anim->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
 		m_DirState = state;		
-		std::cout << typeid(*m_DirState).name() << '\n';
+		//std::cout << typeid(*m_DirState).name() << '\n';
 	}
 }
 
 void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state)
 {
 	//TODO: Check if ID is valid saved texture ID;
-	if(ServiceLocator::GetAnimationManager()->GetAnimationClips(clipID).TextureList.size() == 0)
+	if(/*ServiceLocator::GetAnimationManager()->GetAnimationClips(clipID).TextureList.size() == 0 && */ServiceLocator::GetAnimationManager()->GetSpriteClip(clipID).id == 0)
 	{
 		std::cout << "SpriteComponent::SetAnimationToState() > id Not found in loaded textures! " << clipID << '\n';
 		return;
@@ -54,11 +55,14 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float& deltaTime)
 {
 
 	auto anim = ServiceLocator::GetAnimationManager();
-	const auto clip = anim->GetAnimationClips(GetAnimationIDForState(m_DirState));
-	if (GetGameObject() && GetGameObject()->GetTransform() && clip.TextureList.size() > 0)
+	//const auto clip = anim->GetAnimationClips(GetAnimationIDForState(m_DirState));
+	const auto clip = anim->GetSpriteClip(GetAnimationIDForState(m_DirState));
+	if (GetGameObject() && GetGameObject()->GetTransform() && clip.id != 0)
+	{
+		
 		if (m_Event != NotifyEvent::EVENT_IDLE)
 		{
-			if(!clip.isLooping && m_ActiveFrame == clip.frames -1)
+			if(!clip.isLooping && m_ActiveFrame == clip.frames - 1)
 				return;
 
 			m_FrameTime += deltaTime;
@@ -74,11 +78,10 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float& deltaTime)
 		}
 		else
 		{
-			m_ActiveFrame = 0;
+			m_ActiveFrame = clip.StartFrame;
 			m_FrameTime = 0;
 		}
-
-	//TODO::UV ANIMATIONS
+	}
 }
 
 UINT dae::SpriteComponent::GetAnimationIDForState(std::shared_ptr<BaseState> state)

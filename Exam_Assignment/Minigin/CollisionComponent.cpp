@@ -41,7 +41,10 @@ void dae::CollisionComponent::Update(float& deltaTime)
 	if (m_Size.IsNullVector())
 	{
 		if (GetGameObject())
-			m_Size = GetGameObject()->GetComponent<TextureComponent>()->GetSize();
+			if(GetGameObject()->GetSprite())
+				m_Size = { GetGameObject()->GetComponent<SpriteComponent>()->GetCurrentUV().w, GetGameObject()->GetComponent<SpriteComponent>()->GetCurrentUV().h };
+			else if(GetGameObject()->GetTexture())
+				m_Size = GetGameObject()->GetComponent<TextureComponent>()->GetSize();
 	}
 	else
 	{
@@ -49,12 +52,15 @@ void dae::CollisionComponent::Update(float& deltaTime)
 		{
 			if (GetGameObject() && !GetGameObject()->GetComponent<TextureComponent>()->GetSize().IsNullVector())
 			{
-				m_offSet.x = m_Size.x - GetGameObject()->GetComponent<TextureComponent>()->GetSize().x;
-				m_offSet.y = m_Size.y - GetGameObject()->GetComponent<TextureComponent>()->GetSize().y;
+				if (!GetGameObject()->GetSprite())
+				{
+					m_offSet.x = m_Size.x - GetGameObject()->GetComponent<TextureComponent>()->GetSize().x;
+					m_offSet.y = m_Size.y - GetGameObject()->GetComponent<TextureComponent>()->GetSize().y;
+				}		
 			}
 		}
-		m_Position.x = m_pTransformComponent->GetPosition().x - m_offSet.x / 2;
-		m_Position.y = m_pTransformComponent->GetPosition().y - m_offSet.y / 2;
+		m_Position.x = m_pTransformComponent->GetPosition().x - (m_offSet.x / 2);
+		m_Position.y = m_pTransformComponent->GetPosition().y - (m_offSet.x / 2);
 	}
 
 	//TODO:: CHANGE PUSH OUT EFFECT, MAYBE PREVENT OBJECT MOVING INTO A COLLISION?
