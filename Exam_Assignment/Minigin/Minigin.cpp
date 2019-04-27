@@ -101,9 +101,9 @@ void dae::Minigin::Run()
 			lag += deltatime;
 			doContinue = input->ProcessInput();
 
-			physics->Update(float(deltatime));
-			tileManager->Update(float(deltatime));
-			sceneManager->Update(float(deltatime));		
+			physics->Update(static_cast<float>(deltatime));
+			tileManager->Update(static_cast<float>(deltatime));
+			sceneManager->Update(static_cast<float>(deltatime));
 
 			t += std::chrono::milliseconds(msPerFrame);
 			std::this_thread::sleep_until(t);

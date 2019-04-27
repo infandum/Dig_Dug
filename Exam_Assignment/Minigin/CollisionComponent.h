@@ -38,11 +38,11 @@ namespace  dae
 		iVector2 m_offSet = { 0,0 };
 		iVector2 m_Size = { 0,0 };
 		glm::vec3 m_Position {0};
-		std::shared_ptr<TransformComponent> m_pTransformComponent{};
+		std::shared_ptr<TransformComponent> m_pTransformComponent = nullptr;
 		bool m_ShowCollisionBox = false;
-		std::shared_ptr<Texture2D> m_pCollisionBox{};
+		std::shared_ptr<Texture2D> m_pCollisionBox = nullptr;
 
-		CollisionComponent* m_pOtherCollider{};
+		CollisionComponent* m_pOtherCollider = nullptr;
 
 		bool m_HasCollision = false;
 	};

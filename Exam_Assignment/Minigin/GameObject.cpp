@@ -91,8 +91,6 @@ void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> comp)
 		}
 	}
 	m_pComponents.push_back(comp);
-	/*std::shared_ptr<GameObject> owner;
-	owner.reset(this);*/
 	comp->m_pGameObject = this;
 
 	for (auto& component : m_pComponents)

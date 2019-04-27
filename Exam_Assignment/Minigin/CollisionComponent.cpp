@@ -61,12 +61,14 @@ void dae::CollisionComponent::Update(float& deltaTime)
 
 	//TODO:: CHANGE PUSH OUT EFFECT, MAYBE PREVENT OBJECT MOVING INTO A COLLISION?
 	//Prevent Overlapping
-	if(GetCollision() != nullptr)
+	if(m_HasCollision)
 	{
 		if(GetCollision()->GetGameObject()->GetComponent<TransformComponent>()->GetIsStatic() || GetCollision() != this)
 		{
 			std::cout << "PUSHOUT" << std::endl;
 			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
+			m_HasCollision = false;
+			GetCollision()->SetHasCollision(false);
 		}	
 	}
 }

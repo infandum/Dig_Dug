@@ -135,7 +135,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		go->AddComponent(std::make_shared<TextureComponent>());
 		go->AddComponent(std::make_shared<SpriteComponent>());
 		go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(02));
-		go->GetComponent<TransformComponent>()->SetPosition(32 * 8, 32 * 8);
+		go->GetComponent<TransformComponent>()->SetPosition(32 * 1, 32 * 8);
 		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,288}, 0, 2, false, true }, 5);
 		go->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<IdleState>());
 		m_Scene->Add(go);
@@ -147,9 +147,9 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		go->AddComponent(std::make_shared<TextureComponent>());
 		go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(12));
 		go->GetComponent<TransformComponent>()->SetPosition(32*4, 32*6);
-		//go->GetComponent<TransformComponent>()->SetIsStatic(true);
+		go->GetComponent<TransformComponent>()->SetIsStatic(true);
 		m_Scene->Add(go);
-		
+
 		tiles->SetPlayer(m_pPlayer);
 		tiles->CreateTunnel(12, 12, Direction::UP, 2);
 		tiles->CreateTunnel(12, 12, Direction::LEFT, 2);

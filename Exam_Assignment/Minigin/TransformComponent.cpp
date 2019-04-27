@@ -87,6 +87,7 @@ dae::TransformComponent::TransformComponent(float x, float y, float z)
 
 void dae::TransformComponent::SetPosition(float x, float y, float z)
 {
+	m_Position = { 0,0,0 };
 	m_Position = glm::vec3(x, y, z);
 	SetPositionIndex({int( x / 32), int(y / 32) });
 }
