@@ -233,7 +233,6 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AnimationManager.cpp" />
-    <ClCompile Include="BaseComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="NpcComponent.cpp" />
     <ClCompile Include="PhysicsManager.cpp" />

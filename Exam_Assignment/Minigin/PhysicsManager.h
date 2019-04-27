@@ -13,8 +13,8 @@ namespace dae
 
 		void Update(float deltaTime);
 
-		void AddCollision(std::shared_ptr<CollisionComponent> collision);
-		std::shared_ptr<CollisionComponent> GetCollision(std::shared_ptr<GameObject> owner);
+		void AddCollision(CollisionComponent* collision);
+		CollisionComponent* GetCollision(GameObject* owner);
 
 		bool ShowCollisionBox(bool show) { return m_ShowCollisionBox = show; }
 		bool ShowCollisionBox() const { return m_ShowCollisionBox; }
@@ -24,11 +24,14 @@ namespace dae
 
 
 	protected:
-		bool IsOverlapping(std::shared_ptr<CollisionComponent> firstComp, std::shared_ptr<CollisionComponent>secondComp) const;
-
+		bool IsOverlapping(CollisionComponent* firstComp, CollisionComponent* secondComp) const;
+		bool CheckBoxesIntersect(CollisionBox firstCollision, CollisionBox SecondCollision) const { return (abs((firstCollision.x ) - SecondCollision.x) * 2 < (firstCollision.RadiusX + SecondCollision.RadiusX)) && (abs(firstCollision.y - SecondCollision.y) * 2 < (firstCollision.RadiusY + SecondCollision.RadiusY));}
 	private:
-		std::vector<std::shared_ptr<CollisionComponent>> m_pCollisionComponents{};
+		std::vector<CollisionComponent*> m_pCollisionComponents{};
 		bool m_ShowCollisionBox = false;
 		float m_CollisionPadding = 1.0f;
+
+		//BOX: x & y center pos W & H radius
+		
 	};
 }

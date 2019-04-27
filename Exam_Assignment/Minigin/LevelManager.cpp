@@ -93,20 +93,34 @@ void dae::LevelManager::Update(float deltaTime)
 	}
 }
 
-void dae::LevelManager::AddTile(std::shared_ptr<TileComponent> tile)
+//void dae::LevelManager::AddTile(std::shared_ptr<TileComponent> tile)
+//{
+//	for (auto& component : m_pTileComponents)
+//	{
+//		if (component->GetPositionIndex().x == tile->GetPositionIndex().x && component->GetPositionIndex().y == tile->GetPositionIndex().y)
+//		{
+//			std::cout << "Tile Duplicate: " << "["<<component->GetPositionIndex().x << "," << component->GetPositionIndex().y << "] >> Already added!!\n";
+//			return;
+//		}
+//	}
+//	m_pTileComponents.push_back(tile);
+//}
+
+void dae::LevelManager::AddTile(TileComponent* tile)
 {
 	for (auto& component : m_pTileComponents)
 	{
 		if (component->GetPositionIndex().x == tile->GetPositionIndex().x && component->GetPositionIndex().y == tile->GetPositionIndex().y)
 		{
-			std::cout << "Tile Duplicate: " << "["<<component->GetPositionIndex().x << "," << component->GetPositionIndex().y << "] >> Already added!!\n";
+			std::cout << "Tile Duplicate: " << "[" << component->GetPositionIndex().x << "," << component->GetPositionIndex().y << "] >> Already added!!\n";
 			return;
 		}
 	}
+
 	m_pTileComponents.push_back(tile);
 }
 
-std::shared_ptr<dae::TileComponent> dae::LevelManager::GetTile(int x, int y)
+dae::TileComponent* dae::LevelManager::GetTile(int x, int y)
 {
 	for (auto& component : m_pTileComponents)
 	{
@@ -118,7 +132,7 @@ std::shared_ptr<dae::TileComponent> dae::LevelManager::GetTile(int x, int y)
 	return nullptr;
 }
 
-void dae::LevelManager::DigConnection(std::shared_ptr<TileComponent> start, std::shared_ptr<TileComponent> end, Direction dir)
+void dae::LevelManager::DigConnection(TileComponent* start, TileComponent* end, Direction dir)
 {
 
 	switch (dir)
@@ -161,7 +175,7 @@ void dae::LevelManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int 
 	tile->SetTileState(TileState::DUG);
 	for(auto i = 0; i < distance; ++i)
 	{
-		std::shared_ptr<TileComponent> nextTile = nullptr;
+		TileComponent* nextTile = nullptr;
 		switch (dir)
 		{
 		case Direction::UP:

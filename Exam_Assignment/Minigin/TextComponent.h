@@ -14,6 +14,7 @@ namespace dae{
 		TextComponent& operator=(const TextComponent& other) = delete;
 		TextComponent& operator=(TextComponent&& other) noexcept = delete;
 
+		TextComponent() = default;
 		explicit TextComponent(const std::string& text, std::shared_ptr<Font> font);
 		virtual ~TextComponent() = default;
 
@@ -29,7 +30,7 @@ namespace dae{
 
 	private:
 		SDL_Color m_Color = { 255,255,255 };
-		bool m_NeedsUpdate;
+		bool m_NeedsUpdate = true;
 		std::string m_Text{};
 		std::shared_ptr<Font> mFont{};
 	};

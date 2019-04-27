@@ -13,16 +13,15 @@ namespace dae {
 		void Update(float deltaTime);
 
 		void SetPlayer(std::shared_ptr<GameObject> player) { m_pPlayer = player; }
-		void AddTile(std::shared_ptr<TileComponent> tile);
-		std::shared_ptr<TileComponent> GetTile(int x, int y);
+		void AddTile(TileComponent* tile);
+		TileComponent* GetTile(int x, int y);
 
-		static void DigConnection(std::shared_ptr<TileComponent> start, std::shared_ptr<TileComponent> end, Direction dir);
+		static void DigConnection(TileComponent* start, TileComponent* end, Direction dir);
 		void CreateTunnel(int xIndex, int yIndex, Direction dir, int distance = {0});
 
 	private:
-		
-		std::vector<std::shared_ptr<TileComponent>> m_pTileComponents{};
+		std::vector<TileComponent*> m_pTileComponents{};
 		std::shared_ptr<GameObject> m_pPlayer {};
-		std::shared_ptr<TileComponent> m_StartTile {};
+		TileComponent* m_StartTile {};
 	};
 }

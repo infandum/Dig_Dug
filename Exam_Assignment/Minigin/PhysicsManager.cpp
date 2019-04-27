@@ -38,7 +38,7 @@ void dae::PhysicsManager::Update(float deltaTime)
 	}
 }
 
-void dae::PhysicsManager::AddCollision(std::shared_ptr<CollisionComponent> collision)
+void dae::PhysicsManager::AddCollision(CollisionComponent* collision)
 {
 	for (auto& component : m_pCollisionComponents)
 	{
@@ -51,7 +51,7 @@ void dae::PhysicsManager::AddCollision(std::shared_ptr<CollisionComponent> colli
 	m_pCollisionComponents.push_back(collision);
 }
 
-std::shared_ptr<dae::CollisionComponent> dae::PhysicsManager::GetCollision(std::shared_ptr<GameObject> owner)
+dae::CollisionComponent* dae::PhysicsManager::GetCollision(GameObject* owner)
 {
 	for (auto& component : m_pCollisionComponents)
 	{
@@ -63,7 +63,7 @@ std::shared_ptr<dae::CollisionComponent> dae::PhysicsManager::GetCollision(std::
 	return nullptr;
 }
 
-bool dae::PhysicsManager::IsOverlapping(std::shared_ptr<CollisionComponent> firstComp, std::shared_ptr<CollisionComponent> secondComp) const
+bool dae::PhysicsManager::IsOverlapping(CollisionComponent* firstComp, CollisionComponent* secondComp) const
 {
 	auto IsXOverlap = false;
 	auto IsYOverlap = false;

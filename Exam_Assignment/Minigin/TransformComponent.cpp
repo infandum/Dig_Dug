@@ -11,6 +11,7 @@ extern const float g_TileCenterPadding;
 
 void dae::TransformComponent::Update(float& deltaTime)
 {
+	UNREFERENCED_PARAMETER(deltaTime);
 
 	if(m_IsStatic)
 	{
@@ -19,9 +20,6 @@ void dae::TransformComponent::Update(float& deltaTime)
 			tile->SetTileState(TileState::OCCUPIED);
 	}
 
-	
-
-	UNREFERENCED_PARAMETER(deltaTime);
 	if(!m_IsStatic)
 	{
 		glm::vec3 velocity{ 0 };
@@ -34,7 +32,7 @@ void dae::TransformComponent::Update(float& deltaTime)
 			isSwappingTile = false;
 			//CHECK IF NEXT TILE IS LEGAL MOVE
 			const iVector2 nextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
-			const auto currTile = ServiceLocator::GetLevelManager()->GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
+			//const auto currTile = ServiceLocator::GetLevelManager()->GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
 			const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
 			if (nextTile != nullptr)
 			{
@@ -80,11 +78,6 @@ void dae::TransformComponent::Update(float& deltaTime)
 			m_IsMoving = false;	
 		}
 	}
-}
-
-dae::TransformComponent::TransformComponent()
-{
-	m_Position = { 0,0,0 };
 }
 
 dae::TransformComponent::TransformComponent(float x, float y, float z)

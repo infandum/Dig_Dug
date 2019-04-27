@@ -13,7 +13,7 @@ namespace dae
 		TileComponent(TileComponent&& other) noexcept = delete;
 		TileComponent& operator=(const TileComponent& other) = delete;
 		TileComponent& operator=(TileComponent&& other) noexcept = delete;
-		TileComponent() = default;
+		
 		explicit TileComponent(TileState state, int xIndex, int yIndex);
 		virtual ~TileComponent() = default;
 

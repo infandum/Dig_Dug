@@ -15,7 +15,7 @@ namespace dae
 	{
 	public:
 		void InitScene(SceneList scene);
-		std::shared_ptr<GameObject> m_pPlayer{};
-		std::shared_ptr<Scene> m_Scene{};
+		std::shared_ptr<GameObject> m_pPlayer = nullptr;
+		std::shared_ptr<Scene> m_Scene = nullptr;
 	};
 }

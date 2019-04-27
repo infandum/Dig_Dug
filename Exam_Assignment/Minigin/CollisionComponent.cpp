@@ -8,19 +8,15 @@ extern const float g_MoveSpeed;
 
 dae::CollisionComponent::CollisionComponent()
 {
-	auto Collision = ServiceLocator::GetPhysicsManager();
-	std::shared_ptr<CollisionComponent> coll;
-	coll.reset(this);
-	Collision->AddCollision(coll);
+	auto physics_manager = ServiceLocator::GetPhysicsManager();
+	physics_manager->AddCollision(this);
 }
 
 dae::CollisionComponent::CollisionComponent(int x, int y)
 {
 	m_Size = {x,y};
-	auto Collision = ServiceLocator::GetPhysicsManager();
-	std::shared_ptr<CollisionComponent> coll;
-	coll.reset(this);
-	Collision->AddCollision(coll);
+	auto physics_manager = ServiceLocator::GetPhysicsManager();
+	physics_manager->AddCollision(this);
 }
 
 void dae::CollisionComponent::SetPosition(float x, float y, float z)
@@ -67,7 +63,7 @@ void dae::CollisionComponent::Update(float& deltaTime)
 	//Prevent Overlapping
 	if(GetCollision() != nullptr)
 	{
-		if(GetCollision()->GetGameObject()->GetComponent<TransformComponent>()->GetIsStatic())
+		if(GetCollision()->GetGameObject()->GetComponent<TransformComponent>()->GetIsStatic() || GetCollision() != this)
 		{
 			std::cout << "PUSHOUT" << std::endl;
 			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));

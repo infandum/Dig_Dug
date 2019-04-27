@@ -165,6 +165,12 @@ namespace dae
 		bool isLooping = false;
 	};
 
-
+	struct CollisionBox
+	{
+		int x;
+		int y;
+		int RadiusX;
+		int RadiusY;
+	};
 	
 }

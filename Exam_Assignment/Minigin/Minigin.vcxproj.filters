@@ -153,9 +153,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BaseComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="FPSComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>

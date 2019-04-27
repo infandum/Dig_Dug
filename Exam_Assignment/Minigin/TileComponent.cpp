@@ -9,17 +9,15 @@
 
 dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_TileState(state) 
 {
-	auto tiles = ServiceLocator::GetLevelManager();
-	m_TileIndex.x = xIndex; 
+	m_TileIndex.x = xIndex;
 	m_TileIndex.y = yIndex;
-	std::shared_ptr<TileComponent> tile;
-	tile.reset(this);
-	tiles->AddTile(tile);
+
+	auto tiles = ServiceLocator::GetLevelManager();
+	tiles->AddTile(this);
 }
 
 void dae::TileComponent::SetTileState(TileState state)
 {
-	/*m_pState = std::make_shared<DirtState>();*/
 	m_TileState = state;
 	m_NeedsUpdate = true;
 }

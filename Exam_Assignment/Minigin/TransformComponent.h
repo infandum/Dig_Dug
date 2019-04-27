@@ -17,7 +17,7 @@ namespace dae
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
-		TransformComponent();
+		TransformComponent() = default;
 		explicit TransformComponent(float x , float y , float z = 0);
 		virtual ~TransformComponent() = default;
 
@@ -59,9 +59,9 @@ namespace dae
 		Direction m_CurrentDirection = Direction::RIGHT;
 		Direction m_PreviousDirection = Direction::RIGHT;
 
-		glm::vec3 m_Position {};
-		glm::vec3 m_OffSet {};
-		glm::vec3 m_Velocity {};
+		glm::vec3 m_Position = { 0,0,0 };
+		glm::vec3 m_OffSet = { 0,0,0 };
+		glm::vec3 m_Velocity = { 0,0,0 };
 
 		
 

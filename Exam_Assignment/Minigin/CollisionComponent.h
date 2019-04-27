@@ -25,8 +25,8 @@ namespace  dae
 		bool GetHasCollision() const { return m_HasCollision; }
 		void SetHasCollision(bool hasCollision) { m_HasCollision = hasCollision; }
 
-		std::shared_ptr<CollisionComponent> GetCollision() const { return m_pOtherCollider; }
-		void SetCollision(std::shared_ptr<CollisionComponent> pOtherCollider) { m_pOtherCollider = pOtherCollider; }
+		CollisionComponent* GetCollision() const { return m_pOtherCollider; }
+		void SetCollision(CollisionComponent* pOtherCollider) { m_pOtherCollider = pOtherCollider; }
 
 
 	protected:
@@ -42,7 +42,7 @@ namespace  dae
 		bool m_ShowCollisionBox = false;
 		std::shared_ptr<Texture2D> m_pCollisionBox{};
 
-		std::shared_ptr<CollisionComponent>m_pOtherCollider{};
+		CollisionComponent* m_pOtherCollider{};
 
 		bool m_HasCollision = false;
 	};

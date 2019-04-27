@@ -19,23 +19,6 @@ void dae::GameObject::Update(float deltaTime)
 	for (auto& component : m_pComponents)
 	{
 		component->Update(deltaTime);
-		if (component && typeid(*component) == typeid(TransformComponent) && m_pTransformComponent == nullptr)
-			m_pTransformComponent = std::static_pointer_cast<TransformComponent>(component);
-
-		if (component && typeid(*component) == typeid(TextureComponent) && m_pTextureComponent == nullptr)
-			m_pTextureComponent = std::static_pointer_cast<TextureComponent>(component);
-
-		if (component && typeid(*component) == typeid(TileComponent) && m_pTileComponent == nullptr)
-			m_pTileComponent = std::static_pointer_cast<TileComponent>(component);
-
-		if (component && typeid(*component) == typeid(CollisionComponent) && m_pCollisionComponent == nullptr)
-			m_pCollisionComponent = std::static_pointer_cast<CollisionComponent>(component);
-
-		if (component && typeid(*component) == typeid(SpriteComponent) && m_pSpriteComponent == nullptr)
-			m_pSpriteComponent = std::static_pointer_cast<SpriteComponent>(component);
-
-		if (component && typeid(*component) == typeid(InputComponent) && m_pInputComponent == nullptr)
-			m_pInputComponent = std::static_pointer_cast<InputComponent>(component);
 	}
 }
 
@@ -108,9 +91,30 @@ void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> comp)
 		}
 	}
 	m_pComponents.push_back(comp);
-	std::shared_ptr<GameObject> owner;
-	owner.reset(this);
-	comp->m_pGameObject = owner;
+	/*std::shared_ptr<GameObject> owner;
+	owner.reset(this);*/
+	comp->m_pGameObject = this;
+
+	for (auto& component : m_pComponents)
+	{
+		if (component && typeid(*component) == typeid(TransformComponent) && m_pTransformComponent == nullptr)
+			m_pTransformComponent = std::static_pointer_cast<TransformComponent>(component);
+
+		if (component && typeid(*component) == typeid(TextureComponent) && m_pTextureComponent == nullptr)
+			m_pTextureComponent = std::static_pointer_cast<TextureComponent>(component);
+
+		if (component && typeid(*component) == typeid(TileComponent) && m_pTileComponent == nullptr)
+			m_pTileComponent = std::static_pointer_cast<TileComponent>(component);
+
+		if (component && typeid(*component) == typeid(CollisionComponent) && m_pCollisionComponent == nullptr)
+			m_pCollisionComponent = std::static_pointer_cast<CollisionComponent>(component);
+
+		if (component && typeid(*component) == typeid(SpriteComponent) && m_pSpriteComponent == nullptr)
+			m_pSpriteComponent = std::static_pointer_cast<SpriteComponent>(component);
+
+		if (component && typeid(*component) == typeid(InputComponent) && m_pInputComponent == nullptr)
+			m_pInputComponent = std::static_pointer_cast<InputComponent>(component);
+	}
 }
 
 void dae::GameObject::RemoveComponent(std::shared_ptr<BaseComponent> pComp)

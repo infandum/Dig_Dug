@@ -11,6 +11,7 @@ namespace dae
 		NpcComponent& operator=(const BaseComponent& other) = delete;
 		NpcComponent& operator=(BaseComponent&& other) noexcept = delete;
 		NpcComponent() = default;
+		virtual ~NpcComponent() = default;
 
 	protected:
 		//virtual void Initialize() = 0;
