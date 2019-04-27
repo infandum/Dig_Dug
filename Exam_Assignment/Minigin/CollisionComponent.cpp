@@ -68,7 +68,7 @@ void dae::CollisionComponent::Update(float& deltaTime)
 			std::cout << "PUSHOUT" << std::endl;
 			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
 			m_HasCollision = false;
-			GetCollision()->SetHasCollision(false);
+			//GetCollision()->SetHasCollision(false);
 		}	
 	}
 }

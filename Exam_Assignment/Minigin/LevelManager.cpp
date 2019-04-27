@@ -7,7 +7,7 @@ void dae::LevelManager::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
 	//GetTile(4, 6)->SetTileState(TileState::OCCUPIED);
-
+	//TODO: TRACK NPCs
 	if (m_pPlayer != nullptr  && m_pPlayer->GetTransform() != nullptr)
 	{
 
@@ -92,19 +92,6 @@ void dae::LevelManager::Update(float deltaTime)
 		}
 	}
 }
-
-//void dae::LevelManager::AddTile(std::shared_ptr<TileComponent> tile)
-//{
-//	for (auto& component : m_pTileComponents)
-//	{
-//		if (component->GetPositionIndex().x == tile->GetPositionIndex().x && component->GetPositionIndex().y == tile->GetPositionIndex().y)
-//		{
-//			std::cout << "Tile Duplicate: " << "["<<component->GetPositionIndex().x << "," << component->GetPositionIndex().y << "] >> Already added!!\n";
-//			return;
-//		}
-//	}
-//	m_pTileComponents.push_back(tile);
-//}
 
 void dae::LevelManager::AddTile(TileComponent* tile)
 {

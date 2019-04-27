@@ -9,7 +9,6 @@ namespace dae
 {
 	class GameObject;
 	enum class ControllerButton;
-	//class SDL_Keycode;
 	class Command
 	{
 	public:
@@ -41,8 +40,6 @@ namespace dae
 	{
 		if(gameObject.GetSprite())
 			gameObject.GetSprite()->onNotify(event);
-		if (gameObject.GetInput())
-			gameObject.GetInput()->onNotify(event);
 	}
 
 	inline void UpCommand::Execute(GameObject& gameObject)
@@ -51,11 +48,6 @@ namespace dae
 		{
 			if (m_Input->IsKeyDown())
 			{
-				/*if (gameObject.GetTransform()->isSwappingTile == false)
-					notify(gameObject, NotifyEvent::EVENT_MOVE);
-				else
-					notify(gameObject, NotifyEvent::EVENT_DIG);*/
-
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
 				gameObject.GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
@@ -83,11 +75,6 @@ namespace dae
 		{
 			if (m_Input->IsKeyDown())
 			{
-				/*if (gameObject.GetTransform()->isSwappingTile == false)
-					notify(gameObject, NotifyEvent::EVENT_MOVE);
-				else
-					notify(gameObject, NotifyEvent::EVENT_DIG);*/
-
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
 				gameObject.GetTransform()->SetVelocity({ 0, g_MoveSpeed, 0 });
@@ -115,11 +102,6 @@ namespace dae
 		{
 			if (m_Input->IsKeyDown())
 			{
-				/*if (gameObject.GetTransform()->isSwappingTile == false)
-					notify(gameObject, NotifyEvent::EVENT_MOVE);
-				else
-					notify(gameObject, NotifyEvent::EVENT_DIG);*/
-
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
 				gameObject.GetTransform()->SetVelocity({ -g_MoveSpeed, 0, 0 });
@@ -148,11 +130,6 @@ namespace dae
 		{
 			if (m_Input->IsKeyDown())
 			{
-				/*if (gameObject.GetTransform()->isSwappingTile == false)
-					notify(gameObject, NotifyEvent::EVENT_MOVE);
-				else
-					notify(gameObject, NotifyEvent::EVENT_DIG);*/
-
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
 				gameObject.GetTransform()->SetVelocity({ g_MoveSpeed, 0, 0 });

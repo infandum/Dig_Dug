@@ -15,16 +15,10 @@ namespace dae {
 		InputComponent() = default;
 		virtual ~InputComponent() = default;
 
-		void onNotify(NotifyEvent event);
-
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
-
-	private:
-		std::shared_ptr<TransformComponent> m_TransformComponent{};
-		/*SDL_Event m_Event{};*/
 	};
 
 }

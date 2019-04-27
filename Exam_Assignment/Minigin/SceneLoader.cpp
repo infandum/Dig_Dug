@@ -134,6 +134,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		go->AddComponent(std::make_shared<TransformComponent>());
 		go->AddComponent(std::make_shared<TextureComponent>());
 		go->AddComponent(std::make_shared<SpriteComponent>());
+		go->AddComponent(std::make_shared<NpcComponent>());
 		go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(02));
 		go->GetComponent<TransformComponent>()->SetPosition(32 * 1, 32 * 8);
 		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,288}, 0, 2, false, true }, 5);
