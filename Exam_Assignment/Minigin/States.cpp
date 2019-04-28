@@ -18,7 +18,6 @@ void dae::DirectionState::Update(float& deltaTime, GameObject& gameObject)
 
 void dae::DirectionState::Animated(GameObject& gameObject)
 {
-	/*auto resource = ServiceLocator::GetResourceManager();*/
 	SpriteFlip(gameObject);
 	if (gameObject.GetTransform())
 		switch (gameObject.GetTransform()->GetCurrentDirection())
@@ -26,31 +25,63 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 		case Direction::RIGHT:
 			if (gameObject.GetSprite())
 			{
-				gameObject.GetSprite()->SetCurrentUV((32 * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x), m_Clip.UV.y);
-			}
-			break;
-		case Direction::UP:
-			if (gameObject.GetSprite() && m_Clip.hasUpDown)
-			{
-				if (gameObject.GetSprite()->GetFlipSprite())
-					gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames))), m_Clip.UV.y);
-				else
-					gameObject.GetSprite()->SetCurrentUV((32 * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames)), m_Clip.UV.y);
+				gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 			}
 			break;
 		case Direction::LEFT:
 			if (gameObject.GetSprite())
 			{
-				gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 2)), m_Clip.UV.y);
+				gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 			}
 			break;
-		case Direction::DOWN:
+		case Direction::UP:
+			if (gameObject.GetSprite())
+			{
+				gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+			}
 			if (gameObject.GetSprite() && m_Clip.hasUpDown)
 			{
-				if (gameObject.GetSprite()->GetFlipSprite())
-					gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 3))), m_Clip.UV.y);
+				if (m_Clip.hasUpDown)
+				{
+					if (gameObject.GetSprite()->GetFlipSprite())
+						gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 2))), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+					else
+						gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 2)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				}
 				else
-					gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 3)), m_Clip.UV.y);
+				{
+					if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetTransform()->GetPreviousDirection() == Direction::LEFT)
+						m_LastHorDir = gameObject.GetTransform()->GetPreviousDirection();
+
+					if (m_LastHorDir == Direction::RIGHT)
+						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+					if (m_LastHorDir == Direction::LEFT)
+						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				}
+			}
+			break;
+			
+		case Direction::DOWN:
+
+			if (gameObject.GetSprite())
+			{
+				if(m_Clip.hasUpDown)
+				{
+					if (gameObject.GetSprite()->GetFlipSprite())
+						gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 3))), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+					else
+						gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames * 3)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				}
+				else
+				{
+					if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetTransform()->GetPreviousDirection() == Direction::LEFT)
+						m_LastHorDir = gameObject.GetTransform()->GetPreviousDirection();
+
+					if (m_LastHorDir == Direction::RIGHT)
+						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+					if (m_LastHorDir == Direction::LEFT)
+						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.frames)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				}
 			}
 			break;
 		default:
@@ -118,7 +149,7 @@ void dae::DirectionState::SpriteFlip(GameObject & gameObject) const
 		{
 		default:;
 		case Direction::UP:
-			if (gameObject.GetSprite())
+			if (gameObject.GetSprite() && m_Clip.hasUpDown)
 			{
 				if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT)
 					gameObject.GetSprite()->SetFlipSprite(SDL_FLIP_NONE);
@@ -127,7 +158,7 @@ void dae::DirectionState::SpriteFlip(GameObject & gameObject) const
 			}
 			break;
 		case Direction::DOWN:
-			if (gameObject.GetSprite())
+			if (gameObject.GetSprite() && m_Clip.hasUpDown)
 			{
 				if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT)
 					gameObject.GetSprite()->SetFlipSprite(SDL_FLIP_HORIZONTAL);
@@ -150,87 +181,130 @@ void dae::DirectionState::SpriteFlip(GameObject & gameObject) const
 		}
 }
 
-std::shared_ptr<dae::BaseState> dae::IdleState::Swap(NotifyEvent event, GameObject& gameObject)
+std::shared_ptr<dae::BaseState> dae::IdlePlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	UNREFERENCED_PARAMETER(event);
-	UNREFERENCED_PARAMETER(gameObject);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
 		return nullptr;
 	case NotifyEvent::EVENT_MOVE:
-		if (gameObject.GetTransform()->isSwappingTile)
-			return std::make_shared<DigState>();
+		if (gameObject.GetTransform()->isSwappingTile && gameObject.GetInput())
+			return std::make_shared<DigPlayerState>();
 		
-			return std::make_shared<MoveState>();
+			return std::make_shared<MovePlayerState>();
 	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigState>();
+		return std::make_shared<DigPlayerState>();
 	case NotifyEvent::EVENT_ATTACK:
-		return std::make_shared<AttackState>();
+		return std::make_shared<AttackPlayerState>();
+	case NotifyEvent::EVENT_DEAD:
+		return std::make_shared<DeadPlayerState>();
 	default: ;
 	}
 
 	return nullptr;
 }
 
-std::shared_ptr<dae::BaseState> dae::MoveState::Swap(NotifyEvent event, GameObject& gameObject)
+std::shared_ptr<dae::BaseState> dae::MovePlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	UNREFERENCED_PARAMETER(event);
-	UNREFERENCED_PARAMETER(gameObject);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		return std::make_shared<IdleState>();
+		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
-		if (gameObject.GetTransform()->isSwappingTile)
-			return std::make_shared<DigState>();
+		if (gameObject.GetTransform()->isSwappingTile && gameObject.GetInput())
+			return std::make_shared<DigPlayerState>();
 
 		return nullptr;
 	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigState>();
+		return std::make_shared<DigPlayerState>();
 	case NotifyEvent::EVENT_ATTACK:
-		return std::make_shared<AttackState>();
+		return std::make_shared<AttackPlayerState>();
+	case NotifyEvent::EVENT_DEAD:
+		return std::make_shared<DeadPlayerState>();
 	default:;
 	}
 
 	return nullptr;
 }
 
-std::shared_ptr<dae::BaseState> dae::DigState::Swap(NotifyEvent event, GameObject& gameObject)
+std::shared_ptr<dae::BaseState> dae::DigPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {	
-	UNREFERENCED_PARAMETER(event);
-	UNREFERENCED_PARAMETER(gameObject);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		return std::make_shared<IdleState>();
+		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
 		
-		if (!gameObject.GetTransform()->isSwappingTile)
-			return std::make_shared<MoveState>();
+		if (!gameObject.GetTransform()->isSwappingTile && !gameObject.GetInput())
+			return std::make_shared<MovePlayerState>();
 		return nullptr;
 	case NotifyEvent::EVENT_DIG:
 		return nullptr;
 	case NotifyEvent::EVENT_ATTACK:
-		return std::make_shared<AttackState>();
+		return std::make_shared<AttackPlayerState>();
+	case NotifyEvent::EVENT_DEAD:
+		return std::make_shared<DeadPlayerState>();
 	default:;
 	}
 	return nullptr;
 }
 
-std::shared_ptr<dae::BaseState> dae::AttackState::Swap(NotifyEvent event, GameObject& gameObject)
+std::shared_ptr<dae::BaseState> dae::AttackPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	UNREFERENCED_PARAMETER(event);
 	UNREFERENCED_PARAMETER(gameObject);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		return std::make_shared<IdleState>();
+		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
-		return std::make_shared<IdleState>();
+		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigState>();
+		return std::make_shared<DigPlayerState>();
 	case NotifyEvent::EVENT_ATTACK:
+		return nullptr;
+	case NotifyEvent::EVENT_DEAD:
+		return std::make_shared<DeadPlayerState>();
+	default:;
+	}
+
+	return nullptr;
+}
+
+std::shared_ptr<dae::BaseState> dae::PumpPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	UNREFERENCED_PARAMETER(event);
+	UNREFERENCED_PARAMETER(gameObject);
+	/*switch (event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdlePlayerState>();
+	case NotifyEvent::EVENT_MOVE:
+		return std::make_shared<IdlePlayerState>();
+	case NotifyEvent::EVENT_DIG:
+		return std::make_shared<DigPlayerState>();
+	case NotifyEvent::EVENT_ATTACK:
+		return std::make_shared<AttackPlayerState>();
+	case NotifyEvent::EVENT_DEAD:
+		return nullptr;
+	default:;
+	}*/
+	return nullptr;
+}
+
+std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	UNREFERENCED_PARAMETER(gameObject);
+	switch (event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdlePlayerState>();
+	case NotifyEvent::EVENT_MOVE:
+		return std::make_shared<IdlePlayerState>();
+	case NotifyEvent::EVENT_DIG:
+		return std::make_shared<DigPlayerState>();
+	case NotifyEvent::EVENT_ATTACK:
+		return std::make_shared<AttackPlayerState>();
+	case NotifyEvent::EVENT_DEAD:
 		return nullptr;
 	default:;
 	}

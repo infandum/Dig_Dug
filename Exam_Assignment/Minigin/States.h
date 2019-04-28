@@ -19,6 +19,7 @@ namespace dae
 	protected:
 		virtual void SpriteFlip(GameObject& gameObject) const = 0;
 		SpriteClip m_Clip;
+		Direction m_LastHorDir = Direction::RIGHT;
 	};
 
 	class DirectionState : public BaseState
@@ -33,34 +34,50 @@ namespace dae
 		void SpriteFlip(GameObject& gameObject) const override;
 	};
 
-	class IdleState : public DirectionState
+	class IdlePlayerState : public DirectionState
 	{
 	public:
-		virtual ~IdleState() = default;
+		virtual ~IdlePlayerState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
 		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};
 
-	class MoveState : public DirectionState
+	class MovePlayerState : public DirectionState
 	{
 	public:
-		virtual ~MoveState() = default;
+		virtual ~MovePlayerState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
 		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};
 
-	class DigState : public DirectionState
+	class DigPlayerState : public DirectionState
 	{
 	public:
-		virtual ~DigState() = default;
+		virtual ~DigPlayerState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
 		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};
 
-	class AttackState : public DirectionState
+	class AttackPlayerState : public DirectionState
 	{
 	public:
-		virtual ~AttackState() = default;
+		virtual ~AttackPlayerState() = default;
+		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
+		//void Update(float& deltaTime, GameObject& gameObject) override;
+	};
+
+	class PumpPlayerState : public DirectionState
+	{
+	public:
+		virtual ~PumpPlayerState() = default;
+		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
+		//void Update(float& deltaTime, GameObject& gameObject) override;
+	};
+
+	class DeadPlayerState : public DirectionState
+	{
+	public:
+		virtual ~DeadPlayerState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
 		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};

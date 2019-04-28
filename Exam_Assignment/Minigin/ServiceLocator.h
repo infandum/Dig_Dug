@@ -15,6 +15,8 @@ namespace  dae
 	class ServiceLocator
 	{
 	public:
+
+		//TODO: REFRACTOR SERVICE PROVIDE AND RETURN
 		Service* GetService(UINT id);
 		void Provide(Service* service, UINT id);
 

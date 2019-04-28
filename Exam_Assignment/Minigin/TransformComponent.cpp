@@ -24,7 +24,10 @@ void dae::TransformComponent::Update(float& deltaTime)
 	{
 		glm::vec3 velocity{ 0 };
 		if (m_Velocity.x != 0 || m_Velocity.y != 0)
-			velocity = MoveDirection();
+			if(m_isOmniDirectional)
+				velocity = MoveOmniDirectional();
+			else
+				velocity = MoveDirectional();
 		
 
 		if (m_IsMoving)
@@ -42,7 +45,7 @@ void dae::TransformComponent::Update(float& deltaTime)
 					isSwappingTile = false;
 					return;
 				}
-				if (nextTile->GetTileState() == TileState::DIRT/* && currTile->GetBorder(GetCurrentDirection()) == false*/)
+				if (nextTile->GetTileState() == TileState::DIRT /*|| !currTile->GetBorder(GetCurrentDirection())*/)
 				{
 					isSwappingTile = true;
 				}
@@ -93,7 +96,7 @@ void dae::TransformComponent::SetPosition(float x, float y, float z)
 }
 
 
-glm::vec3 dae::TransformComponent::MoveDirection()
+glm::vec3 dae::TransformComponent::MoveDirectional()
 {
 	//TODO: Fix Minor freeze bug might be lag?
 	glm::vec3 velocity{ 0 };
@@ -146,9 +149,17 @@ glm::vec3 dae::TransformComponent::MoveDirection()
 	return velocity;
 }
 
+glm::vec3 dae::TransformComponent::MoveOmniDirectional()
+{
+	glm::vec3 velocity{ 0 };
+	m_IsMoving = true;
+	velocity.x = m_Velocity.x;
+	velocity.y = m_Velocity.y;
+	return velocity;
+}
+
 bool dae::TransformComponent::IsCentered() const
 {
-	//from top
 	bool XisCenter = false;
 	bool YisCenter = false;
 
@@ -166,9 +177,7 @@ void dae::TransformComponent::SetVelocity(glm::vec3 direction)
 	m_Velocity = direction; 
 	if (GetDirectionFromVelocity() != Direction::NONE) 
 	{
-		/*if (m_PreviousDirection != m_CurrentDirection)*/
-			m_PreviousDirection = m_CurrentDirection;
-
+		m_PreviousDirection = m_CurrentDirection;
 		m_CurrentDirection = GetDirectionFromVelocity();
 	}
 }
@@ -176,17 +185,19 @@ void dae::TransformComponent::SetVelocity(glm::vec3 direction)
 
 dae::Direction dae::TransformComponent::GetDirectionFromVelocity() const
 {
+	
+	if (m_Velocity.x < 0.0f)
+		return Direction::LEFT;
+
+	if (m_Velocity.x > 0.0f)
+		return Direction::RIGHT;
+
 	if (m_Velocity.y < 0.0f)
 		return Direction::UP;
 
 	if (m_Velocity.y > 0.0f)
 		return Direction::DOWN;
 
-	if (m_Velocity.x < 0.0f)
-		return Direction::LEFT;
-
-	if (m_Velocity.x > 0.0f)
-		return Direction::RIGHT;
 
 	return Direction::NONE;
 }
@@ -203,27 +214,23 @@ dae::iVector2 dae::TransformComponent::GetNextTileDirectionFromVelocity() const
 	return dir;
 }
 
-glm::vec3 dae::TransformComponent::MoveToTile(unsigned int x, unsigned int y, bool canDig)
+void dae::TransformComponent::MoveToTile(unsigned int xIndex, unsigned int yIndex)
 {
 	glm::vec3 velocity{ 0 };
-	if(canDig)
-	{
-		m_IsMoving = true;
+	if (m_CurrentTileIndex.x == static_cast<int>(xIndex) && m_CurrentTileIndex.y == static_cast<int>(yIndex))
+		if(IsCentered())
+		{
+			m_Velocity = velocity;
+			return;
+		}
+			
 
-	
-	glm::vec3 newPos;
-	newPos.x = float(x) * 32;
-	newPos.y = float(y) * 32;
-	m_OffSet = glm::vec3(0, 0, 0);
+	m_IsMoving = true;
+	iVector2 vec = { static_cast<int>((xIndex * 32) - m_Position.x) ,  static_cast<int>((yIndex * 32) - m_Position.y) };
+	const float distance = vec.Magnitude();
+	velocity.x = (g_MoveSpeed / distance) * vec.x;
+	velocity.y = (g_MoveSpeed / distance) * vec.y;
 
-	if (newPos.x > m_Position.y)
-		velocity.x = g_MoveSpeed;
-	if (newPos.x < m_Position.y)
-		velocity.x = -g_MoveSpeed;
-	if (newPos.y > m_Position.y)
-		velocity.y = g_MoveSpeed;
-	if (newPos.x < m_Position.y)
-		velocity.y = -g_MoveSpeed;
-	}
-	return velocity;
+	//m_Velocity = velocity;
+	SetVelocity({ velocity.x, velocity.y, 0 });
 }

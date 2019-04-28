@@ -59,7 +59,7 @@ namespace dae
 
 		bool IsNullVector() const;
 		StatusCode Normalize();
-		int Magnitude() const;
+		float Magnitude() const;
 	};
 
 	inline bool iVector2::IsNullVector() const
@@ -74,14 +74,14 @@ namespace dae
 			return StatusCode::STATUS_ERROR;
 		}
 		const auto magnitude = Magnitude();
-		x /= magnitude;
-		y /= magnitude;
+		x /= static_cast<int>(magnitude);
+		y /= static_cast<int>(magnitude);
 		return StatusCode::STATUS_SUCCES;
 	}
 
-	inline int iVector2::Magnitude() const
+	inline float iVector2::Magnitude() const
 	{
-		return static_cast<int>(std::sqrt(x * x + y * y));
+		return static_cast<float>(std::sqrt(x * x + y * y));
 	}
 	
 
@@ -91,8 +91,11 @@ namespace dae
 		EVENT_IDLE,
 		EVENT_MOVE,
 		EVENT_DIG,
+		EVENT_GHOST,
 		EVENT_ATTACK,
+		EVENT_PUMP,
 		EVENT_HIT,
+		EVENT_CHARGE,
 		EVENT_DEAD,
 		EVENT_CRUSHED,
 	};
@@ -100,8 +103,8 @@ namespace dae
 	enum class Direction
 	{
 		RIGHT = 0,
-		UP = 1,
-		LEFT = 2,
+		LEFT = 1,
+		UP = 2,
 		DOWN = 3,
 		NONE = 4
 		/*UP = 0,
@@ -159,6 +162,7 @@ namespace dae
 	{
 		UINT id = 0;
 		iVector2 UV = { 0 , 0 };
+		iVector2 Size = { 32 , 32 };
 		UINT StartFrame = 0;
 		UINT frames = 1;
 		bool hasUpDown = false;

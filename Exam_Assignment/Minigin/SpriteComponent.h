@@ -11,13 +11,13 @@ namespace dae
 		SpriteComponent(SpriteComponent&& other) noexcept = delete;
 		SpriteComponent& operator=(const SpriteComponent& other) = delete;
 		SpriteComponent& operator=(SpriteComponent&& other) noexcept = delete;
-
+		//TODO: CHECK IF PLAYER OR NPC ASSIGN CORRECT INIT STATE
 		SpriteComponent() = default;
 		virtual ~SpriteComponent() = default;
 
 		void Swap();
 
-		std::shared_ptr<BaseState> GetCurrentDirectionState() const { return m_DirState; }
+		std::shared_ptr<BaseState> GetCurrentDirectionState() const { return m_State; }
 
 		void SetFlipSprite(const SDL_RendererFlip flip) { m_FlipDirection = flip; }
 		SDL_RendererFlip GetFlipSprite() const { return m_FlipDirection; }
@@ -29,7 +29,7 @@ namespace dae
 
 		void SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state);
 
-		void onNotify(NotifyEvent event) { m_Event = event; }
+		void onNotify(NotifyEvent event);
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
@@ -38,7 +38,8 @@ namespace dae
 		void SetActiveAnimationFrame(float& deltaTime);
 		UINT GetAnimationIDForState(std::shared_ptr<BaseState> state);
 	private:
-		std::shared_ptr<BaseState> m_DirState = std::make_shared<IdleState>();
+		std::shared_ptr<BaseState> m_State = std::make_shared<DirectionState>();
+		std::shared_ptr<BaseState> m_NpcState = std::make_shared<IdlePlayerState>();
 
 		NotifyEvent m_Event = NotifyEvent::EVENT_IDLE;
 		SDL_RendererFlip m_FlipDirection = SDL_FLIP_NONE;

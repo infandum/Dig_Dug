@@ -30,6 +30,8 @@ namespace dae
 		glm::vec3 GetVelocity() const { return m_Velocity; }
 		void SetVelocity(glm::vec3 direction);
 
+		void MoveToTile(unsigned int xIndex = 0, unsigned int yIndex = 0);
+
 		Direction GetDirectionFromVelocity() const;
 		iVector2 GetNextTileDirectionFromVelocity() const;
 
@@ -39,9 +41,12 @@ namespace dae
 		bool GetIsStatic() const { return m_IsStatic; }
 		void SetIsStatic(const bool isStatic) { m_IsStatic = isStatic; }
 
+		bool GetIsOmniDirectional() const { return m_isOmniDirectional; }
+		void SetIsOmniDirectional(const bool isOmniDirectional) { m_isOmniDirectional = isOmniDirectional; }
+
 		bool IsCentered() const;
 
-		glm::vec3 MoveToTile(unsigned int x = 0, unsigned int y = 0, bool canDig = false);
+		
 
 		bool isSwappingTile = false;
 
@@ -49,10 +54,12 @@ namespace dae
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
-		glm::vec3 MoveDirection();
+		glm::vec3 MoveDirectional();
+		glm::vec3 MoveOmniDirectional();
 
 	private:
 		bool m_IsMoving = false;
+		bool m_isOmniDirectional = false;
 		bool m_IsStatic = false;
 
 		iVector2 m_CurrentTileIndex{};

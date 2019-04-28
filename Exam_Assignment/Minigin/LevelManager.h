@@ -1,10 +1,13 @@
 #pragma once
 #include "Service.h"
+#include "NpcComponent.h"
+#include "InputComponent.h"
 
 namespace dae {
 	enum class Direction;
 	class GameObject;
 	class TileComponent;
+	class vec3;
 	class LevelManager final : public Service
 	{
 	public:
@@ -12,16 +15,24 @@ namespace dae {
 
 		void Update(float deltaTime);
 
-		void SetPlayer(std::shared_ptr<GameObject> player) { m_pPlayer = player; }
 		void AddTile(TileComponent* tile);
 		TileComponent* GetTile(int x, int y);
+
+		void AddPlayer(InputComponent* pPlayer);
+		void RemovePlayer(InputComponent* pPlayer);
+
+		void AddEntity(NpcComponent* pEntity);
+		void RemoveEntity(NpcComponent* pEntity);
 
 		static void DigConnection(TileComponent* start, TileComponent* end, Direction dir);
 		void CreateTunnel(int xIndex, int yIndex, Direction dir, int distance = {0});
 
 	private:
+		bool IsSwitchingTile(float posX, float posY) const;
+
 		std::vector<TileComponent*> m_pTileComponents{};
-		std::shared_ptr<GameObject> m_pPlayer {};
+		std::vector<InputComponent*> m_pPlayers{};
+		std::vector<NpcComponent*> m_pEntities {};
 		TileComponent* m_StartTile {};
 	};
 }

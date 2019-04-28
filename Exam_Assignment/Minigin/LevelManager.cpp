@@ -1,93 +1,58 @@
 #include "MiniginPCH.h"
 #include "LevelManager.h"
 #include "GameObject.h"
-
+#include <glm/detail/type_vec3.hpp>
 
 void dae::LevelManager::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
-	//GetTile(4, 6)->SetTileState(TileState::OCCUPIED);
+
 	//TODO: TRACK NPCs
-	if (m_pPlayer != nullptr  && m_pPlayer->GetTransform() != nullptr)
+	//TODO: CLEAN UP AND REFRACTOR
+	
+	for (auto& player : m_pPlayers)
 	{
+		if (player != nullptr  && player->GetGameObject()->GetTransform() != nullptr)
+		{
 
-		if (m_StartTile == nullptr)
-		{
-			m_StartTile = GetTile(m_pPlayer->GetTransform()->GetPositionIndex().x, m_pPlayer->GetTransform()->GetPositionIndex().y);
-			//Dig out starting tile if player starts underground
-			if (m_StartTile->GetTileState() == TileState::DIRT)
-				m_StartTile->SetTileState(TileState::DUG);
-		}
-
-		double modX = fmod(round(m_pPlayer->GetTransform()->GetPosition().x), 32.0);
-		double modY = fmod(round(m_pPlayer->GetTransform()->GetPosition().y), 32.0);
-		bool isSwappingTile = false;
-		bool isEnteringLeft = false;
-		bool isEnterRight = false;
-		bool isEnteringUp = false;
-		bool isEnterDown = false;
-
-		if(modX >= 2 && modX < 14)
-		{
-			//std::cout << "LEAVING TILE TO THE RIGHT\n";
-			/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::RIGHT)
-				m_pPlayer->GetTransform()->isSwappingTile = true;*/
-			isEnteringLeft = true;
-		}
-		else if (modX >= 14 && modX <= 18)
-		{
-			//std::cout << "CENTER\n";
-			//m_pPlayer->GetTransform()->isSwappingTile = true;
-			isSwappingTile = true;
-			
-		}
-		else if( modX > 18 && modX <= 30)
-		{
-			//std::cout << "LEAVING TILE TO THE LEFT\n";
-			/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::LEFT)
-				m_pPlayer->GetTransform()->isSwappingTile = true;*/
-			isEnterRight = true;
-		}
-
-		if (modY >= 2 && modY < 14)
-		{
-			//std::cout << "LEAVING TILE TO THE DOWN\n";
-			/*if(m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::DOWN)
-				m_pPlayer->GetTransform()->isSwappingTile = true;*/
-			isEnteringUp = true;
-		}
-		else if (modY >= 14 && modY <= 18)
-		{
-			//std::cout << "CENTER\n";
-			
-			/*m_pPlayer->GetTransform()->isSwappingTile = true;*/
-			isSwappingTile = true;
-		}
-		else if (modY > 18 && modY <= 30)
-		{
-			//std::cout << "LEAVING TILE TO THE UP\n";
-			/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::UP)
-				m_pPlayer->GetTransform()->isSwappingTile = true;*/
-			isEnterDown = true;
-		}
-
-		if(isSwappingTile)
-		{ 
-			int x = static_cast<int>(round(m_pPlayer->GetTransform()->GetPosition().x / 32.0f));
-			int y = static_cast<int>(round(m_pPlayer->GetTransform()->GetPosition().y / 32.0f));
-			const auto nextTile = GetTile(x, y);
-			if (nextTile != nullptr && nextTile != m_StartTile)
+			if (m_StartTile == nullptr)
 			{
-				const auto dir = m_pPlayer->GetTransform()->GetCurrentDirection();
-				if (dir != Direction::NONE)
+				m_StartTile = GetTile(player->GetGameObject()->GetTransform()->GetPositionIndex().x, player->GetGameObject()->GetTransform()->GetPositionIndex().y);
+				//Dig out starting tile if player starts underground
+				if (m_StartTile->GetTileState() == TileState::DIRT)
+					m_StartTile->SetTileState(TileState::DUG);
+			}
+
+			if (IsSwitchingTile(player->GetGameObject()->GetTransform()->GetPosition().x, player->GetGameObject()->GetTransform()->GetPosition().y))
+			{
+				int x = static_cast<int>(round(player->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
+				int y = static_cast<int>(round(player->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
+				const auto nextTile = GetTile(x, y);
+				if (nextTile != nullptr && nextTile != m_StartTile)
 				{
-					//TODO: FALSE POSITIVE TUNNEL CONNECTION (DIRECTION IS PROBALY BUGGY)
-					DigConnection(m_StartTile, nextTile, dir);
-					m_pPlayer->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
-					if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
-						GetTile(x, y)->SetTileState(TileState::DUG);
-					m_StartTile = nextTile;
+					const auto dir = player->GetGameObject()->GetTransform()->GetCurrentDirection();
+					if (dir != Direction::NONE)
+					{
+						//TODO: FALSE POSITIVE TUNNEL CONNECTION (DIRECTION IS PROBALY BUGGY)
+						DigConnection(m_StartTile, nextTile, dir);
+						player->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+						if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
+							GetTile(x, y)->SetTileState(TileState::DUG);
+						m_StartTile = nextTile;
+					}
 				}
+			}
+		}
+	}
+	for(auto& entity : m_pEntities)
+	{
+		if (entity != nullptr  && entity->GetGameObject()->GetTransform() != nullptr)
+		{
+			if (IsSwitchingTile(entity->GetGameObject()->GetTransform()->GetPosition().x, entity->GetGameObject()->GetTransform()->GetPosition().y))
+			{
+				int x = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
+				int y = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
+				entity->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
 			}
 		}
 	}
@@ -117,6 +82,54 @@ dae::TileComponent* dae::LevelManager::GetTile(int x, int y)
 		}
 	}
 	return nullptr;
+}
+
+void dae::LevelManager::AddPlayer(InputComponent* pPlayer)
+{
+	for (auto& component : m_pPlayers)
+	{
+		if (typeid(*component) == typeid(*pPlayer))
+		{
+			std::cout << "Component Duplicate: " << typeid(*pPlayer).name() << " >> Already added!!";
+			return;
+		}
+	}
+	m_pPlayers.push_back(pPlayer);
+}
+
+void dae::LevelManager::RemovePlayer(InputComponent* pPlayer)
+{
+	const auto ent = std::find(m_pPlayers.begin(), m_pPlayers.end(), pPlayer);
+	if (ent == m_pPlayers.end())
+	{
+		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+		return;
+	}
+	m_pPlayers.erase(ent);
+}
+
+void dae::LevelManager::AddEntity(NpcComponent* pEntity)
+{
+	for (auto& entity : m_pEntities)
+	{
+		if (typeid(*entity) == typeid(*pEntity))
+		{
+			std::cout << "Component Duplicate: " << typeid(*pEntity).name() << " >> Already added!!";
+			return;
+		}
+	}
+	m_pEntities.push_back(pEntity);
+}
+
+void dae::LevelManager::RemoveEntity(NpcComponent* pEntity)
+{
+	const auto entity = std::find(m_pEntities.begin(), m_pEntities.end(), pEntity);
+	if (entity == m_pEntities.end())
+	{
+		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+		return;
+	}
+	m_pEntities.erase(entity);
 }
 
 void dae::LevelManager::DigConnection(TileComponent* start, TileComponent* end, Direction dir)
@@ -187,4 +200,61 @@ void dae::LevelManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int 
 		tile = nextTile;
 		nextTile->SetTileState(TileState::DUG);
 	}
+}
+
+bool dae::LevelManager::IsSwitchingTile(float posX, float posY) const
+{
+	double modX = fmod(round(posX), 32.0);
+	double modY = fmod(round(posY), 32.0);
+	bool isSwapping = false;
+	bool isEnteringLeft = false;
+	bool isEnterRight = false;
+	bool isEnteringUp = false;
+	bool isEnterDown = false;
+
+	if (modX >= 2 && modX < 14)
+	{
+		//std::cout << "LEAVING TILE TO THE RIGHT\n";
+		/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::RIGHT)
+			m_pPlayer->GetTransform()->isSwappingTile = true;*/
+		isEnteringLeft = true;
+	}
+	else if (modX >= 14 && modX <= 18)
+	{
+		//std::cout << "CENTER\n";
+		//m_pPlayer->GetTransform()->isSwappingTile = true;
+		isSwapping = true;
+
+	}
+	else if (modX > 18 && modX <= 30)
+	{
+		//std::cout << "LEAVING TILE TO THE LEFT\n";
+		/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::LEFT)
+			m_pPlayer->GetTransform()->isSwappingTile = true;*/
+		isEnterRight = true;
+	}
+
+	if (modY >= 2 && modY < 14)
+	{
+		//std::cout << "LEAVING TILE TO THE DOWN\n";
+		/*if(m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::DOWN)
+			m_pPlayer->GetTransform()->isSwappingTile = true;*/
+		isEnteringUp = true;
+	}
+	else if (modY >= 14 && modY <= 18)
+	{
+		//std::cout << "CENTER\n";
+
+		/*m_pPlayer->GetTransform()->isSwappingTile = true;*/
+		isSwapping = true;
+	}
+	else if (modY > 18 && modY <= 30)
+	{
+		//std::cout << "LEAVING TILE TO THE UP\n";
+		/*if (m_pPlayer->GetTransform()->GetCurrentDirection() == Direction::UP)
+			m_pPlayer->GetTransform()->isSwappingTile = true;*/
+		isEnterDown = true;
+	}
+
+	return isSwapping;
 }

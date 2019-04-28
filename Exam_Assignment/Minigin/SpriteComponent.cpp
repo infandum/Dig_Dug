@@ -5,17 +5,30 @@
 
 void dae::SpriteComponent::Swap()
 {
-	const auto state = m_DirState->Swap(m_Event, *GetGameObject());
-	auto anim = ServiceLocator::GetAnimationManager();
-
-	if(GetAnimationIDForState(m_DirState))
-		m_DirState->SetStateAnimClip(anim->GetSpriteClip(GetAnimationIDForState(m_DirState)));
-	if (state != nullptr && typeid(*m_DirState) != typeid(*state))
+	if(typeid(*m_State) == typeid(DirectionState))
 	{
-		m_ActiveFrame = anim->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
-		m_DirState = state;		
-		//std::cout << typeid(*m_DirState).name() << '\n';
+		if(GetGameObject()->GetInput())
+			m_State = std::make_shared<IdlePlayerState>();
+		if (GetGameObject()->GetNPC())
+			m_State = std::make_shared<IdlePlayerState>();
 	}
+	else
+	{
+		const auto state = m_State->Swap(m_Event, *GetGameObject());
+		auto anim = ServiceLocator::GetAnimationManager();
+
+		if (GetAnimationIDForState(m_State))
+			m_State->SetStateAnimClip(anim->GetSpriteClip(GetAnimationIDForState(m_State)));
+		if (state != nullptr && typeid(*m_State) != typeid(*state))
+		{
+			if (anim->GetSpriteClip(GetAnimationIDForState(state)).id == 0)
+				return;
+			m_ActiveFrame = anim->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
+			m_State = state;
+			//std::cout << typeid(*m_State).name() << '\n';
+		}
+	}
+	
 }
 
 void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state)
@@ -43,20 +56,29 @@ void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<Base
 	m_StateClips[clipID] = state;
 }
 
+void dae::SpriteComponent::onNotify(NotifyEvent event)
+{
+	if(m_Event != NotifyEvent::EVENT_DEAD)
+		m_Event = event;
+}
+
 void dae::SpriteComponent::Update(float& deltaTime)
 {
-	SetActiveAnimationFrame(deltaTime);
 	Swap();
-	m_DirState->Update(deltaTime, *GetGameObject());
-	m_DirState->Animated(*GetGameObject());
+	if (typeid(*m_State) != typeid(DirectionState))
+	{
+		SetActiveAnimationFrame(deltaTime);		
+		m_State->Update(deltaTime, *GetGameObject());
+		m_State->Animated(*GetGameObject());
+	}
 }
 
 void dae::SpriteComponent::SetActiveAnimationFrame(float& deltaTime)
 {
 
 	auto anim = ServiceLocator::GetAnimationManager();
-	//const auto clip = anim->GetAnimationClips(GetAnimationIDForState(m_DirState));
-	const auto clip = anim->GetSpriteClip(GetAnimationIDForState(m_DirState));
+	//const auto clip = anim->GetAnimationClips(GetAnimationIDForState(m_State));
+	const auto clip = anim->GetSpriteClip(GetAnimationIDForState(m_State));
 	if (GetGameObject() && GetGameObject()->GetTransform() && clip.id != 0)
 	{
 		

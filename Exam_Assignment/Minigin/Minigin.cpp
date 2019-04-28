@@ -15,7 +15,6 @@
 
 extern const float g_MoveSpeed = 90.f;
 extern const float g_TileCenterPadding = 1.0f;
-extern const float g_CollisionPadding = 1.0f;
 
 void dae::Minigin::Initialize()
 {

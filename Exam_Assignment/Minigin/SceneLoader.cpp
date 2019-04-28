@@ -20,6 +20,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT);
 	input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_x);
 	auto animations = ServiceLocator::GetAnimationManager();
+	animations->SetAnimationSpeed(10.0f);
 	auto tiles = ServiceLocator::GetLevelManager();
 	
 	std::shared_ptr<Font> font;
@@ -117,14 +118,16 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
 
-		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,0}, 1, 2, true, true }, 1);
-		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdleState>());
-		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,0}, 1, 2, true, true }, 2);
-		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<MoveState>());
-		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,32}, 1, 2, true, true }, 3);
-		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<DigState>());
-		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,64}, 0, 1, true, false }, 4);
-		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 0}, { 32 , 32 }, 1, 2, true, true }, 1);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdlePlayerState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 0}, { 32 , 32 }, 1, 2, true, true }, 2);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<MovePlayerState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 32}, { 32 , 32 }, 1, 2, true, true }, 3);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<DigPlayerState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 64}, { 32 , 32 }, 0, 1, true, false }, 4);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackPlayerState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);
+		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
 
 		m_Scene->Add(m_pPlayer);
 
@@ -137,8 +140,12 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		go->AddComponent(std::make_shared<NpcComponent>());
 		go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(02));
 		go->GetComponent<TransformComponent>()->SetPosition(32 * 1, 32 * 8);
-		animations->LoadSpriteClip(SpriteClip{ 0,iVector2{0,288}, 0, 2, false, true }, 5);
-		go->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<IdleState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {32, 256}, { 32 , 32 }, 0, 1, false, false }, 11);
+		go->GetComponent<SpriteComponent>()->SetAnimationToState(11, std::make_shared<IdlePlayerState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);
+		go->GetComponent<SpriteComponent>()->SetAnimationToState(12, std::make_shared<MovePlayerState>());
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 288}, { 64 , 64 }, 0, 4, true, false }, 15);
+		go->GetComponent<SpriteComponent>()->SetAnimationToState(15, std::make_shared<DeadPlayerState>());
 		m_Scene->Add(go);
 
 		go = std::make_shared<GameObject>();
@@ -151,7 +158,6 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		go->GetComponent<TransformComponent>()->SetIsStatic(true);
 		m_Scene->Add(go);
 
-		tiles->SetPlayer(m_pPlayer);
 		tiles->CreateTunnel(12, 12, Direction::UP, 2);
 		tiles->CreateTunnel(12, 12, Direction::LEFT, 2);
 

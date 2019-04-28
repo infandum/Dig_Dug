@@ -15,11 +15,11 @@ namespace dae
 		void LoadSpriteClip(SpriteClip spriteClip, UINT id);
 		SpriteClip GetSpriteClip(UINT id);
 
-		void SetAnimationSpeed(float speed) { m_AnimSpeed = speed; }
+		void SetAnimationSpeed(float speed = 16.0f) { m_AnimSpeed = speed; }
 		float GetAnimationSpeed() const { return m_AnimSpeed; }
 	private:
-		std::map<UINT, AnimationClip> m_pLoadedAnimations;
-		std::map<UINT, SpriteClip> m_pLoadedSprites;
+		std::map<UINT, AnimationClip> m_pLoadedAnimations{};
+		std::map<UINT, SpriteClip> m_pLoadedSprites{};
 		float m_AnimSpeed = 16.f;
 	};
 }

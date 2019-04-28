@@ -10,7 +10,7 @@ namespace dae
 		NpcComponent(BaseComponent&& other) noexcept = delete;
 		NpcComponent& operator=(const BaseComponent& other) = delete;
 		NpcComponent& operator=(BaseComponent&& other) noexcept = delete;
-		NpcComponent() = default;
+		NpcComponent();
 		virtual ~NpcComponent() = default;
 
 	protected:

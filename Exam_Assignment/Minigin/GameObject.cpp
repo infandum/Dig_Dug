@@ -36,7 +36,7 @@ void dae::GameObject::Render() const
 			}
 			else
 			{
-				ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, (float)(m_pTextureComponent->GetSize().x), (float)(m_pTextureComponent->GetSize().y), flip);
+				ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, static_cast<float>(m_pTextureComponent->GetSize().x), static_cast<float>(m_pTextureComponent->GetSize().y), flip);
 			}
 		}
 	
@@ -112,6 +112,9 @@ void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> comp)
 
 		if (component && typeid(*component) == typeid(InputComponent) && m_pInputComponent == nullptr)
 			m_pInputComponent = std::static_pointer_cast<InputComponent>(component);
+
+		if (component && typeid(*component) == typeid(NpcComponent) && m_pNpcComponent == nullptr)
+			m_pNpcComponent = std::static_pointer_cast<NpcComponent>(component);
 	}
 }
 
