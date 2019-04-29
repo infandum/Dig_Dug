@@ -62,11 +62,11 @@ void dae::TileComponent::Update(float& deltaTime)
 			switch (m_TileState)
 			{
 			default:;
-			case TileState::DIRT:
+			case TileState::FREE:
 				if (GetGameObject()->GetComponent<TextureComponent>())
 					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(std::make_shared<Texture2D>(nullptr));
 				break;
-			case TileState::DUG:
+			case TileState::USED:
 				if (GetGameObject()->GetComponent<TextureComponent>())
 					GetGameObject()->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(11));
 				break;

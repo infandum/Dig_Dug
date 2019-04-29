@@ -10,6 +10,9 @@
 #include "Commands.h"
 #include "ServiceLocator.h"
 
+//TODO: FILE READING LEVEL LOADING
+//TODO DECOUPLE MORE FUNCTION AWAY FROM PURE DIG USED FEATURES more
+
 void dae::SceneLoader::InitScene(dae::SceneList scene)
 {
 	auto resource = ServiceLocator::GetResourceManager();
@@ -77,9 +80,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		resource->LoadTexture("images/Occupied.png", 13);
 			
 		resource->LoadTexture("images/Collision.png", 10000);
-		resource->LoadTexture("images/ClossWallNZ.png", 10001);
 		resource->LoadTexture("images/OpenWallNZ.png", 10002);
-		resource->LoadTexture("images/ClossWallEW.png", 10003);
 		resource->LoadTexture("images/OpenWallEW.png", 10004);
 
 
@@ -101,7 +102,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 				if (y <= 1)
 					tile->GetComponent<TileComponent>()->SetTileState(TileState::EMPITY);
 				else
-					tile->GetComponent<TileComponent>()->SetTileState(TileState::DIRT);
+					tile->GetComponent<TileComponent>()->SetTileState(TileState::FREE);
 				tile->GetComponent<TransformComponent>()->SetPosition(static_cast<float>(x) * 32, static_cast<float>(y) * 32);
 				m_Scene->Add(tile);
 			}
@@ -118,7 +119,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_pPlayer->GetComponent<TransformComponent>()->SetPosition(0, 96);
 		m_pPlayer->GetComponent<TransformComponent>()->SetIsStatic(false);
 
-		animations->LoadSpriteClip(SpriteClip{ 0, {0, 0}, { 32 , 32 }, 1, 2, true, true }, 1);
+		animations->LoadSpriteClip(SpriteClip{ 0, {0, 0}, { 32 , 32 }, 1, 2, true, false }, 1);
 		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdlePlayerState>());
 		animations->LoadSpriteClip(SpriteClip{ 0, {0, 0}, { 32 , 32 }, 1, 2, true, true }, 2);
 		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<MovePlayerState>());
@@ -129,6 +130,14 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		animations->LoadSpriteClip(SpriteClip{ 0, {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);
 		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
 
+		go = std::make_shared<GameObject>();
+		go->SetName("Rock");
+		go->AddComponent(std::make_shared<CollisionComponent>());
+		go->AddComponent(std::make_shared<TransformComponent>());
+		go->AddComponent(std::make_shared<TextureComponent>());
+		go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(12));
+		go->GetComponent<TransformComponent>()->SetPosition(0, 32);
+		m_pPlayer->AddChild(go);
 		m_Scene->Add(m_pPlayer);
 
 		go = std::make_shared<GameObject>();

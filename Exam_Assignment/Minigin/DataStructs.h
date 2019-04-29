@@ -88,15 +88,13 @@ namespace dae
 	enum class NotifyEvent
 	{
 		EVENT_SPAWN,
+		EVENT_DESPAWN,
 		EVENT_IDLE,
 		EVENT_MOVE,
-		EVENT_DIG,
-		EVENT_GHOST,
-		EVENT_ATTACK,
-		EVENT_PUMP,
-		EVENT_HIT,
+		EVENT_ACTION,
+		EVENT_INTERACT,
 		EVENT_CHARGE,
-		EVENT_DEAD,
+		EVENT_COLLISION,
 		EVENT_CRUSHED,
 	};
 
@@ -107,24 +105,12 @@ namespace dae
 		UP = 2,
 		DOWN = 3,
 		NONE = 4
-		/*UP = 0,
-		DOWN = 1,
-		LEFT = 2,
-		RIGHT = 3,
-		NONE = 4*/
-	};
-
-	enum InputTriggerState
-	{
-		Pressed,
-		Released,
-		Down
 	};
 
 	enum class TileState
 	{
-		DIRT,
-		DUG,
+		FREE,
+		USED,
 		BLOCKED,
 		OCCUPIED,
 		EMPITY,

@@ -19,7 +19,7 @@ namespace dae
 		void Update(float deltaTime) override;
 		void Render() const override;
 
-		static unsigned int GetObjectCount() { return m_NumberOfGameObjects; }
+		static UINT GetObjectCount() { return m_NumberOfGameObjects; }
 
 		void SetName(std::string name);
 		std::string GetName() const { return m_Name; }
@@ -46,9 +46,29 @@ namespace dae
 			return nullptr;
 		}
 
+		void AddChild(std::shared_ptr<GameObject> pChild, bool isActive = true, bool isAttached = true);
+		void RemoveChild(std::shared_ptr<GameObject> pChild);
+		bool IsChild(GameObject* pChild);
+		std::shared_ptr<GameObject> GetChild(UINT index);
+		UINT GetChildCount() const { return m_pChilds.size(); }
+		void DetachChild(GameObject* pChild);
+		void AttachChild(GameObject* pChild);
+		bool IsChildAttached(GameObject* pChild);
+		void ActivateChild(GameObject* pChild);
+		void DeactivateChild(GameObject* pChild);
+		bool IsChildActive(GameObject* pChild);
+		//TODO: RELEASE CHILD OBJECT HIERACHY
+
+		GameObject* GetParent() const { return m_pParent; }
+		void SetParent(GameObject* parent) { m_pParent = parent; }
+
 	private:
 		std::string m_Name = "GameObject" + std::to_string(m_NumberOfGameObjects);
 		std::vector<std::shared_ptr<BaseComponent>> m_pComponents{};
+		std::vector<std::shared_ptr<GameObject>> m_pChilds{};
+		std::vector<bool> m_IsChildAttached {};
+		std::vector<bool> m_IsChildActive{};
+		GameObject* m_pParent {};
 		std::shared_ptr<TransformComponent> m_pTransformComponent{};
 		std::shared_ptr<TextureComponent> m_pTextureComponent{};
 		std::shared_ptr<CollisionComponent> m_pCollisionComponent{};
@@ -56,6 +76,6 @@ namespace dae
 		std::shared_ptr<SpriteComponent> m_pSpriteComponent{};
 		std::shared_ptr<InputComponent> m_pInputComponent{};
 		std::shared_ptr<NpcComponent> m_pNpcComponent{};
-		static unsigned int m_NumberOfGameObjects;
+		static UINT m_NumberOfGameObjects;
 	};
 }

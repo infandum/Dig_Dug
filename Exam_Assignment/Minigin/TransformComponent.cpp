@@ -9,9 +9,13 @@
 extern  const float g_MoveSpeed;
 extern const float g_TileCenterPadding;
 
+
 void dae::TransformComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
+	if (GetGameObject()->GetParent())
+		if (GetGameObject()->GetParent()->IsChildAttached(GetGameObject()))
+			m_Position = GetGameObject()->GetParent()->GetTransform()->GetPosition() + GetGameObject()->GetTransform()->GetLocalPosition();
 
 	if(m_IsStatic)
 	{
@@ -19,12 +23,11 @@ void dae::TransformComponent::Update(float& deltaTime)
 		if (tile->GetTileState() != TileState::OCCUPIED)
 			tile->SetTileState(TileState::OCCUPIED);
 	}
-
-	if(!m_IsStatic)
+	else
 	{
 		glm::vec3 velocity{ 0 };
 		if (m_Velocity.x != 0 || m_Velocity.y != 0)
-			if(m_isOmniDirectional)
+			if(m_IsOmniDirectional)
 				velocity = MoveOmniDirectional();
 			else
 				velocity = MoveDirectional();
@@ -32,51 +35,16 @@ void dae::TransformComponent::Update(float& deltaTime)
 
 		if (m_IsMoving)
 		{
-			isSwappingTile = false;
-			//CHECK IF NEXT TILE IS LEGAL MOVE
-			const iVector2 nextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
-			//const auto currTile = ServiceLocator::GetLevelManager()->GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
-			const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
-			if (nextTile != nullptr)
-			{
-				if(nextTile->GetTileState() == TileState::OCCUPIED && IsCentered())
-				{
-					//std::cout << "NEXT TILE IS OCCUPIED\n";
-					isSwappingTile = false;
-					return;
-				}
-				if (nextTile->GetTileState() == TileState::DIRT /*|| !currTile->GetBorder(GetCurrentDirection())*/)
-				{
-					isSwappingTile = true;
-				}
-			}
+			if(CheckOccupiedTileMove())
+				return;
 
-				
-				
-			
+			CheckTileSwapping();
 
 			double newPositionX = m_Position.x + round(deltaTime * velocity.x);
 			double newPositionY = m_Position.y + round(deltaTime * velocity.y);
 
-			//BORDER CONTROL
-			const int MIN_POSITION_X = 0;
-			const int MAX_POSITION_X = 448 - 32;
-			const int MIN_POSITION_Y = 32;
-			const int MAX_POSITION_Y = 576 - (32 + 32);
+			BorderControl(newPositionX, newPositionY);
 
-			if (newPositionX < MIN_POSITION_X)
-				newPositionX = MIN_POSITION_X;
-
-			if (newPositionX > MAX_POSITION_X)
-				newPositionX = MAX_POSITION_X;
-			
-			if (newPositionY < MIN_POSITION_Y)
-				newPositionY = MIN_POSITION_Y;
-
-			if (newPositionY > MAX_POSITION_Y)
-				newPositionY = MAX_POSITION_Y;
-
-			
 			m_Position = { newPositionX, newPositionY, m_Position.z };
 			m_IsMoving = false;	
 		}
@@ -231,6 +199,63 @@ void dae::TransformComponent::MoveToTile(unsigned int xIndex, unsigned int yInde
 	velocity.x = (g_MoveSpeed / distance) * vec.x;
 	velocity.y = (g_MoveSpeed / distance) * vec.y;
 
-	//m_Velocity = velocity;
 	SetVelocity({ velocity.x, velocity.y, 0 });
+}
+
+
+bool dae::TransformComponent::CheckTileSwapping()
+{
+	const iVector2 nextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
+	const auto currTile = ServiceLocator::GetLevelManager()->GetTile(m_CurrentTileIndex.x, m_CurrentTileIndex.y);
+	const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
+	if (nextTile != nullptr)
+	{
+		if (nextTile->GetTileState() == TileState::FREE)
+		{
+			isSwappingTile = true;
+		}
+		if (nextTile->GetTileState() == TileState::USED)
+		{
+			isSwappingTile = false;
+			if (!currTile->GetIsConnectedBorder(GetCurrentDirection()))
+				isSwappingTile = true;
+		}
+
+		if (nextTile->GetTileState() == TileState::EMPITY)
+		{
+			isSwappingTile = false;
+		}
+	}
+	return isSwappingTile;
+}
+
+bool dae::TransformComponent::CheckOccupiedTileMove()
+{
+	const iVector2 nextTileIndex = { m_CurrentTileIndex.x + GetNextTileDirectionFromVelocity().x, m_CurrentTileIndex.y + GetNextTileDirectionFromVelocity().y };
+	const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
+	if (nextTile != nullptr)
+		if (nextTile->GetTileState() == TileState::OCCUPIED && IsCentered())
+			return m_IsMoveAble = true;
+
+	return m_IsMoveAble = false;
+}
+
+void dae::TransformComponent::BorderControl(double& posX, double& posY)
+{
+	const int MIN_POSITION_X = 0;
+	const int MAX_POSITION_X = 448 - 32;
+	const int MIN_POSITION_Y = 32;
+	const int MAX_POSITION_Y = 576 - (32 + 32);
+
+	if (posX < MIN_POSITION_X)
+		posX = MIN_POSITION_X;
+
+	if (posX > MAX_POSITION_X)
+		posX = MAX_POSITION_X;
+
+	if (posY < MIN_POSITION_Y)
+		posY = MIN_POSITION_Y;
+
+	if (posY > MAX_POSITION_Y)
+		posY = MAX_POSITION_Y;
 }

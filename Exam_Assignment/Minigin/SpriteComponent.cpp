@@ -58,7 +58,7 @@ void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<Base
 
 void dae::SpriteComponent::onNotify(NotifyEvent event)
 {
-	if(m_Event != NotifyEvent::EVENT_DEAD)
+	if(m_Event != NotifyEvent::EVENT_COLLISION)
 		m_Event = event;
 }
 

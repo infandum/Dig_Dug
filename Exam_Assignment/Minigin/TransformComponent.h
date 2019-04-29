@@ -23,6 +23,9 @@ namespace dae
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(float x = 0, float y = 0, float z = 0);
+
+		const glm::vec3& GetLocalPosition() const { return m_localPosition; }
+		void SetLocalPosition(float x = 0, float y = 0, float z = 0) { m_localPosition = { x,y,z }; }
 	
 		const iVector2& GetPositionIndex() const { return m_CurrentTileIndex; }
 		void SetPositionIndex(iVector2 index) { /*std::cout << index.x << "," << index.y << '\n';*/ m_CurrentTileIndex = index; }
@@ -41,16 +44,17 @@ namespace dae
 		bool GetIsStatic() const { return m_IsStatic; }
 		void SetIsStatic(const bool isStatic) { m_IsStatic = isStatic; }
 
-		bool GetIsOmniDirectional() const { return m_isOmniDirectional; }
-		void SetIsOmniDirectional(const bool isOmniDirectional) { m_isOmniDirectional = isOmniDirectional; }
+		bool GetIsOmniDirectional() const { return m_IsOmniDirectional; }
+		void SetIsOmniDirectional(const bool isOmniDirectional) { m_IsOmniDirectional = isOmniDirectional; }
 
 		bool IsCentered() const;
 
+		bool CheckOccupiedTileMove();
+		bool CheckTileSwapping();
 		
-
-		bool isSwappingTile = false;
-
 	protected:
+		
+		static void BorderControl(double& posX, double& posY);
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
 		/*void Draw(float& deltaTime) override;*/
@@ -58,16 +62,19 @@ namespace dae
 		glm::vec3 MoveOmniDirectional();
 
 	private:
-		bool m_IsMoving = false;
-		bool m_isOmniDirectional = false;
 		bool m_IsStatic = false;
+		bool m_IsMoving = false;
+		bool isSwappingTile = false;
+		bool m_IsMoveAble = false;
+		bool m_IsOmniDirectional = false;
+		
 
 		iVector2 m_CurrentTileIndex{};
 		Direction m_CurrentDirection = Direction::RIGHT;
 		Direction m_PreviousDirection = Direction::RIGHT;
 
 		glm::vec3 m_Position = { 0,0,0 };
-		glm::vec3 m_OffSet = { 0,0,0 };
+		glm::vec3 m_localPosition = { 0,0,0 };
 		glm::vec3 m_Velocity = { 0,0,0 };
 
 		

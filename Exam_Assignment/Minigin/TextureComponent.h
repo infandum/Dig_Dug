@@ -13,10 +13,10 @@ namespace dae
 		TextureComponent& operator=(TextureComponent&& other) noexcept = delete;
 
 		explicit TextureComponent() = default;
-		/*explicit TextureComponent(std::shared_ptr<Texture2D> texture);*/
+		explicit TextureComponent(std::shared_ptr<Texture2D> texture);
 		virtual ~TextureComponent() = default;
 
-		void SetTexture(std::shared_ptr<Texture2D> texture, int width = { 32 }, int height = { 32 });
+		void SetTexture(std::shared_ptr<Texture2D> texture);
 		std::shared_ptr<Texture2D>& GetTexture() { return m_spTexture; }
 		iVector2 GetSize() const { return m_Size; }
 

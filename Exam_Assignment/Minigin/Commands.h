@@ -5,6 +5,8 @@
 
 extern  const float g_MoveSpeed;
 
+//TODO: RETHINK COMMANDS ASSIGNEMENT
+
 namespace dae
 {
 	class GameObject;
@@ -156,7 +158,18 @@ namespace dae
 		std::cout << gameObject.GetName() << ">> ATTACKING" << '\n';
 		if (m_Input->IsKeyDown())
 		{
-			notify(gameObject, NotifyEvent::EVENT_ATTACK);
+			notify(gameObject, NotifyEvent::EVENT_ACTION);
+			/*if (gameObject.GetChildCount() > 0)
+				if (gameObject.IsChildAttached(gameObject.GetChild(0).get()))
+					gameObject.DetachChild(gameObject.GetChild(0).get());
+				else
+					gameObject.AttachChild(gameObject.GetChild(0).get());;*/
+
+			if (gameObject.GetChildCount() > 0)
+				if (gameObject.IsChildActive(gameObject.GetChild(0).get()))
+					gameObject.DeactivateChild(gameObject.GetChild(0).get());
+				else
+					gameObject.ActivateChild(gameObject.GetChild(0).get());;
 		}
 
 		if (m_Input->IsKeyUp())

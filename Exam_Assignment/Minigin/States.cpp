@@ -188,15 +188,16 @@ std::shared_ptr<dae::BaseState> dae::IdlePlayerState::Swap(NotifyEvent event, Ga
 	case NotifyEvent::EVENT_IDLE:
 		return nullptr;
 	case NotifyEvent::EVENT_MOVE:
-		if (gameObject.GetTransform()->isSwappingTile && gameObject.GetInput())
+		if (gameObject.GetTransform()->CheckOccupiedTileMove())
+			return nullptr;
+
+		if (gameObject.GetTransform()->CheckTileSwapping())
 			return std::make_shared<DigPlayerState>();
 		
 			return std::make_shared<MovePlayerState>();
-	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigPlayerState>();
-	case NotifyEvent::EVENT_ATTACK:
+	case NotifyEvent::EVENT_ACTION:
 		return std::make_shared<AttackPlayerState>();
-	case NotifyEvent::EVENT_DEAD:
+	case NotifyEvent::EVENT_COLLISION:
 		return std::make_shared<DeadPlayerState>();
 	default: ;
 	}
@@ -211,15 +212,16 @@ std::shared_ptr<dae::BaseState> dae::MovePlayerState::Swap(NotifyEvent event, Ga
 	case NotifyEvent::EVENT_IDLE:
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
-		if (gameObject.GetTransform()->isSwappingTile && gameObject.GetInput())
+		if (gameObject.GetTransform()->CheckOccupiedTileMove())
+			return std::make_shared<IdlePlayerState>();
+
+		if (gameObject.GetTransform()->CheckTileSwapping())
 			return std::make_shared<DigPlayerState>();
 
 		return nullptr;
-	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigPlayerState>();
-	case NotifyEvent::EVENT_ATTACK:
+	case NotifyEvent::EVENT_ACTION:
 		return std::make_shared<AttackPlayerState>();
-	case NotifyEvent::EVENT_DEAD:
+	case NotifyEvent::EVENT_COLLISION:
 		return std::make_shared<DeadPlayerState>();
 	default:;
 	}
@@ -234,15 +236,16 @@ std::shared_ptr<dae::BaseState> dae::DigPlayerState::Swap(NotifyEvent event, Gam
 	case NotifyEvent::EVENT_IDLE:
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
-		
-		if (!gameObject.GetTransform()->isSwappingTile && !gameObject.GetInput())
+		if (gameObject.GetTransform()->CheckOccupiedTileMove())
+			return std::make_shared<IdlePlayerState>();
+
+		if (!gameObject.GetTransform()->CheckTileSwapping())
 			return std::make_shared<MovePlayerState>();
+
 		return nullptr;
-	case NotifyEvent::EVENT_DIG:
-		return nullptr;
-	case NotifyEvent::EVENT_ATTACK:
+	case NotifyEvent::EVENT_ACTION:
 		return std::make_shared<AttackPlayerState>();
-	case NotifyEvent::EVENT_DEAD:
+	case NotifyEvent::EVENT_COLLISION:
 		return std::make_shared<DeadPlayerState>();
 	default:;
 	}
@@ -258,11 +261,9 @@ std::shared_ptr<dae::BaseState> dae::AttackPlayerState::Swap(NotifyEvent event, 
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
 		return std::make_shared<IdlePlayerState>();
-	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigPlayerState>();
-	case NotifyEvent::EVENT_ATTACK:
+	case NotifyEvent::EVENT_ACTION:
 		return nullptr;
-	case NotifyEvent::EVENT_DEAD:
+	case NotifyEvent::EVENT_COLLISION:
 		return std::make_shared<DeadPlayerState>();
 	default:;
 	}
@@ -280,11 +281,9 @@ std::shared_ptr<dae::BaseState> dae::PumpPlayerState::Swap(NotifyEvent event, Ga
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
 		return std::make_shared<IdlePlayerState>();
-	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigPlayerState>();
-	case NotifyEvent::EVENT_ATTACK:
+	case NotifyEvent::EVENT_INPUT:
 		return std::make_shared<AttackPlayerState>();
-	case NotifyEvent::EVENT_DEAD:
+	case NotifyEvent::EVENT_COLLISION:
 		return nullptr;
 	default:;
 	}*/
@@ -300,11 +299,9 @@ std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, Ga
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
 		return std::make_shared<IdlePlayerState>();
-	case NotifyEvent::EVENT_DIG:
-		return std::make_shared<DigPlayerState>();
-	case NotifyEvent::EVENT_ATTACK:
+	case NotifyEvent::EVENT_ACTION:
 		return std::make_shared<AttackPlayerState>();
-	case NotifyEvent::EVENT_DEAD:
+	case NotifyEvent::EVENT_COLLISION:
 		return nullptr;
 	default:;
 	}

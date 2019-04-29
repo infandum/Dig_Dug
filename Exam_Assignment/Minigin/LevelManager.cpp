@@ -9,7 +9,7 @@ void dae::LevelManager::Update(float deltaTime)
 
 	//TODO: TRACK NPCs
 	//TODO: CLEAN UP AND REFRACTOR
-	
+	//TODO: MOVE DIGGING TO PLAYER
 	for (auto& player : m_pPlayers)
 	{
 		if (player != nullptr  && player->GetGameObject()->GetTransform() != nullptr)
@@ -19,8 +19,8 @@ void dae::LevelManager::Update(float deltaTime)
 			{
 				m_StartTile = GetTile(player->GetGameObject()->GetTransform()->GetPositionIndex().x, player->GetGameObject()->GetTransform()->GetPositionIndex().y);
 				//Dig out starting tile if player starts underground
-				if (m_StartTile->GetTileState() == TileState::DIRT)
-					m_StartTile->SetTileState(TileState::DUG);
+				if (m_StartTile->GetTileState() == TileState::FREE)
+					m_StartTile->SetTileState(TileState::USED);
 			}
 
 			if (IsSwitchingTile(player->GetGameObject()->GetTransform()->GetPosition().x, player->GetGameObject()->GetTransform()->GetPosition().y))
@@ -33,11 +33,10 @@ void dae::LevelManager::Update(float deltaTime)
 					const auto dir = player->GetGameObject()->GetTransform()->GetCurrentDirection();
 					if (dir != Direction::NONE)
 					{
-						//TODO: FALSE POSITIVE TUNNEL CONNECTION (DIRECTION IS PROBALY BUGGY)
 						DigConnection(m_StartTile, nextTile, dir);
 						player->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
 						if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
-							GetTile(x, y)->SetTileState(TileState::DUG);
+							GetTile(x, y)->SetTileState(TileState::USED);
 						m_StartTile = nextTile;
 					}
 				}
@@ -172,7 +171,7 @@ void dae::LevelManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int 
 		return;
 	}
 
-	tile->SetTileState(TileState::DUG);
+	tile->SetTileState(TileState::USED);
 	for(auto i = 0; i < distance; ++i)
 	{
 		TileComponent* nextTile = nullptr;
@@ -198,7 +197,7 @@ void dae::LevelManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int 
 
 		DigConnection(tile, nextTile, dir);
 		tile = nextTile;
-		nextTile->SetTileState(TileState::DUG);
+		nextTile->SetTileState(TileState::USED);
 	}
 }
 

@@ -91,7 +91,6 @@ void dae::Minigin::Run()
 		auto doContinue = true;
 		auto lag{ 0.0f };
 		auto previousTime = std::chrono::high_resolution_clock::now();
-		//const auto perUpdateTime{ float(msPerFrame) };
 		while (doContinue)
 		{
 			const auto currentTime = std::chrono::high_resolution_clock::now();

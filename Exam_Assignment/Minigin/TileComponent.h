@@ -23,7 +23,7 @@ namespace dae
 		iVector2 GetPositionIndex() const { return m_TileIndex; }
 
 		void SetBorder(Direction dir, bool isCrossed);
-		bool GetBorder(Direction dir) { return m_IsBorderConnected[static_cast<int>(dir)]; }
+		bool GetIsConnectedBorder(Direction dir) { return m_IsBorderConnected[static_cast<int>(dir)]; }
 		
 	protected:
 		/*void Initialize() override;*/

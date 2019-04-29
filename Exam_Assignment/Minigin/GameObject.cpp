@@ -5,7 +5,7 @@
 #include <complex>
 #include "ServiceLocator.h"
 
-unsigned int dae::GameObject::m_NumberOfGameObjects = 0;
+UINT dae::GameObject::m_NumberOfGameObjects = 0;
 
 dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureComponent(nullptr),
                                m_pCollisionComponent(nullptr), m_pTileComponent(nullptr)
@@ -15,11 +15,17 @@ dae::GameObject::GameObject(): m_pTransformComponent(nullptr), m_pTextureCompone
 
 void dae::GameObject::Update(float deltaTime)
 {
-	UNREFERENCED_PARAMETER(deltaTime);
+	for (size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_IsChildActive[i])
+			m_pChilds[i]->Update(deltaTime);
+	}
+
 	for (auto& component : m_pComponents)
 	{
 		component->Update(deltaTime);
 	}
+
 }
 
 void dae::GameObject::Render() const
@@ -42,25 +48,25 @@ void dae::GameObject::Render() const
 	
 	if (m_pTileComponent != nullptr && m_pTransformComponent != nullptr)
 	{
-		if (m_pTileComponent->GetTileState() == TileState::DUG)
+		if (m_pTileComponent->GetTileState() == TileState::USED)
 		{
 			const auto Hwall = ServiceLocator::GetResourceManager()->GetTexture(10002);
 
 			const auto Vwall = ServiceLocator::GetResourceManager()->GetTexture(10004);
 
-			if(!m_pTileComponent->GetBorder(Direction::UP))
+			if(!m_pTileComponent->GetIsConnectedBorder(Direction::UP))
 				ServiceLocator::GetRenderer()->RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 32.0f, 5.0f);
 			
 
-			if (!m_pTileComponent->GetBorder(Direction::DOWN))
+			if (!m_pTileComponent->GetIsConnectedBorder(Direction::DOWN))
 				ServiceLocator::GetRenderer()->RenderTexture(*Hwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y + 32 - 5, 32.0f, 5.0f);
 			
 
-			if (!m_pTileComponent->GetBorder(Direction::LEFT))
+			if (!m_pTileComponent->GetIsConnectedBorder(Direction::LEFT))
 				ServiceLocator::GetRenderer()->RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
 			
 
-			if (!m_pTileComponent->GetBorder(Direction::RIGHT))
+			if (!m_pTileComponent->GetIsConnectedBorder(Direction::RIGHT))
 				ServiceLocator::GetRenderer()->RenderTexture(*Vwall, m_pTransformComponent->GetPosition().x + 32 - 5, m_pTransformComponent->GetPosition().y, 5.0f, 32.0f);
 		}
 	}
@@ -72,6 +78,12 @@ void dae::GameObject::Render() const
 			const auto Collision = ServiceLocator::GetResourceManager()->GetTexture(10000);
 			ServiceLocator::GetRenderer()->RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, static_cast<float>(m_pCollisionComponent->GetSize().x), static_cast<float>(m_pCollisionComponent->GetSize().y));
 		}
+	}
+
+	for(size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_IsChildActive[i])
+			m_pChilds[i]->Render();
 	}
 }
 
@@ -128,4 +140,157 @@ void dae::GameObject::RemoveComponent(std::shared_ptr<BaseComponent> pComp)
 	}
 	m_pComponents.erase(comp);
 	pComp->m_pGameObject = nullptr;
+}
+
+void dae::GameObject::AddChild(std::shared_ptr<GameObject> pChild, bool isActive, bool isAttached)
+{
+	for (auto& child : m_pChilds)
+	{
+		if (typeid(*child) == typeid(*pChild))
+		{
+			std::cout << "Component Duplicate: " << typeid(*child).name() << " >> Already added!!";
+			return;
+		}
+	}
+	pChild->SetParent(this);
+	pChild->GetTransform()->SetLocalPosition(pChild->GetTransform()->GetPosition().x - GetTransform()->GetPosition().x, pChild->GetTransform()->GetPosition().y - GetTransform()->GetPosition().y, pChild->GetTransform()->GetPosition().z - GetTransform()->GetPosition().z);
+	m_IsChildAttached.push_back(isAttached);
+	m_IsChildActive.push_back(isActive);
+	m_pChilds.push_back(pChild);
+}
+
+void dae::GameObject::RemoveChild(std::shared_ptr<GameObject> pChild)
+{
+	const auto child = std::find(m_pChilds.begin(), m_pChilds.end(), pChild);
+	if (child == m_pChilds.end())
+	{
+		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+		return;
+	}
+	const auto it = m_IsChildAttached.begin() + (child - m_pChilds.begin());
+	m_pChilds.erase(child);
+	m_IsChildAttached.erase(it);
+	pChild->SetParent(nullptr);
+}
+
+bool dae::GameObject::IsChild(GameObject* pChild)
+{
+	if (m_pChilds.size() == 0)
+		return false;
+
+	for (UINT i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_pChilds[i].get() == pChild)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+std::shared_ptr<dae::GameObject> dae::GameObject::GetChild(UINT index)
+{
+	if(m_pChilds.size() == 0)
+		return nullptr;
+
+	for (UINT i = 0; i < m_pChilds.size(); i++)
+	{
+		if (i == index)
+		{
+			return m_pChilds[i];
+		}
+	}
+	return nullptr;
+}
+
+void dae::GameObject::DetachChild(GameObject* pChild)
+{
+	if (m_pChilds.size() == 0)
+		return;
+
+	for (size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_pChilds[i].get() == pChild)
+		{
+			m_IsChildAttached[i] = false;
+			return;
+		}
+	}
+}
+
+void dae::GameObject::AttachChild(GameObject* pChild)
+{
+	if (m_pChilds.size() == 0)
+		return;
+
+	for (size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_pChilds[i].get() == pChild)
+		{
+			m_IsChildAttached[i] = true;
+			pChild->GetTransform()->SetLocalPosition(pChild->GetTransform()->GetPosition().x - GetTransform()->GetPosition().x, pChild->GetTransform()->GetPosition().y - GetTransform()->GetPosition().y, pChild->GetTransform()->GetPosition().z - GetTransform()->GetPosition().z);
+			return;
+		}
+	}
+}
+
+bool dae::GameObject::IsChildAttached(GameObject* pChild)
+{
+	if (m_pChilds.size() == 0)
+		return false;
+
+	for (size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_pChilds[i].get() == pChild)
+		{
+			return m_IsChildAttached[i];
+		}
+	}
+	return false;
+}
+
+void dae::GameObject::ActivateChild(GameObject* pChild)
+{
+	if (m_pChilds.size() == 0)
+		return;
+
+	for (size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_pChilds[i].get() == pChild)
+		{
+			m_IsChildActive[i] = true;
+			return;
+		}
+	}
+}
+
+void dae::GameObject::DeactivateChild(GameObject* pChild)
+{
+	if (m_pChilds.size() == 0)
+		return;
+
+	for (size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if (m_pChilds[i].get() == pChild)
+		{
+			m_IsChildActive[i] = false;
+			return;
+		}
+	}
+}
+
+
+bool dae::GameObject::IsChildActive(GameObject* pChild)
+{
+	if (m_pChilds.size() == 0)
+		return false;
+
+	for(size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		if(m_pChilds[i].get() == pChild)
+		{
+			return m_IsChildActive[i];
+		}
+	}
+	return false;
 }
