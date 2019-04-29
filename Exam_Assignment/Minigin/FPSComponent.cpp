@@ -20,3 +20,7 @@ void dae::FPSComponent::Update(float& deltaTime)
 		m_AccuTime -= 1.0f;
 	}
 }
+
+void dae::FPSComponent::Render()
+{
+}

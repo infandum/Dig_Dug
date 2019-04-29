@@ -18,3 +18,7 @@ void dae::TextureComponent::Update(float& deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
 }
+
+void dae::TextureComponent::Render()
+{
+}

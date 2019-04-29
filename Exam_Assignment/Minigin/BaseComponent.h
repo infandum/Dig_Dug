@@ -20,7 +20,7 @@ namespace dae
 	protected:
 		//virtual void Initialize() = 0;
 		virtual void Update(float& deltaTime) = 0;
-		//virtual void Draw(float& deltaTime) = 0;
+		virtual void Render() = 0;
 
 		GameObject*  m_pGameObject{};
 	};

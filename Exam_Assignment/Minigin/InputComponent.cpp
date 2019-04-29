@@ -19,3 +19,7 @@ void dae::InputComponent::Update(float& deltaTime)
 	if (command != nullptr)
 		command->Execute(*GetGameObject());
 }
+
+void dae::InputComponent::Render()
+{
+}

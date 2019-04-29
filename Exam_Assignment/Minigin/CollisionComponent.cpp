@@ -79,3 +79,8 @@ void dae::CollisionComponent::Update(float& deltaTime)
 		}
 	}
 }
+
+void dae::CollisionComponent::Render()
+{
+
+}

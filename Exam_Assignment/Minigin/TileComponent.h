@@ -28,8 +28,8 @@ namespace dae
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
-		/*void Draw(float& deltaTime) override;*/
-		
+		void Render() override;
+
 	private:
 		TileState m_TileState = TileState::EMPITY;
 		std::shared_ptr<BaseState> m_pState{};

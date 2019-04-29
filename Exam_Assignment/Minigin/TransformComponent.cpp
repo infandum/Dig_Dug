@@ -51,6 +51,10 @@ void dae::TransformComponent::Update(float& deltaTime)
 	}
 }
 
+void dae::TransformComponent::Render()
+{
+}
+
 dae::TransformComponent::TransformComponent(float x, float y, float z)
 {
 	m_Position = { x, y, z };

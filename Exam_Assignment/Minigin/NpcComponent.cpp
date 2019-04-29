@@ -20,3 +20,7 @@ void dae::NpcComponent::Update(float& deltaTime)
 	//GetGameObject()->GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
 	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 }
+
+void dae::NpcComponent::Render()
+{
+}

@@ -30,6 +30,9 @@ void dae::GameObject::Update(float deltaTime)
 
 void dae::GameObject::Render() const
 {
+	
+
+	//TODO: REFRACTOR
 	if (m_pTextureComponent != nullptr && m_pTransformComponent != nullptr)
 		if(m_pTextureComponent->GetTexture())
 		{
@@ -45,7 +48,8 @@ void dae::GameObject::Render() const
 				ServiceLocator::GetRenderer()->RenderTexture(*m_pTextureComponent->GetTexture(), m_pTransformComponent->GetPosition().x, m_pTransformComponent->GetPosition().y, static_cast<float>(m_pTextureComponent->GetSize().x), static_cast<float>(m_pTextureComponent->GetSize().y), flip);
 			}
 		}
-	
+
+	//TODO: UPDATE TILE DEBUG TEXTURES WITH TILE TEXTURE FUNCTIONS
 	if (m_pTileComponent != nullptr && m_pTransformComponent != nullptr)
 	{
 		if (m_pTileComponent->GetTileState() == TileState::USED)
@@ -80,7 +84,12 @@ void dae::GameObject::Render() const
 		}
 	}
 
-	for(size_t i = 0; i < m_pChilds.size(); i++)
+	for (auto& comp : m_pComponents)
+	{
+		comp->Render();
+	}
+
+	for (size_t i = 0; i < m_pChilds.size(); i++)
 	{
 		if (m_IsChildActive[i])
 			m_pChilds[i]->Render();

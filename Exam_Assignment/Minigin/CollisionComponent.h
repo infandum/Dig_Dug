@@ -32,7 +32,7 @@ namespace  dae
 	protected:
 		//virtual void Initialize() = 0;
 		void Update(float& deltaTime) override;
-		//virtual void Draw(float& deltaTime) = 0;
+		void Render() override;
 
 	private:
 		iVector2 m_offSet = { 0,0 };

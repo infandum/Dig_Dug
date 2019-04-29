@@ -89,3 +89,7 @@ void dae::TileComponent::Update(float& deltaTime)
 
 
 }
+
+void dae::TileComponent::Render()
+{
+}

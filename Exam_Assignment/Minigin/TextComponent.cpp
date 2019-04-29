@@ -35,6 +35,10 @@ void dae::TextComponent::Update(float& deltaTime)
 	}
 }
 
+void dae::TextComponent::Render()
+{
+}
+
 void dae::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;

@@ -73,6 +73,10 @@ void dae::SpriteComponent::Update(float& deltaTime)
 	}
 }
 
+void dae::SpriteComponent::Render()
+{
+}
+
 void dae::SpriteComponent::SetActiveAnimationFrame(float& deltaTime)
 {
 

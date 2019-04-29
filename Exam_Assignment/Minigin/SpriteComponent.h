@@ -33,7 +33,7 @@ namespace dae
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
-		/*void Draw(float& deltaTime) override;*/
+		void Render() override;
 
 		void SetActiveAnimationFrame(float& deltaTime);
 		UINT GetAnimationIDForState(std::shared_ptr<BaseState> state);

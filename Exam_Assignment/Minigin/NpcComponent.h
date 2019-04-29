@@ -16,6 +16,6 @@ namespace dae
 	protected:
 		//virtual void Initialize() = 0;
 		void Update(float& deltaTime) override;
-		//virtual void Draw(float& deltaTime) = 0;
+		void Render() override;
 	};
 }

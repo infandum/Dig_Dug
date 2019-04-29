@@ -159,17 +159,17 @@ namespace dae
 		if (m_Input->IsKeyDown())
 		{
 			notify(gameObject, NotifyEvent::EVENT_ACTION);
-			/*if (gameObject.GetChildCount() > 0)
+			if (gameObject.GetChildCount() > 0)
 				if (gameObject.IsChildAttached(gameObject.GetChild(0).get()))
 					gameObject.DetachChild(gameObject.GetChild(0).get());
 				else
-					gameObject.AttachChild(gameObject.GetChild(0).get());;*/
+					gameObject.AttachChild(gameObject.GetChild(0).get());;
 
-			if (gameObject.GetChildCount() > 0)
+			/*if (gameObject.GetChildCount() > 0)
 				if (gameObject.IsChildActive(gameObject.GetChild(0).get()))
 					gameObject.DeactivateChild(gameObject.GetChild(0).get());
 				else
-					gameObject.ActivateChild(gameObject.GetChild(0).get());;
+					gameObject.ActivateChild(gameObject.GetChild(0).get());;*/
 		}
 
 		if (m_Input->IsKeyUp())

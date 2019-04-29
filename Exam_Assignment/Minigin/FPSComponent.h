@@ -22,7 +22,7 @@ namespace dae
 	protected:
 		/*void Initialize() override;*/
 		void Update(float& deltaTime) override;
-		/*void Draw(float& deltaTime) override;*/
+		void Render() override;
 
 	private:
 		float m_Fps = 0;
