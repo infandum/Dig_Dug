@@ -50,7 +50,7 @@ namespace dae
 		void RemoveChild(std::shared_ptr<GameObject> pChild);
 		bool IsChild(GameObject* pChild);
 		std::shared_ptr<GameObject> GetChild(UINT index);
-		UINT GetChildCount() const { return m_pChilds.size(); }
+		UINT GetChildCount() const { return static_cast<UINT>(m_pChilds.size()); }
 		void DetachChild(GameObject* pChild);
 		void AttachChild(GameObject* pChild);
 		bool IsChildAttached(GameObject* pChild);
