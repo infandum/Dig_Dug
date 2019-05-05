@@ -4,8 +4,7 @@
 dae::TextureComponent::TextureComponent(std::shared_ptr<Texture2D> texture)
 	: m_spTexture(nullptr)
 {
-	m_spTexture = texture;
-	SDL_QueryTexture(m_spTexture->GetSDLTexture(), nullptr, nullptr, &m_Size.x, &m_Size.y);
+	SetTexture(texture);
 }
 
 void dae::TextureComponent::SetTexture(std::shared_ptr<Texture2D> texture)
@@ -14,11 +13,11 @@ void dae::TextureComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 	SDL_QueryTexture(m_spTexture->GetSDLTexture(), nullptr, nullptr, &m_Size.x, &m_Size.y);
 }
 
-void dae::TextureComponent::Update(float& deltaTime)
+void dae::TextureComponent::Initialize()
 {
-	UNREFERENCED_PARAMETER(deltaTime);
 }
 
-void dae::TextureComponent::Render()
+void dae::TextureComponent::Update(float )
 {
+
 }

@@ -13,6 +13,14 @@ void dae::Scene::Add(const std::shared_ptr<SceneObject>& object)
 	mObjects.push_back(object);
 }
 
+void dae::Scene::Initialize()
+{
+	for (auto gameObject : mObjects)
+	{
+		gameObject->Initialize();
+	}
+}
+
 void dae::Scene::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);

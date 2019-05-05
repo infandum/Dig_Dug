@@ -21,9 +21,9 @@ namespace dae
 		iVector2 GetSize() const { return m_Size; }
 
 	protected:
-		/*void Initialize() override;*/
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 
 	private:
 		std::shared_ptr<Texture2D> m_spTexture{};

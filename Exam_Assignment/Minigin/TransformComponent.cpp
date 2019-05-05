@@ -10,11 +10,10 @@ extern  const float g_MoveSpeed;
 extern const float g_TileCenterPadding;
 
 
-void dae::TransformComponent::Update(float& deltaTime)
+void dae::TransformComponent::Update(float deltaTime)
 {
-	UNREFERENCED_PARAMETER(deltaTime);
 	if (GetGameObject()->GetParent())
-		if (GetGameObject()->GetParent()->IsChildAttached(GetGameObject()))
+		if (GetGameObject()->GetIsFollowingParent())
 			m_Position = GetGameObject()->GetParent()->GetTransform()->GetPosition() + GetGameObject()->GetTransform()->GetLocalPosition();
 
 	if(m_IsStatic)
@@ -49,10 +48,6 @@ void dae::TransformComponent::Update(float& deltaTime)
 			m_IsMoving = false;	
 		}
 	}
-}
-
-void dae::TransformComponent::Render()
-{
 }
 
 dae::TransformComponent::TransformComponent(float x, float y, float z)
@@ -262,4 +257,8 @@ void dae::TransformComponent::BorderControl(double& posX, double& posY)
 
 	if (posY > MAX_POSITION_Y)
 		posY = MAX_POSITION_Y;
+}
+
+void dae::TransformComponent::Initialize()
+{
 }

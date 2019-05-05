@@ -9,7 +9,7 @@
 #include "CollisionComponent.h"
 #include "SpriteComponent.h"
 #include "NpcComponent.h"
-
+#include "RenderComponent.h"
 //Sub Components
 #include "TextComponent.h"
 #include "FPSComponent.h"

@@ -151,6 +151,9 @@
     <ClInclude Include="Subject.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -238,6 +241,9 @@
       <Filter>Managers\Engine</Filter>
     </ClCompile>
     <ClCompile Include="NpcComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>

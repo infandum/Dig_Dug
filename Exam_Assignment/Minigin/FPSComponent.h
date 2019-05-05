@@ -20,9 +20,9 @@ namespace dae
 		static unsigned int GetTotalFrames() { return m_Frames; }
 
 	protected:
-		/*void Initialize() override;*/
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		////void Render() override;
 
 	private:
 		float m_Fps = 0;

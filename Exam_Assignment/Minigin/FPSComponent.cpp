@@ -3,10 +3,12 @@
 #include "GameObject.h"
 #include <iomanip>
 
-void dae::FPSComponent::Update(float& deltaTime)
+void dae::FPSComponent::Initialize()
 {
-	UNREFERENCED_PARAMETER(deltaTime);
+}
 
+void dae::FPSComponent::Update(float deltaTime)
+{
 	m_Frames++;
 	m_Fps = (1.0f / deltaTime);
 	m_AccuTime += deltaTime;
@@ -19,8 +21,4 @@ void dae::FPSComponent::Update(float& deltaTime)
 			GetGameObject()->GetComponent<TextComponent>()->SetText(txt);
 		m_AccuTime -= 1.0f;
 	}
-}
-
-void dae::FPSComponent::Render()
-{
 }

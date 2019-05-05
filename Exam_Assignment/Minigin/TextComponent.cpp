@@ -14,9 +14,8 @@ dae::TextComponent::TextComponent(const std::string& text, std::shared_ptr<Font>
 	
 }
 
-void dae::TextComponent::Update(float& deltaTime)
+void dae::TextComponent::Update(float)
 {
-	UNREFERENCED_PARAMETER(deltaTime);
 	if (m_NeedsUpdate)
 	{
 		const auto surf = TTF_RenderText_Blended(mFont->GetFont(), m_Text.c_str(), m_Color);
@@ -35,14 +34,14 @@ void dae::TextComponent::Update(float& deltaTime)
 	}
 }
 
-void dae::TextComponent::Render()
-{
-}
-
 void dae::TextComponent::SetText(const std::string& text)
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
+}
+
+void dae::TextComponent::Initialize()
+{
 }
 
 void dae::TextComponent::SetColor(const SDL_Color& color)

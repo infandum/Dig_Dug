@@ -62,7 +62,11 @@ void dae::SpriteComponent::onNotify(NotifyEvent event)
 		m_Event = event;
 }
 
-void dae::SpriteComponent::Update(float& deltaTime)
+void dae::SpriteComponent::Initialize()
+{
+}
+
+void dae::SpriteComponent::Update(float deltaTime)
 {
 	Swap();
 	if (typeid(*m_State) != typeid(DirectionState))
@@ -73,11 +77,7 @@ void dae::SpriteComponent::Update(float& deltaTime)
 	}
 }
 
-void dae::SpriteComponent::Render()
-{
-}
-
-void dae::SpriteComponent::SetActiveAnimationFrame(float& deltaTime)
+void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 {
 
 	auto anim = ServiceLocator::GetAnimationManager();

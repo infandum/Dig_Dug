@@ -31,11 +31,11 @@ namespace dae
 
 		void onNotify(NotifyEvent event);
 	protected:
-		/*void Initialize() override;*/
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 
-		void SetActiveAnimationFrame(float& deltaTime);
+		void SetActiveAnimationFrame(float deltaTime);
 		UINT GetAnimationIDForState(std::shared_ptr<BaseState> state);
 	private:
 		std::shared_ptr<BaseState> m_State = std::make_shared<DirectionState>();

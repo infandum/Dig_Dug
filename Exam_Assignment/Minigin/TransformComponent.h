@@ -55,9 +55,10 @@ namespace dae
 	protected:
 		
 		static void BorderControl(double& posX, double& posY);
-		/*void Initialize() override;*/
-		void Update(float& deltaTime) override;
-		void Render() override;
+
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 
 		glm::vec3 MoveDirectional();
 		glm::vec3 MoveOmniDirectional();

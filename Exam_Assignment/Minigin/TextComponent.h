@@ -24,9 +24,9 @@ namespace dae{
 		void SetText(const std::string& text);
 
 	protected:
-		/*void Initialize() override;*/
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 
 	private:
 		SDL_Color m_Color = { 255,255,255 };

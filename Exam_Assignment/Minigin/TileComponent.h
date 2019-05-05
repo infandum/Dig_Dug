@@ -26,9 +26,9 @@ namespace dae
 		bool GetIsConnectedBorder(Direction dir) { return m_IsBorderConnected[static_cast<int>(dir)]; }
 		
 	protected:
-		/*void Initialize() override;*/
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 
 	private:
 		TileState m_TileState = TileState::EMPITY;

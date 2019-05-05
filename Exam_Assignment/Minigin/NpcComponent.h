@@ -14,8 +14,8 @@ namespace dae
 		virtual ~NpcComponent() = default;
 
 	protected:
-		//virtual void Initialize() = 0;
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 	};
 }

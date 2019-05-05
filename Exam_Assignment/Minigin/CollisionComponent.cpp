@@ -24,7 +24,11 @@ void dae::CollisionComponent::SetPosition(float x, float y, float z)
 	m_Position = glm::vec3(x, y, z);
 }
 
-void dae::CollisionComponent::Update(float& deltaTime)
+void dae::CollisionComponent::Initialize()
+{
+}
+
+void dae::CollisionComponent::Update(float deltaTime)
 {
 	UNREFERENCED_PARAMETER(deltaTime);
 	if (!m_pTransformComponent && m_pTransformComponent == nullptr && GetGameObject()->GetTransform() != nullptr)
@@ -78,9 +82,4 @@ void dae::CollisionComponent::Update(float& deltaTime)
 				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
 		}
 	}
-}
-
-void dae::CollisionComponent::Render()
-{
-
 }

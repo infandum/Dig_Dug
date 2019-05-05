@@ -2,6 +2,13 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+void dae::SceneManager::Initialize()
+{
+	for (const auto scene : m_spScenes)
+	{
+		scene->Initialize();
+	}
+}
 
 void dae::SceneManager::Update(const float deltaTime)
 {

@@ -30,15 +30,15 @@ namespace  dae
 
 
 	protected:
-		//virtual void Initialize() = 0;
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 
 	private:
 		iVector2 m_offSet = { 0,0 };
 		iVector2 m_Size = { 0,0 };
 		glm::vec3 m_Position {0};
-		std::shared_ptr<TransformComponent> m_pTransformComponent = nullptr;
+		TransformComponent* m_pTransformComponent = nullptr;
 		bool m_ShowCollisionBox = false;
 		std::shared_ptr<Texture2D> m_pCollisionBox = nullptr;
 

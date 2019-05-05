@@ -11,16 +11,15 @@ dae::NpcComponent::NpcComponent()
 	tiles->AddEntity(this);
 }
 
-void dae::NpcComponent::Update(float& deltaTime)
+void dae::NpcComponent::Initialize()
 {
-	UNREFERENCED_PARAMETER(deltaTime);
+}
+
+void dae::NpcComponent::Update(float )
+{
 	GetGameObject()->GetTransform()->SetIsOmniDirectional(true);
 	//GetGameObject()->GetTransform()->SetVelocity({ g_MoveSpeed , -g_MoveSpeed, 0 });
 	GetGameObject()->GetTransform()->MoveToTile(0, 10);
 	//GetGameObject()->GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
 	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
-}
-
-void dae::NpcComponent::Render()
-{
 }

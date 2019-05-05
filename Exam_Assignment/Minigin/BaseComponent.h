@@ -18,9 +18,12 @@ namespace dae
 		GameObject* GetGameObject() const { return m_pGameObject; }
 
 	protected:
-		//virtual void Initialize() = 0;
-		virtual void Update(float& deltaTime) = 0;
-		virtual void Render() = 0;
+		//TODO: GO OVERALL COMPONENT AND DECOUPLE AND CLEAN UP
+		//TODO: INIT 
+		//TODO: REMOVE RENDER
+		virtual void Initialize() = 0;
+		virtual void Update(float deltaTime) = 0;
+		//virtual void Render() = 0;
 
 		GameObject*  m_pGameObject{};
 	};

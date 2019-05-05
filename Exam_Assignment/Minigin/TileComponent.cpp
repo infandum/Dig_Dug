@@ -43,9 +43,12 @@ void dae::TileComponent::SetBorder(Direction dir, bool isCrossed)
 	//m_IsBorderConnected[static_cast<int>(dir)] = isCrossed;
 }
 
-void dae::TileComponent::Update(float& deltaTime)
+void dae::TileComponent::Initialize()
 {
-	UNREFERENCED_PARAMETER(deltaTime);
+}
+
+void dae::TileComponent::Update(float)
+{
 
 	//TODO:: TILE STATE
 	/*const auto state = m_pState->Swap(*GetGameObject());
@@ -55,8 +58,8 @@ void dae::TileComponent::Update(float& deltaTime)
 	}*/
 
 	const auto resource = ServiceLocator::GetResourceManager();
-	if(m_NeedsUpdate)
-	{ 
+	if (m_NeedsUpdate)
+	{
 		if (GetGameObject())
 		{
 			switch (m_TileState)
@@ -88,8 +91,4 @@ void dae::TileComponent::Update(float& deltaTime)
 	}
 
 
-}
-
-void dae::TileComponent::Render()
-{
 }

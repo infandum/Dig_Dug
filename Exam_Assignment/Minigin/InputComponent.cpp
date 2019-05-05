@@ -10,16 +10,15 @@ dae::InputComponent::InputComponent()
 	tiles->AddPlayer(this);
 }
 
-void dae::InputComponent::Update(float& deltaTime)
+void dae::InputComponent::Initialize()
 {
-	UNREFERENCED_PARAMETER(deltaTime);
+}
+
+void dae::InputComponent::Update(float)
+{
 	auto input = ServiceLocator::GetInputManager();
 	auto command = input->HandleInput();
 
 	if (command != nullptr)
 		command->Execute(*GetGameObject());
-}
-
-void dae::InputComponent::Render()
-{
 }

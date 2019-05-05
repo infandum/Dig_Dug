@@ -61,6 +61,7 @@ void dae::Minigin::Initialize()
 void dae::Minigin::LoadGame() const
 {
 	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_1);
+	ServiceLocator::GetSceneManager()->Initialize();
 }
 
 void dae::Minigin::Cleanup()
@@ -86,13 +87,13 @@ void dae::Minigin::Run()
 		auto physics = ServiceLocator::GetPhysicsManager();
 		physics->ShowCollisionBox(true);
 		
-
 		auto t = std::chrono::high_resolution_clock::now();
 		auto doContinue = true;
 		auto lag{ 0.0f };
 		auto previousTime = std::chrono::high_resolution_clock::now();
+		
 		while (doContinue)
-		{
+		{		
 			const auto currentTime = std::chrono::high_resolution_clock::now();
 			const auto deltatime = std::chrono::duration<float>(currentTime - previousTime).count();
 			previousTime = currentTime;

@@ -86,6 +86,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		go = std::make_shared<GameObject>();
 		go->AddComponent(std::make_shared<TransformComponent>());
+		go->AddComponent(std::make_shared<RenderComponent>());
 		go->AddComponent(std::make_shared<TextureComponent>());	
 		go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(01));
 		m_Scene->Add(go);
@@ -95,6 +96,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 			for (auto y = 0; y < 17; ++y)
 			{
 				auto tile = std::make_shared<GameObject>();
+				tile->AddComponent(std::make_shared<RenderComponent>());
 				tile->AddComponent(std::make_shared<TransformComponent>());
 				tile->AddComponent(std::make_shared<TextureComponent>());
 				tile->AddComponent(std::make_shared<TileComponent>(TileState::EMPITY, x, y));
@@ -110,6 +112,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		m_pPlayer = std::make_shared<GameObject>();
 		m_pPlayer->SetName("Player");
+		m_pPlayer->AddComponent(std::make_shared<RenderComponent>());
 		m_pPlayer->AddComponent(std::make_shared<CollisionComponent>());
 		m_pPlayer->AddComponent(std::make_shared<TransformComponent>());
 		m_pPlayer->AddComponent(std::make_shared<InputComponent>());
@@ -132,6 +135,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		go = std::make_shared<GameObject>();
 		go->SetName("Rock");
+		go->AddComponent(std::make_shared<RenderComponent>());
 		go->AddComponent(std::make_shared<CollisionComponent>());
 		go->AddComponent(std::make_shared<TransformComponent>());
 		go->AddComponent(std::make_shared<TextureComponent>());
@@ -142,6 +146,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		go = std::make_shared<GameObject>();
 		go->SetName("Pooka");
+		go->AddComponent(std::make_shared<RenderComponent>());
 		go->AddComponent(std::make_shared<CollisionComponent>());
 		go->AddComponent(std::make_shared<TransformComponent>());
 		go->AddComponent(std::make_shared<TextureComponent>());
@@ -159,6 +164,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		go = std::make_shared<GameObject>();
 		go->SetName("Rock");
+		go->AddComponent(std::make_shared<RenderComponent>());
 		go->AddComponent(std::make_shared <CollisionComponent>());
 		go->AddComponent(std::make_shared<TransformComponent>());
 		go->AddComponent(std::make_shared<TextureComponent>());
@@ -172,6 +178,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		font = resource->LoadFont("Lingua.otf", 25);
 		go = std::make_shared<GameObject>();
+		go->AddComponent(std::make_shared<RenderComponent>());
 		go->AddComponent(std::make_shared<TransformComponent>());
 		go->AddComponent(std::make_shared<TextureComponent>());
 		go->AddComponent(std::make_shared<TextComponent>("00FPS", font));
@@ -179,6 +186,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		color = { 255, 255, 0 };
 		go->GetComponent<TextComponent>()->SetColor(color);
 		m_Scene->Add(go);
+
+
 		break;
 	default: ;
 	}

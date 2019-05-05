@@ -16,9 +16,9 @@ namespace dae {
 		virtual ~InputComponent() = default;
 
 	protected:
-		/*void Initialize() override;*/
-		void Update(float& deltaTime) override;
-		void Render() override;
+		void Initialize() override;
+		void Update(float deltaTime) override;
+		//void Render() override;
 	};
 
 }

@@ -11,7 +11,7 @@ namespace dae
 		void Add(const std::shared_ptr<SceneObject>& object);
 		std::string GetName() const { return mName; }
 
-		/*virtual void Initialize() = 0;*/
+		virtual void Initialize();
 		virtual void Update(float deltaTime);
 		virtual void Render() const;
 
