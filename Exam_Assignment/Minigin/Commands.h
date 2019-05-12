@@ -46,20 +46,20 @@ namespace dae
 
 	inline void UpCommand::Execute(GameObject& gameObject)
 	{
-		if (gameObject.GetTransform())
+		if (gameObject.GetComponent<MoveComponent>())
 		{
 			if (m_Input->IsKeyDown())
 			{
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
-				gameObject.GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ 0, -g_MoveSpeed, 0 });
 			}
 
 			if (m_Input->IsKeyUp())
 			{
 				notify(gameObject, NotifyEvent::EVENT_IDLE);
 
-				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			}
 
 		}
@@ -73,20 +73,20 @@ namespace dae
 
 	inline void DownCommand::Execute(GameObject& gameObject)
 	{
-		if (gameObject.GetTransform())
+		if (gameObject.GetComponent<MoveComponent>())
 		{
 			if (m_Input->IsKeyDown())
 			{
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
-				gameObject.GetTransform()->SetVelocity({ 0, g_MoveSpeed, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ 0, g_MoveSpeed, 0 });
 			}
 
 			if (m_Input->IsKeyUp())
 			{
 				notify(gameObject, NotifyEvent::EVENT_IDLE);
 
-				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			}
 
 		}
@@ -106,14 +106,14 @@ namespace dae
 			{
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
-				gameObject.GetTransform()->SetVelocity({ -g_MoveSpeed, 0, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ -g_MoveSpeed, 0, 0 });
 			}
 
 			if (m_Input->IsKeyUp())
 			{
 				notify(gameObject, NotifyEvent::EVENT_IDLE);
 
-				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			}
 
 		}
@@ -134,14 +134,14 @@ namespace dae
 			{
 				notify(gameObject, NotifyEvent::EVENT_MOVE);
 
-				gameObject.GetTransform()->SetVelocity({ g_MoveSpeed, 0, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ g_MoveSpeed, 0, 0 });
 			}
 				
 			if (m_Input->IsKeyUp())
 			{
 				notify(gameObject, NotifyEvent::EVENT_IDLE);
 
-				gameObject.GetTransform()->SetVelocity({ 0, 0, 0 });
+				gameObject.GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			}
 				
 		}

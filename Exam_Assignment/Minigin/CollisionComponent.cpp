@@ -67,18 +67,22 @@ void dae::CollisionComponent::Update(float deltaTime)
 	//Prevent Overlapping
 	if(m_HasCollision)
 	{	
-		if(GetCollision()->GetGameObject()->GetComponent<TransformComponent>()->GetIsStatic() || GetCollision() != this)
+		if(GetCollision() != this)
 		{
 			//Don't trigger collision with child/parents 
 			if (GetGameObject()->IsChild(GetCollision()->GetGameObject()) || GetGameObject()->GetParent() == GetCollision()->GetGameObject())
+			{
+				m_HasCollision = false;
 				return;
+			}
+				
 
 			//TODO:: CHANGE PUSH OUT EFFECT, MAYBE PREVENT OBJECT MOVING INTO A COLLISION?
 			std::cout << "PUSHOUT" << std::endl;
 			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
 			m_HasCollision = false;
 
-			if (GetGameObject()->GetSprite() && GetGameObject()->GetInput())
+			if (GetGameObject()->GetInput() && GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
 				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
 		}
 	}

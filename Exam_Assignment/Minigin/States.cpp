@@ -19,8 +19,9 @@ void dae::DirectionState::Update(float& deltaTime, GameObject& gameObject)
 void dae::DirectionState::Animated(GameObject& gameObject)
 {
 	SpriteFlip(gameObject);
+	//const auto gameObject.GetTransform();
 	if (gameObject.GetTransform())
-		switch (gameObject.GetTransform()->GetCurrentDirection())
+		switch (gameObject.GetComponent<MoveComponent>()->GetCurrentDirection())
 		{
 		case Direction::RIGHT:
 			if (gameObject.GetSprite())
@@ -50,8 +51,8 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 				}
 				else
 				{
-					if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetTransform()->GetPreviousDirection() == Direction::LEFT)
-						m_LastHorDir = gameObject.GetTransform()->GetPreviousDirection();
+					if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
+						m_LastHorDir = gameObject.GetComponent<MoveComponent>()->GetPreviousDirection();
 
 					if (m_LastHorDir == Direction::RIGHT)
 						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
@@ -74,8 +75,8 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 				}
 				else
 				{
-					if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetTransform()->GetPreviousDirection() == Direction::LEFT)
-						m_LastHorDir = gameObject.GetTransform()->GetPreviousDirection();
+					if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
+						m_LastHorDir = gameObject.GetComponent<MoveComponent>()->GetPreviousDirection();
 
 					if (m_LastHorDir == Direction::RIGHT)
 						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
@@ -145,24 +146,24 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 void dae::DirectionState::SpriteFlip(GameObject & gameObject) const
 {
 	if (gameObject.GetTransform())
-		switch (gameObject.GetTransform()->GetCurrentDirection())
+		switch (gameObject.GetComponent<MoveComponent>()->GetCurrentDirection())
 		{
 		default:;
 		case Direction::UP:
 			if (gameObject.GetSprite() && m_Clip.hasUpDown)
 			{
-				if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT)
+				if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT)
 					gameObject.GetSprite()->SetFlipSprite(SDL_FLIP_NONE);
-				if (gameObject.GetTransform()->GetPreviousDirection() == Direction::LEFT)
+				if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
 					gameObject.GetSprite()->SetFlipSprite(SDL_FLIP_HORIZONTAL);
 			}
 			break;
 		case Direction::DOWN:
 			if (gameObject.GetSprite() && m_Clip.hasUpDown)
 			{
-				if (gameObject.GetTransform()->GetPreviousDirection() == Direction::RIGHT)
+				if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT)
 					gameObject.GetSprite()->SetFlipSprite(SDL_FLIP_HORIZONTAL);
-				if (gameObject.GetTransform()->GetPreviousDirection() == Direction::LEFT)
+				if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
 					gameObject.GetSprite()->SetFlipSprite(SDL_FLIP_NONE);
 			}
 			break;
@@ -188,10 +189,10 @@ std::shared_ptr<dae::BaseState> dae::IdlePlayerState::Swap(NotifyEvent event, Ga
 	case NotifyEvent::EVENT_IDLE:
 		return nullptr;
 	case NotifyEvent::EVENT_MOVE:
-		if (gameObject.GetTransform()->CheckOccupiedTileMove())
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
 			return nullptr;
 
-		if (gameObject.GetTransform()->CheckTileSwapping())
+		if (gameObject.GetComponent<MoveComponent>()->CheckTileSwapping())
 			return std::make_shared<DigPlayerState>();
 		
 			return std::make_shared<MovePlayerState>();
@@ -212,10 +213,10 @@ std::shared_ptr<dae::BaseState> dae::MovePlayerState::Swap(NotifyEvent event, Ga
 	case NotifyEvent::EVENT_IDLE:
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
-		if (gameObject.GetTransform()->CheckOccupiedTileMove())
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
 			return std::make_shared<IdlePlayerState>();
 
-		if (gameObject.GetTransform()->CheckTileSwapping())
+		if (gameObject.GetComponent<MoveComponent>()->CheckTileSwapping())
 			return std::make_shared<DigPlayerState>();
 
 		return nullptr;
@@ -236,10 +237,10 @@ std::shared_ptr<dae::BaseState> dae::DigPlayerState::Swap(NotifyEvent event, Gam
 	case NotifyEvent::EVENT_IDLE:
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
-		if (gameObject.GetTransform()->CheckOccupiedTileMove())
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
 			return std::make_shared<IdlePlayerState>();
 
-		if (!gameObject.GetTransform()->CheckTileSwapping())
+		if (!gameObject.GetComponent<MoveComponent>()->CheckTileSwapping())
 			return std::make_shared<MovePlayerState>();
 
 		return nullptr;
@@ -293,6 +294,7 @@ std::shared_ptr<dae::BaseState> dae::PumpPlayerState::Swap(NotifyEvent event, Ga
 std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	UNREFERENCED_PARAMETER(gameObject);
+	gameObject.GetComponent<MoveComponent>()->SetIsStatic(true);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:

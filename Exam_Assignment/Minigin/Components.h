@@ -13,3 +13,4 @@
 //Sub Components
 #include "TextComponent.h"
 #include "FPSComponent.h"
+#include "MoveComponent.h"

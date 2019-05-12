@@ -30,7 +30,7 @@ void dae::LevelManager::Update(float deltaTime)
 				const auto nextTile = GetTile(x, y);
 				if (nextTile != nullptr && nextTile != m_StartTile)
 				{
-					const auto dir = player->GetGameObject()->GetTransform()->GetCurrentDirection();
+					const auto dir = player->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
 					if (dir != Direction::NONE)
 					{
 						DigConnection(m_StartTile, nextTile, dir);
