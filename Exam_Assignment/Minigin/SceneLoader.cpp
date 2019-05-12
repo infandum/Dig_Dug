@@ -17,11 +17,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 {
 	auto resource = ServiceLocator::GetResourceManager();
 	auto input = ServiceLocator::GetInputManager();
-	input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_UP);
-	input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_DOWN);
-	input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_LEFT);
-	input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT);
-	input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_x);
+	input->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonSelect, SDLK_ESCAPE, nullptr);
 	auto animations = ServiceLocator::GetAnimationManager();
 	animations->SetAnimationSpeed(10.0f);
 	auto tiles = ServiceLocator::GetLevelManager();
@@ -32,19 +28,25 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	switch (scene)
 	{
 	case SceneList::DEMO:
-		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Demo");
+			m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Demo");
 
 			resource->LoadTexture("background.jpg", 999);
 			resource->LoadTexture("logo.png", 998);
 
 			go = std::make_shared<GameObject>();
+			go->AddComponent(std::make_shared<InputComponent>());
+			m_Scene->Add(go);
+
+			go = std::make_shared<GameObject>();
 			go->AddComponent(std::make_shared<TransformComponent>(0.f, 0.f));
+			go->AddComponent(std::make_shared<RenderComponent>());
 			go->AddComponent(std::make_shared<TextureComponent>());
 			go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(999));
 			m_Scene->Add(go);
 
 			go = std::make_shared<GameObject>();
 			go->AddComponent(std::make_shared<TransformComponent>(216.f, 180.f));
+			go->AddComponent(std::make_shared<RenderComponent>());
 			go->AddComponent(std::make_shared<TextureComponent>());
 			go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(998));
 			m_Scene->Add(go);
@@ -52,6 +54,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 			font = resource->LoadFont("Lingua.otf", 36);
 			go = std::make_shared<GameObject>();
 			go->AddComponent(std::make_shared<TransformComponent>(80.f, 20.f));
+			go->AddComponent(std::make_shared<RenderComponent>());
 			go->AddComponent(std::make_shared<TextureComponent>());
 			go->AddComponent(std::make_shared<TextComponent>("Programming 4 Assignment", font));
 			m_Scene->Add(go);
@@ -59,6 +62,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 			font = resource->LoadFont("Lingua.otf", 30);
 			go = std::make_shared<GameObject>();
 			go->AddComponent(std::make_shared<TransformComponent>(0.f, 0.f));
+			go->AddComponent(std::make_shared<RenderComponent>());
 			go->AddComponent(std::make_shared<TextureComponent>());
 			go->AddComponent(std::make_shared<TextComponent>("00FPS", font));
 			go->AddComponent(std::make_shared<FPSComponent>());
@@ -69,6 +73,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		break;
 	case SceneList::LEVEL_1:
 		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level 1");
+
 		resource->LoadTexture("images/DigDug_BackGround.png", 01);
 		resource->LoadTexture("images/SpriteSheet.png", 02);
 
@@ -130,6 +135,12 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		animations->LoadSpriteClip(SpriteClip{ 0, {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);
 		m_pPlayer->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
 
+		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_UP, m_pPlayer.get());
+		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_DOWN, m_pPlayer.get());
+		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_LEFT, m_pPlayer.get());
+		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT, m_pPlayer.get());
+		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_x, m_pPlayer.get());
+
 		go = std::make_shared<GameObject>();
 		go->SetName("Spear");
 		go->AddComponent(std::make_shared<RenderComponent>());
@@ -150,6 +161,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		go->AddComponent(std::make_shared<TextureComponent>());
 		go->AddComponent(std::make_shared<SpriteComponent>());
 		go->AddComponent(std::make_shared<NpcComponent>());
+		go->AddComponent(std::make_shared<InputComponent>());
 		go->GetComponent<TextureComponent>()->SetTexture(resource->GetTexture(02));
 		animations->LoadSpriteClip(SpriteClip{ 0, {32, 256}, { 32 , 32 }, 0, 1, false, false }, 11);
 		go->GetComponent<SpriteComponent>()->SetAnimationToState(11, std::make_shared<IdlePlayerState>());
@@ -158,6 +170,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		animations->LoadSpriteClip(SpriteClip{ 0, {0, 288}, { 64 , 64 }, 0, 4, true, false }, 15);
 		go->GetComponent<SpriteComponent>()->SetAnimationToState(15, std::make_shared<DeadPlayerState>());
 		m_Scene->Add(go);
+		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonA, SDLK_c, go.get());
 
 		go = std::make_shared<GameObject>();
 		go->SetName("Rock");
@@ -183,7 +196,6 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		color = { 255, 255, 0 };
 		go->GetComponent<TextComponent>()->SetColor(color);
 		m_Scene->Add(go);
-
 
 		break;
 	default: ;

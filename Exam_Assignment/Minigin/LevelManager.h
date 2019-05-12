@@ -1,12 +1,13 @@
 #pragma once
 #include "Service.h"
-#include "NpcComponent.h"
-#include "InputComponent.h"
+
 
 namespace dae {
 	enum class Direction;
 	class GameObject;
 	class TileComponent;
+	class InputComponent;
+	class NpcComponent;
 	class vec3;
 	class LevelManager final : public Service
 	{

@@ -12,6 +12,10 @@ bool dae::InputManager::ProcessInput()
 	m_IsKeyDown = false;
 	m_KeyDown = 0;
 	m_KeyUp = 0;
+
+	if(m_CloseWindow)
+		return false;
+
 	while (SDL_PollEvent(&m_Event)) {
 		if (m_Event.type == SDL_QUIT) {
 			return false;
@@ -64,18 +68,25 @@ bool dae::InputManager::IsKeyUp() const
 	return m_IsKeyUp;
 }
 
-void dae::InputManager::AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key)
+void dae::InputManager::AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key, GameObject* owner)
 {
 	//Duplicate check
 	for (auto& com : m_pCommands)
 	{
-		if (typeid(*com) == typeid(*command) && com->GetButton() == button)
+		if (com->GetButton() == button)
 		{
-			std::cout << "Duplicate Command >> " << typeid(*command).name() << std::endl;
+			std::cout << "Duplicate Command >> Button id = " << static_cast<int>(button) << " Command type: " << typeid(*command).name() << std::endl;
+			return;
+		}
+
+		if (com->GetKey() == key)
+		{
+			std::cout << "Duplicate Command >> Key id = " << static_cast<int>(key) << " Command type: " << typeid(*command).name() << std::endl;
 			return;
 		}
 	}
 	m_pCommands.push_back(command);
 	m_pCommands.at(m_pCommands.size() - 1)->SetButton(button);
 	m_pCommands.at(m_pCommands.size() - 1)->SetKey(key);
+	m_pCommands.at(m_pCommands.size() - 1)->SetOwner(owner);
 }

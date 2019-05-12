@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "BaseComponent.h"
 
 namespace dae{
 	class Font;

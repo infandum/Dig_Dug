@@ -60,8 +60,13 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
+	
+	/*ServiceLocator::GetSceneLoader()->InitScene(SceneList::DEMO);*/
+	//TODO: FIX LEVEL RELOADING GO OVER ALL COMP INIT WHILE IM AT IT.
 	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_1);
+	
 	ServiceLocator::GetSceneManager()->Initialize();
+	ServiceLocator::GetSceneManager()->SetActive("Level 1");
 }
 
 void dae::Minigin::Cleanup()

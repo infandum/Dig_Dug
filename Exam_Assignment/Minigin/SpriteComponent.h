@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseComponent.h"
 #include "States.h"
+#include <SDL.h>
 
 namespace dae
 {

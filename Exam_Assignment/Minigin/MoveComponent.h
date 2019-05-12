@@ -3,12 +3,12 @@
 #pragma warning(push)
 #pragma warning (disable:4201)
 #include <glm/vec3.hpp>
-#include "TransformComponent.h"
 #pragma warning(pop)
 
 namespace dae
 {
-	class MoveComponent : public BaseComponent
+	class TransformComponent;
+	class MoveComponent final : public BaseComponent
 	{
 	public:
 		MoveComponent(const MoveComponent& other) = delete;

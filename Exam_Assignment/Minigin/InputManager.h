@@ -5,6 +5,7 @@
 
 namespace dae
 {
+	class GameObject;
 	enum class ControllerButton;
 	class Command;
 	class InputManager final : public Service
@@ -19,7 +20,9 @@ namespace dae
 		bool IsKeyDown() const;
 		bool IsKeyUp() const;
 
-		void AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key);
+		void AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key, GameObject* owner);
+
+		void CloseWindow() { m_CloseWindow = true; }
 	private:
 		
 		XINPUT_STATE currentState{};
@@ -30,8 +33,9 @@ namespace dae
 
 		bool m_IsKeyDown = false;
 		bool m_IsKeyUp = false;
+		bool m_CloseWindow = false;
 
-		std::vector<std::shared_ptr<Command>> m_pCommands{};
+		std::vector<std::shared_ptr<Command>> m_pCommands;
 
 	};
 }

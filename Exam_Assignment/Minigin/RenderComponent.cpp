@@ -1,6 +1,7 @@
 #include "MiniginPCH.h"
 #include "RenderComponent.h"
 #include "ServiceLocator.h"
+#include "GameObject.h"
 
 void dae::RenderComponent::Initialize()
 {

@@ -20,5 +20,5 @@ void dae::InputComponent::Update(float)
 	auto command = input->HandleInput();
 
 	if (command != nullptr)
-		command->Execute(*GetGameObject());
+		command->Execute();
 }

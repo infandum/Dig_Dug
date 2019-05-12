@@ -1,8 +1,9 @@
 #include "MiniginPCH.h"
-#include "MoveComponent.h"
+#include "Components.h"
 #include "ServiceLocator.h"
 #include <cmath>
 #include "LevelManager.h"
+#include "GameObject.h"
 
 extern const float g_TileCenterPadding;
 
@@ -194,11 +195,11 @@ bool dae::MoveComponent::CheckTileSwapping()
 
 	const auto currTile = ServiceLocator::GetLevelManager()->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
 	const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
-	if(GetGameObject()->GetInput())
+	/*if(GetGameObject()->GetInput())
 	{
 		std::cout << "CURRENT TILE: X =" << m_pTransform->GetPositionIndex().x << " , Y = " << m_pTransform->GetPositionIndex().y << "\n";
 		std::cout << "NEXT TILE: X = " << m_pTransform->GetPositionIndex().x + GetNextTileDirectionFromVelocity().x << " , Y = " << m_pTransform->GetPositionIndex().y + GetNextTileDirectionFromVelocity().y << "\n";
-	}
+	}*/
 	
 	if (nextTile != nullptr)
 	{

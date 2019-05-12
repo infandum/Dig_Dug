@@ -1,12 +1,13 @@
 #pragma once
 #include "BaseComponent.h"
-#include <SDL.h>
+//#include "Commands.h"
 
-
-namespace dae {
-	class TransformComponent;
-	class InputComponent final : public BaseComponent
+namespace dae
+{
+	class command;
+	class InputComponent  : public BaseComponent
 	{
+
 	public:
 		InputComponent(const InputComponent& other) = delete;
 		InputComponent(InputComponent&& other) noexcept = delete;
@@ -19,6 +20,7 @@ namespace dae {
 		void Initialize() override;
 		void Update(float deltaTime) override;
 		//void Render() override;
+		//std::vector<std::shared_ptr<Command>> m_pCommands;
 	};
 
 }

@@ -1,11 +1,10 @@
 #pragma once
-#include "GameObject.h"
 #include "Service.h"
 
 namespace dae
 {
 	class CollisionComponent;
-
+	class GameObject;
 	class PhysicsManager final : public Service
 	{
 	public:

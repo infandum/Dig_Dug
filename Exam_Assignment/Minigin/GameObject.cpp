@@ -69,7 +69,7 @@ void dae::GameObject::AddComponent(std::shared_ptr<BaseComponent> comp)
 	{ 
 		if (typeid(*component) == typeid(*comp))
 		{
-			std::cout << "Component Duplicate: " << typeid(*comp).name() << " >> Already added!!"; 
+			std::cout << "Component Duplicate: " << typeid(*comp).name() << " >> Already added!! " << GetName() << std::endl;
 			return;
 		}
 	}
@@ -85,7 +85,7 @@ void dae::GameObject::RemoveComponent(std::shared_ptr<BaseComponent> pComp)
 	const auto comp = std::find(m_pComponents.begin(), m_pComponents.end(), pComp);
 	if (comp == m_pComponents.end())
 	{
-		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+		std::cout << "GameObject::RemoveComponent > Component is not attached to this GameObject! " << GetName() << std::endl;
 		return;
 	}
 	m_pComponents.erase(comp);
@@ -98,7 +98,7 @@ void dae::GameObject::AddChild(std::shared_ptr<GameObject> pChild, bool isActive
 	{
 		if (typeid(*child) == typeid(*pChild))
 		{
-			std::cout << "Component Duplicate: " << typeid(*child).name() << " >> Already added!!";
+			std::cout << "Component Duplicate: " << typeid(*child).name() << " >> Already added!! " << GetName() << std::endl;
 			return;
 		}
 	}
@@ -116,7 +116,7 @@ void dae::GameObject::RemoveChild(std::shared_ptr<GameObject> pChild)
 	const auto child = std::find(m_pChilds.begin(), m_pChilds.end(), pChild);
 	if (child == m_pChilds.end())
 	{
-		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+		std::cout << "GameObject::RemoveComponent > Component is not attached to this GameObject! " << GetName() << std::endl;
 		return;
 	}
 	m_pChilds.erase(child);

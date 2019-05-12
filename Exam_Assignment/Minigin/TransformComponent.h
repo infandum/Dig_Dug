@@ -7,8 +7,6 @@
 
 namespace dae
 {
-
-
 	class TransformComponent final : public BaseComponent
 	{
 	public:
