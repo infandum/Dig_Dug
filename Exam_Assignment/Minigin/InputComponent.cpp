@@ -4,12 +4,6 @@
 #include "InputManager.h"
 #include "Commands.h"
 
-dae::InputComponent::InputComponent()
-{
-	auto tiles = ServiceLocator::GetLevelManager();
-	tiles->AddPlayer(this);
-}
-
 void dae::InputComponent::Initialize()
 {
 }

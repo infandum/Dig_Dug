@@ -12,39 +12,13 @@ dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_T
 	m_TileIndex.x = xIndex;
 	m_TileIndex.y = yIndex;
 
-	auto tiles = ServiceLocator::GetLevelManager();
-	tiles->AddTile(this);
-}
-
-void dae::TileComponent::SetTileState(TileState state)
-{
-	m_TileState = state;
-	m_NeedsUpdate = true;
-}
-
-void dae::TileComponent::SetBorder(Direction dir, bool isCrossed)
-{
-	switch (dir)
-	{
-	case Direction::RIGHT:
-		m_IsBorderConnected[0] = isCrossed;
-		break;
-	case Direction::LEFT:
-		m_IsBorderConnected[1] = isCrossed;
-		break;
-	case Direction::UP:
-		m_IsBorderConnected[2] = isCrossed;
-		break;
-	case Direction::DOWN:
-		m_IsBorderConnected[3] = isCrossed;
-		break;
-	default: ;
-	}
-	//m_IsBorderConnected[static_cast<int>(dir)] = isCrossed;
+	
 }
 
 void dae::TileComponent::Initialize()
 {
+	auto tiles = ServiceLocator::GetLevelManager();
+	tiles->AddTile(this);
 }
 
 void dae::TileComponent::Update(float)
@@ -89,6 +63,31 @@ void dae::TileComponent::Update(float)
 		}
 		m_NeedsUpdate = false;
 	}
+}
 
+void dae::TileComponent::SetTileState(TileState state)
+{
+	m_TileState = state;
+	m_NeedsUpdate = true;
+}
 
+void dae::TileComponent::SetBorder(Direction dir, bool isCrossed)
+{
+	switch (dir)
+	{
+	case Direction::RIGHT:
+		m_IsBorderConnected[0] = isCrossed;
+		break;
+	case Direction::LEFT:
+		m_IsBorderConnected[1] = isCrossed;
+		break;
+	case Direction::UP:
+		m_IsBorderConnected[2] = isCrossed;
+		break;
+	case Direction::DOWN:
+		m_IsBorderConnected[3] = isCrossed;
+		break;
+	default:;
+	}
+	//m_IsBorderConnected[static_cast<int>(dir)] = isCrossed;
 }

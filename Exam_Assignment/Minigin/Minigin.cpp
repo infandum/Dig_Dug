@@ -12,6 +12,7 @@
 
 #include <SDL.h>
 #include "ServiceLocator.h"
+#include "DemoScene.h"
 
 extern const float g_MoveSpeed = 90.f;
 extern const float g_TileCenterPadding = 1.0f;
@@ -51,8 +52,9 @@ void dae::Minigin::Initialize()
 
 	ServiceLocator::InitAnimationManager(new AnimationManager());
 
-	ServiceLocator::GetRenderer()->Init(window);
+	ServiceLocator::GetRenderer()->Initialize(window);
 
+	
 }
 
 /**
@@ -60,13 +62,13 @@ void dae::Minigin::Initialize()
  */
 void dae::Minigin::LoadGame() const
 {
-	
-	/*ServiceLocator::GetSceneLoader()->InitScene(SceneList::DEMO);*/
 	//TODO: FIX LEVEL RELOADING GO OVER ALL COMP INIT WHILE IM AT IT.
-	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_1);
+	ServiceLocator::GetSceneLoader()->Initialize();
+	ServiceLocator::GetSceneLoader()->InitScene(SceneList::MAIN_MENU);
+	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_SINGLE);
 	
 	ServiceLocator::GetSceneManager()->Initialize();
-	ServiceLocator::GetSceneManager()->SetActive("Level 1");
+	ServiceLocator::GetSceneManager()->SetActive("Level single");
 }
 
 void dae::Minigin::Cleanup()

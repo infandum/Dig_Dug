@@ -4,7 +4,7 @@
 #include "Texture2D.h"
 #include "ServiceLocator.h"
 
-void dae::Renderer::Init(SDL_Window * window)
+void dae::Renderer::Initialize(SDL_Window * window)
 {
 	mRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (mRenderer == nullptr) 

@@ -14,6 +14,8 @@ namespace dae {
 	public:
 		LevelManager() = default;
 
+		void Reset() { m_pTileComponents.clear(); m_pPlayers.clear(); m_pEntities.clear(); m_StartTile = nullptr; }
+
 		void Update(float deltaTime);
 
 		void AddTile(TileComponent* tile);

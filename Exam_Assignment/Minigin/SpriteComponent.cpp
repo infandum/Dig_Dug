@@ -5,9 +5,10 @@
 
 void dae::SpriteComponent::Swap()
 {
+	//TODO:: INIT FUNCTION
 	if(typeid(*m_State) == typeid(DirectionState))
 	{
-		if(GetGameObject()->GetInput())
+		if(GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
 			m_State = std::make_shared<IdlePlayerState>();
 		if (GetGameObject()->GetNPC())
 			m_State = std::make_shared<IdlePlayerState>();
@@ -119,6 +120,6 @@ UINT dae::SpriteComponent::GetAnimationIDForState(std::shared_ptr<BaseState> sta
 			return entry.first;
 		}
 	}
-	std::cout << "SpriteComponent::GetAnimationIDForState() > State is not found in manager! " << typeid(state).name() << '\n';
+	std::cout << "SpriteComponent::GetAnimationIDForState() > State is not found in manager! " << typeid(state).name() << "Owner: " << GetGameObject()->GetName() << '\n';
 	return 0;
 }

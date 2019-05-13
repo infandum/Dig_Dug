@@ -17,7 +17,7 @@ void dae::FPSComponent::Update(float deltaTime)
 		std::stringstream stream;
 		stream << std::fixed << std::setprecision(1) << m_Fps << " FPS";
 		const auto txt = stream.str();
-		std::cout << stream.str() << std::endl;
+		/*std::cout << stream.str() << std::endl;*/
 		if (GetGameObject()->GetComponent<TextComponent>())
 			GetGameObject()->GetComponent<TextComponent>()->SetText(txt);
 		m_AccuTime -= 1.0f;

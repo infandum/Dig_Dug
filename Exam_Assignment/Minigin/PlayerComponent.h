@@ -12,13 +12,16 @@ namespace dae
 		PlayerComponent& operator=(const PlayerComponent& other) = delete;
 		PlayerComponent& operator=(PlayerComponent&& other) noexcept = delete;
 
-		PlayerComponent();
+		PlayerComponent(PlayerType type);
 		virtual ~PlayerComponent() = default;
 
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;
 		//void Render() override;
+
+	private:
+		PlayerType m_Type{};
 	};
 
 }

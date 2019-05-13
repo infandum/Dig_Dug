@@ -87,9 +87,9 @@ void dae::LevelManager::AddPlayer(InputComponent* pPlayer)
 {
 	for (auto& component : m_pPlayers)
 	{
-		if (typeid(*component) == typeid(*pPlayer))
+		if (component == pPlayer)
 		{
-			std::cout << "Component Duplicate: " << typeid(*pPlayer).name() << " >> Already added!!";
+			std::cout << "LevelManager::Player Duplicate: " << typeid(*pPlayer).name() << " >> Already added!!";
 			return;
 		}
 	}
@@ -101,7 +101,7 @@ void dae::LevelManager::RemovePlayer(InputComponent* pPlayer)
 	const auto ent = std::find(m_pPlayers.begin(), m_pPlayers.end(), pPlayer);
 	if (ent == m_pPlayers.end())
 	{
-		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
+		std::wcout << L"LevelManager::RemovePlayer > Player is not attached to this GameObject!" << std::endl;
 		return;
 	}
 	m_pPlayers.erase(ent);
@@ -111,9 +111,9 @@ void dae::LevelManager::AddEntity(NpcComponent* pEntity)
 {
 	for (auto& entity : m_pEntities)
 	{
-		if (typeid(*entity) == typeid(*pEntity))
+		if (entity == pEntity)
 		{
-			std::cout << "Component Duplicate: " << typeid(*pEntity).name() << " >> Already added!!";
+			std::cout << "LevelManager::Enemy Duplicate: " << typeid(*pEntity).name() << " >> Already added!!";
 			return;
 		}
 	}

@@ -73,13 +73,13 @@ void dae::InputManager::AddCommand(std::shared_ptr<Command> command, ControllerB
 	//Duplicate check
 	for (auto& com : m_pCommands)
 	{
-		if (com->GetButton() == button)
+		if (typeid(*com) == typeid(*command) && com->GetOwner() == owner)
 		{
-			std::cout << "Duplicate Command >> Button id = " << static_cast<int>(button) << " Command type: " << typeid(*command).name() << std::endl;
+			std::cout << "Duplicate Command >> GameObject: already has Command of type : " << typeid(*command).name()  << std::endl;
 			return;
 		}
 
-		if (com->GetKey() == key)
+		if ((com->GetButton() == button && com->GetKey() == key) && com->GetOwner() == owner)
 		{
 			std::cout << "Duplicate Command >> Key id = " << static_cast<int>(key) << " Command type: " << typeid(*command).name() << std::endl;
 			return;

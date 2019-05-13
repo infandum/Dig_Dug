@@ -25,11 +25,7 @@ void dae::SceneManager::Initialize()
 
 void dae::SceneManager::Update(const float deltaTime)
 {
-	for (const auto scene : m_spScenes)
-	{
-		scene->Update(deltaTime);
-	}
-	//m_spScenes[ActiveSceneIndex]->Update(deltaTime);
+	m_spScenes[ActiveSceneIndex]->Update(deltaTime);
 }
 
 void dae::SceneManager::Render()
@@ -39,6 +35,15 @@ void dae::SceneManager::Render()
 
 std::shared_ptr<dae::Scene> dae::SceneManager::CreateScene(const std::string& name)
 {
+	for (int i = 0; i < m_spScenes.size(); i++)
+	{
+		if (m_spScenes[i]->GetName() == name)
+		{
+			m_spScenes[i].reset(new Scene(name));
+			return m_spScenes[i];
+		}		
+	}
+
 	const auto scene = std::make_shared<Scene>(name);
 	m_spScenes.push_back(scene);
 	return scene;
@@ -60,7 +65,7 @@ void dae::SceneManager::PreviousScene()
 
 void dae::SceneManager::SetActive(const std::string& sceneName)
 {
-	for(int i = 0; i < m_spScenes.size(); i++)
+	for(auto i = 0; i < m_spScenes.size(); i++)
 	{
 		if (m_spScenes[i]->GetName() == sceneName)
 			ActiveSceneIndex = i;
@@ -70,5 +75,4 @@ void dae::SceneManager::SetActive(const std::string& sceneName)
 void dae::SceneManager::SetActive(int index)
 {
 	ActiveSceneIndex = index;
-	Initialize();
 }

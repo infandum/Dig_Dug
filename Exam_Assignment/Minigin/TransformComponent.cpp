@@ -2,10 +2,6 @@
 #include "Components.h"
 #include "GameObject.h"
 
-extern  const float g_MoveSpeed;
-extern const float g_TileCenterPadding;
-
-
 void dae::TransformComponent::Update(float )
 {
 	if (GetGameObject()->GetParent())

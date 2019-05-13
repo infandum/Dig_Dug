@@ -24,7 +24,6 @@ namespace dae
 	private:
 		std::vector<std::shared_ptr<Scene>> m_spScenes;
 		int ActiveSceneIndex = 0;
-		/*std::shared_ptr<Scene> m_spCurrentScene, m_spNextScene;*/
 	};
 
 }

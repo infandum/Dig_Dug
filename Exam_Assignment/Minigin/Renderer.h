@@ -13,7 +13,7 @@ namespace dae
 		SDL_Renderer* mRenderer = nullptr;
 
 	public:
-		void Init(SDL_Window* window);
+		void Initialize(SDL_Window* window);
 		void Render();
 		void Destroy();
 

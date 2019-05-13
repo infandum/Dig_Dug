@@ -13,7 +13,7 @@ namespace dae
 		InputComponent(InputComponent&& other) noexcept = delete;
 		InputComponent& operator=(const InputComponent& other) = delete;
 		InputComponent& operator=(InputComponent&& other) noexcept = delete;
-		InputComponent();
+		InputComponent() = default;
 		virtual ~InputComponent() = default;
 
 	protected:

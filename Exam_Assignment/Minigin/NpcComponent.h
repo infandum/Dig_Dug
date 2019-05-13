@@ -10,12 +10,15 @@ namespace dae
 		NpcComponent(BaseComponent&& other) noexcept = delete;
 		NpcComponent& operator=(const BaseComponent& other) = delete;
 		NpcComponent& operator=(BaseComponent&& other) noexcept = delete;
-		NpcComponent();
+		NpcComponent(NPCType type);
 		virtual ~NpcComponent() = default;
 
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;
 		//void Render() override;
+
+	private:
+		NPCType m_Type{};
 	};
 }

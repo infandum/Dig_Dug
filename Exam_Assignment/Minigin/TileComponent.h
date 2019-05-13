@@ -24,6 +24,8 @@ namespace dae
 
 		void SetBorder(Direction dir, bool isCrossed);
 		bool GetIsConnectedBorder(Direction dir) { return m_IsBorderConnected[static_cast<int>(dir)]; }
+
+		void Reset() { for (auto border : m_IsBorderConnected) { border = false; } for (auto border : m_IsBorderDug) { border = false; }}
 		
 	protected:
 		void Initialize() override;

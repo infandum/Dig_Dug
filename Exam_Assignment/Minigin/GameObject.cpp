@@ -16,6 +16,11 @@ void dae::GameObject::Initialize()
 	{
 		component->Initialize();
 	}
+
+	for (size_t i = 0; i < m_pChilds.size(); i++)
+	{
+		m_pChilds[i]->Initialize();
+	}
 }
 
 void dae::GameObject::Update(float deltaTime)
@@ -98,7 +103,7 @@ void dae::GameObject::AddChild(std::shared_ptr<GameObject> pChild, bool isActive
 	{
 		if (typeid(*child) == typeid(*pChild))
 		{
-			std::cout << "Component Duplicate: " << typeid(*child).name() << " >> Already added!! " << GetName() << std::endl;
+			std::cout << "Child Duplicate: " << typeid(*child).name() << " >> Already added!! " << GetName() << std::endl;
 			return;
 		}
 	}

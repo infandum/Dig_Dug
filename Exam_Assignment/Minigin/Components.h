@@ -14,3 +14,4 @@
 #include "TextComponent.h"
 #include "FPSComponent.h"
 #include "MoveComponent.h"
+#include "PlayerComponent.h"

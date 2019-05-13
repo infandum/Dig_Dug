@@ -17,20 +17,20 @@
     <Filter Include="Content">
       <UniqueIdentifier>{64e0e1c2-d75d-4c8e-a31d-36cbdf3db70e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Objects">
-      <UniqueIdentifier>{b5fb3a28-b1b5-4795-876d-e6eea6efd7c4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Managers\Input">
       <UniqueIdentifier>{4c81c308-e0e5-4eb1-8b27-9079bedc8971}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers\Scene">
-      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
     </Filter>
     <Filter Include="Managers\Game">
       <UniqueIdentifier>{555d38c8-52f0-40dc-8502-b58cfaa51240}</UniqueIdentifier>
     </Filter>
     <Filter Include="Managers\Engine">
       <UniqueIdentifier>{6158519a-934e-40e5-8935-8a04f8fe3ca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneGraph">
+      <UniqueIdentifier>{b5fb3a28-b1b5-4795-876d-e6eea6efd7c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneGraph\Scene">
+      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -68,10 +68,10 @@
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Objects</Filter>
+      <Filter>SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="TextObject.h">
-      <Filter>Objects</Filter>
+      <Filter>SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
       <Filter>Components</Filter>
@@ -86,22 +86,22 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Managers\Scene</Filter>
+      <Filter>SceneGraph\Scene</Filter>
     </ClInclude>
     <ClInclude Include="SceneObject.h">
-      <Filter>Objects</Filter>
+      <Filter>SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="DataStructs.h">
       <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="SceneLoader.h">
-      <Filter>Managers\Scene</Filter>
+      <Filter>SceneGraph\Scene</Filter>
     </ClInclude>
     <ClInclude Include="InputComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>Managers\Scene</Filter>
+      <Filter>SceneGraph\Scene</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Managers\Input</Filter>
@@ -119,9 +119,6 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="LevelManager.h">
-      <Filter>Managers\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsManager.h">
       <Filter>Managers\Game</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
@@ -157,6 +154,13 @@
     <ClInclude Include="MoveComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsManager.h">
+      <Filter>Managers\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -181,10 +185,10 @@
       <Filter>Content</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Objects</Filter>
+      <Filter>SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="TextObject.cpp">
-      <Filter>Objects</Filter>
+      <Filter>SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Components</Filter>
@@ -196,19 +200,19 @@
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Managers\Scene</Filter>
+      <Filter>SceneGraph\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="SceneLoader.cpp">
-      <Filter>Managers\Scene</Filter>
+      <Filter>SceneGraph\Scene</Filter>
     </ClCompile>
     <ClCompile Include="InputComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>Managers\Scene</Filter>
+      <Filter>SceneGraph\Scene</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers\Input</Filter>
@@ -223,9 +227,6 @@
       <Filter>Managers</Filter>
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
-      <Filter>Managers\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsManager.cpp">
       <Filter>Managers\Game</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
@@ -252,6 +253,13 @@
     <ClCompile Include="MoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsManager.cpp">
+      <Filter>Managers\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc">

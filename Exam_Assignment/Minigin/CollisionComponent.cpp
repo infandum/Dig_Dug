@@ -4,19 +4,9 @@
 #include "PhysicsManager.h"
 #include "ServiceLocator.h"
 
-extern const float g_MoveSpeed;
-
-dae::CollisionComponent::CollisionComponent()
-{
-	auto physics_manager = ServiceLocator::GetPhysicsManager();
-	physics_manager->AddCollision(this);
-}
-
 dae::CollisionComponent::CollisionComponent(int x, int y)
 {
 	m_Size = {x,y};
-	auto physics_manager = ServiceLocator::GetPhysicsManager();
-	physics_manager->AddCollision(this);
 }
 
 void dae::CollisionComponent::SetPosition(float x, float y, float z)
@@ -26,6 +16,8 @@ void dae::CollisionComponent::SetPosition(float x, float y, float z)
 
 void dae::CollisionComponent::Initialize()
 {
+	auto physics_manager = ServiceLocator::GetPhysicsManager();
+	physics_manager->AddCollision(this);
 }
 
 void dae::CollisionComponent::Update(float deltaTime)
@@ -82,7 +74,7 @@ void dae::CollisionComponent::Update(float deltaTime)
 			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
 			m_HasCollision = false;
 
-			if (GetGameObject()->GetInput() && GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
+			if ((GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>()) && GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
 				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
 		}
 	}

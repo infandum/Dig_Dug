@@ -10,7 +10,7 @@ namespace  dae
 		CollisionComponent& operator=(const CollisionComponent& other) = delete;
 		CollisionComponent& operator=(CollisionComponent&& other) noexcept = delete;
 		
-		CollisionComponent();
+		CollisionComponent() = default;
 		explicit CollisionComponent(int x, int y);
 		virtual ~CollisionComponent() = default;
 

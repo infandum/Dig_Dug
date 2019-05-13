@@ -9,6 +9,17 @@ namespace dae
 		STATUS_ERROR
 	};
 
+	enum class PlayerType
+	{
+		PLAYER_DIGDUG,
+		PLAYER_FYGAR
+	};
+	enum class NPCType
+	{
+		ROCK,
+		POOKA,
+		FYGAR
+	};
 	//2D VECTORS
 	class fVector2
 	{
