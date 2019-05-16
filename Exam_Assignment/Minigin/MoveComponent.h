@@ -44,12 +44,15 @@ namespace dae
 
 		void Reset(float x, float y, Direction dir = Direction::RIGHT);
 		void Reset(glm::vec3  pos, Direction dir = Direction::RIGHT);
+
+
+		float GetMoveSpeed() const { return m_MoveSpeed; }
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;
 		//void Render() override;
 
-		static void BorderControl(double& posX, double& posY);
+		void BorderControl(double& posX, double& posY) const;
 		glm::vec3 MoveDirectional();
 		glm::vec3 MoveOmniDirectional();
 

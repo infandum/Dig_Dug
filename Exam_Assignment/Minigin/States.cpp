@@ -269,6 +269,8 @@ std::shared_ptr<dae::BaseState> dae::AttackPlayerState::Swap(NotifyEvent event, 
 		return nullptr;
 	case NotifyEvent::EVENT_COLLISION:
 		return std::make_shared<DeadPlayerState>();
+	case NotifyEvent::EVENT_INTERACT:
+		return std::make_shared<PumpPlayerState>();
 	default:;
 	}
 
@@ -279,18 +281,18 @@ std::shared_ptr<dae::BaseState> dae::PumpPlayerState::Swap(NotifyEvent event, Ga
 {
 	UNREFERENCED_PARAMETER(event);
 	UNREFERENCED_PARAMETER(gameObject);
-	/*switch (event)
+	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
 		return std::make_shared<IdlePlayerState>();
 	case NotifyEvent::EVENT_MOVE:
-		return std::make_shared<IdlePlayerState>();
-	case NotifyEvent::EVENT_INPUT:
-		return std::make_shared<AttackPlayerState>();
+		return std::make_shared<MovePlayerState>();
 	case NotifyEvent::EVENT_COLLISION:
+		return std::make_shared<DeadPlayerState>();
+	case NotifyEvent::EVENT_INTERACT:
 		return nullptr;
 	default:;
-	}*/
+	}
 	return nullptr;
 }
 
@@ -315,5 +317,10 @@ std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, Ga
 	default:;
 	}
 
+	return nullptr;
+}
+
+std::shared_ptr<dae::BaseState> dae::WeaponState::Swap(NotifyEvent , GameObject& )
+{
 	return nullptr;
 }

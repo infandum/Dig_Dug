@@ -11,7 +11,8 @@ namespace  dae
 		CollisionComponent& operator=(CollisionComponent&& other) noexcept = delete;
 		
 		CollisionComponent() = default;
-		explicit CollisionComponent(int x, int y);
+		CollisionComponent(const bool& isTrigger) { m_Trigger = isTrigger; }
+		explicit CollisionComponent(int x, int y, const bool& isTrigger = false);
 		virtual ~CollisionComponent() = default;
 
 		iVector2 GetSize() const { return m_Size; }
@@ -28,6 +29,9 @@ namespace  dae
 		CollisionComponent* GetCollision() const { return m_pOtherCollider; }
 		void SetCollision(CollisionComponent* pOtherCollider) { m_pOtherCollider = pOtherCollider; }
 
+		void EnableCollision(const bool& enable = true) { m_Collide = enable; }
+		void EnableTrigger(const bool& enable = true) { m_Trigger = enable; }
+		bool IsTrigger() const { return m_Trigger; }
 
 	protected:
 		void Initialize() override;
@@ -40,6 +44,8 @@ namespace  dae
 		glm::vec3 m_Position {0};
 		TransformComponent* m_pTransformComponent = nullptr;
 		bool m_ShowCollisionBox = false;
+		bool m_Collide = true;
+		bool m_Trigger = false;
 		std::shared_ptr<Texture2D> m_pCollisionBox = nullptr;
 
 		CollisionComponent* m_pOtherCollider = nullptr;

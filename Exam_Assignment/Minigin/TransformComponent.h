@@ -21,9 +21,11 @@ namespace dae
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(float x = 0, float y = 0, float z = 0);
+		void SetPosition(const glm::vec3& pos = {0, 0, 0}) { SetLocalPosition(pos.x, pos.y, pos.y); }
 
 		const glm::vec3& GetLocalPosition() const { return m_localPosition; }
 		void SetLocalPosition(float x = 0, float y = 0, float z = 0) { m_localPosition = { x,y,z }; }
+		void SetLocalPosition(const glm::vec3& offset = { 0, 0, 0 }) { SetLocalPosition(offset.x, offset.y, offset.y); }
 	
 		const iVector2& GetPositionIndex() const { return m_CurrentTileIndex; }
 		void SetPositionIndex(iVector2 index) {/* std::cout << "SET TILE: " << m_CurrentTileIndex.x << " , " << m_CurrentTileIndex.y << "\n";*/ m_CurrentTileIndex = index; }

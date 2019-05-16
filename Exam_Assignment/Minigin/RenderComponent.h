@@ -14,6 +14,8 @@ namespace dae
 		RenderComponent() = default;
 		virtual ~RenderComponent() = default;
 
+		void EnableRender(const bool& enable = true) { m_Render = enable; }
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;
@@ -25,6 +27,8 @@ namespace dae
 		CollisionComponent* m_pCollisionComponent = nullptr;
 		TileComponent* m_pTileComponent = nullptr;
 		SpriteComponent* m_pSpriteComponent = nullptr;
+
+		bool m_Render = true;
 	};
 
 

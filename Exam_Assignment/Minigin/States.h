@@ -82,6 +82,14 @@ namespace dae
 		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};
 
+	class WeaponState : public DirectionState
+	{
+	public:
+		virtual ~WeaponState() = default;
+		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
+		//void Update(float& deltaTime, GameObject& gameObject) override;
+	};
+
 
 	/*
 

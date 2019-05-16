@@ -1,6 +1,11 @@
 #pragma once
 #include "MiniginPCH.h"
 #include <windows.h>
+#pragma warning(push)
+#pragma warning (disable:4201)
+#include <glm/vec3.hpp>
+#pragma warning(pop)
+
 namespace dae
 {
 	enum class StatusCode
@@ -117,7 +122,28 @@ namespace dae
 		UP = 2,
 		DOWN = 3,
 		NONE = 4
+
+		
 	};
+
+	inline glm::vec3 DirectionAxis(Direction dir)
+	{
+		switch (dir)
+		{
+		case Direction::RIGHT:
+			return { 1,0,0 };
+		case Direction::LEFT:
+			return { -1,0,0 };
+		case Direction::UP:
+			return { 0, -1,0 };
+		case Direction::DOWN:
+			return { 0, 1,0 };
+
+		case Direction::NONE:
+			return { 0,0,0 };
+		}
+		return {};
+	}
 
 	enum class TileState
 	{

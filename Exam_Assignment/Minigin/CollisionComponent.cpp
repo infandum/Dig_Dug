@@ -4,9 +4,10 @@
 #include "PhysicsManager.h"
 #include "ServiceLocator.h"
 
-dae::CollisionComponent::CollisionComponent(int x, int y)
+dae::CollisionComponent::CollisionComponent(int x, int y, const bool& isTrigger)
 {
 	m_Size = {x,y};
+	m_Trigger = isTrigger;
 }
 
 void dae::CollisionComponent::SetPosition(float x, float y, float z)
@@ -55,9 +56,9 @@ void dae::CollisionComponent::Update(float deltaTime)
 		m_Position.y = m_pTransformComponent->GetPosition().y - (m_offSet.x / 2);
 	}
 
-	
+	ShowCollisionBox(m_Collide);
 	//Prevent Overlapping
-	if(m_HasCollision)
+	if(m_HasCollision && m_Collide)
 	{	
 		if(GetCollision() != this)
 		{
@@ -67,19 +68,10 @@ void dae::CollisionComponent::Update(float deltaTime)
 				m_HasCollision = false;
 				return;
 			}
-				
 
 			//TODO:: CHANGE PUSH OUT EFFECT, MAYBE PREVENT OBJECT MOVING INTO A COLLISION?
-			//std::cout << "PUSHOUT" << std::endl;
-			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
-			m_HasCollision = false;
-
-			if ((GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>()) && GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
-			{
-				std::cout << "Collision" << std::endl;
-				if(GetGameObject()->GetComponent<SpriteComponent>()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
-					GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
-			}
+			if(!m_Trigger || !GetCollision()->IsTrigger())
+				GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
 				
 		}
 	}

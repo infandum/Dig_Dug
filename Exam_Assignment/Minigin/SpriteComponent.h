@@ -14,6 +14,14 @@ namespace dae
 		SpriteComponent& operator=(SpriteComponent&& other) noexcept = delete;
 		//TODO: CHECK IF PLAYER OR NPC ASSIGN CORRECT INIT STATE
 		SpriteComponent() = default;
+
+		template <class T>
+		explicit SpriteComponent(T state)
+		{
+			m_State = std::make_shared<T>(state);
+		}
+
+		//SpriteComponent(const BaseState & state);
 		virtual ~SpriteComponent() = default;
 
 		void Swap();
@@ -42,8 +50,8 @@ namespace dae
 		void SetActiveAnimationFrame(float deltaTime);
 		UINT GetAnimationIDForState(std::shared_ptr<BaseState> state);
 	private:
-		std::shared_ptr<BaseState> m_State = std::make_shared<DirectionState>();
-		std::shared_ptr<BaseState> m_NpcState = std::make_shared<IdlePlayerState>();
+		std::shared_ptr<BaseState> m_State = nullptr;
+		std::shared_ptr<BaseState> m_NpcState = nullptr;
 
 		NotifyEvent m_Event = NotifyEvent::EVENT_IDLE;
 		SDL_RendererFlip m_FlipDirection = SDL_FLIP_NONE;

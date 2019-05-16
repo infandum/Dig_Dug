@@ -103,12 +103,13 @@ void dae::GameObject::AddChild(std::shared_ptr<GameObject> pChild, bool isActive
 {
 	for (auto& child : m_pChilds)
 	{
-		if (typeid(*child) == typeid(*pChild))
+		if (child == pChild)
 		{
 			std::cout << "Child Duplicate: " << typeid(*child).name() << " >> Already added!! " << GetName() << std::endl;
 			return;
 		}
 	}
+
 	pChild->SetParent(this);
 	pChild->GetComponent<TransformComponent>()->SetLocalPosition(pChild->GetComponent<TransformComponent>()->GetPosition().x - GetComponent<TransformComponent>()->GetPosition().x
 																, pChild->GetComponent<TransformComponent>()->GetPosition().y - GetComponent<TransformComponent>()->GetPosition().y
@@ -116,6 +117,15 @@ void dae::GameObject::AddChild(std::shared_ptr<GameObject> pChild, bool isActive
 	pChild->SetIsActive(isActive);
 	pChild->SetIsFollowParent(isAttached);
 	m_pChilds.push_back(pChild);
+	//m_pChilds[m_pChilds.size() - 1]->SetParent(this);
+	////m_pChilds[m_pChilds.size() - 1]->GetComponent<TransformComponent>->SetLocalPosition(pChild->GetComponent<TransformComponent>()->GetPosition().x - GetComponent<TransformComponent>()->GetPosition().x
+	////																					, pChild->GetComponent<TransformComponent>()->GetPosition().y - GetComponent<TransformComponent>()->GetPosition().y
+	////																					, pChild->GetComponent<TransformComponent>()->GetPosition().z - GetComponent<TransformComponent>()->GetPosition().z);
+
+
+	//m_pChilds[m_pChilds.size() - 1]->SetIsActive(isActive);
+	//m_pChilds[m_pChilds.size() - 1]->SetIsFollowParent(isAttached);
+
 }
 
 void dae::GameObject::RemoveChild(std::shared_ptr<GameObject> pChild)

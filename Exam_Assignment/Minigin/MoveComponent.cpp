@@ -38,7 +38,7 @@ void dae::MoveComponent::Update(float deltaTime)
 	if (m_IsStatic)
 	{
 		const auto tile = m_pLevelManager->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
-		if (tile->GetTileState() != TileState::OCCUPIED)
+		if (tile->GetTileState() != TileState::OCCUPIED && !GetGameObject()->GetParent())
 			tile->SetTileState(TileState::OCCUPIED);
 	}
 	else
@@ -254,8 +254,11 @@ bool dae::MoveComponent::CheckOccupiedTileMove() const
 	return true;
 }
 
-void dae::MoveComponent::BorderControl(double& posX, double& posY)
+void dae::MoveComponent::BorderControl(double& posX, double& posY) const
 {
+	if(GetGameObject()->GetComponent<CollisionComponent>() && GetGameObject()->GetComponent<CollisionComponent>()->IsTrigger())
+		return;
+
 	const int MIN_POSITION_X = 0;
 	const int MAX_POSITION_X = 448 - 32;
 	const int MIN_POSITION_Y = 32;

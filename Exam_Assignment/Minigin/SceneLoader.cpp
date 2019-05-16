@@ -35,6 +35,9 @@ void dae::SceneLoader::Initialize()
 	animations->LoadSpriteClip(SpriteClip{ 0, {0, 32}, { 32 , 32 }, 1, 2, true, true }, 3);
 	animations->LoadSpriteClip(SpriteClip{ 0, {0, 64}, { 32 , 32 }, 0, 1, true, false }, 4);
 	animations->LoadSpriteClip(SpriteClip{ 0, {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 160}, { 32 , 32 }, 0, 2, true, true }, 6);
+
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 96}, { 64 , 64 }, 0, 1, true, false }, 7);
 
 	//POOKA
 	animations->LoadSpriteClip(SpriteClip{ 0, {32, 256}, { 32 , 32 }, 0, 1, false, false }, 11);
@@ -248,7 +251,7 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
 	player->AddComponent(std::make_shared<CollisionComponent>());
 	player->AddComponent(std::make_shared<TransformComponent>(x, y));
 	player->AddComponent(std::make_shared<TextureComponent>());
-	player->AddComponent(std::make_shared<SpriteComponent>());
+	player->AddComponent(std::make_shared<SpriteComponent>(IdlePlayerState()));
 	player->AddComponent(std::make_shared<MoveComponent>());
 	player->AddComponent(std::make_shared<PlayerComponent>(type));
 	player->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
@@ -264,6 +267,7 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<DigPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
+		player->GetComponent<SpriteComponent>()->SetAnimationToState(6, std::make_shared<PumpPlayerState>());
 
 		
 		break;

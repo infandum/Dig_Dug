@@ -5,11 +5,15 @@
 
 void dae::SpriteComponent::Initialize()
 {
-	if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
-		m_State = std::make_shared<IdlePlayerState>(); 
-	if (GetGameObject()->GetNPC())
-		m_State = std::make_shared<IdlePlayerState>();
+	if(!m_State)
+	{
+		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
+			m_State = std::make_shared<IdlePlayerState>();
+		if (GetGameObject()->GetNPC())
+			m_State = std::make_shared<IdlePlayerState>();
 
+	}
+		
 	m_Event = NotifyEvent::EVENT_SPAWN;
 }
 
@@ -24,40 +28,33 @@ void dae::SpriteComponent::Update(float deltaTime)
 	}
 }
 
+
 void dae::SpriteComponent::Swap()
 {
 	//TODO:: INIT FUNCTION
-	if(typeid(*m_State) == typeid(DirectionState))
-	{
-		if(GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
-			m_State = std::make_shared<IdlePlayerState>();
-		if (GetGameObject()->GetNPC())
-			m_State = std::make_shared<IdlePlayerState>();
-	}
-	else
-	{
-		const auto state = m_State->Swap(m_Event, *GetGameObject());
-		auto anim = ServiceLocator::GetAnimationManager();
+	std::shared_ptr<BaseState> pBase2 = m_State;
 
-		if (GetAnimationIDForState(m_State))
-			m_State->SetStateAnimClip(anim->GetSpriteClip(GetAnimationIDForState(m_State)));
+	const auto state = m_State->Swap(m_Event, *GetGameObject());
+	auto anim = ServiceLocator::GetAnimationManager();
 
-		if (state != nullptr && typeid(*m_State) != typeid(*state))
-		{
-			if (anim->GetSpriteClip(GetAnimationIDForState(state)).id == 0)
-				return;
-			m_ActiveFrame = anim->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
-			m_State = state;
-			//std::cout << typeid(*m_State).name() << '\n';
-		}
+	if (GetAnimationIDForState(m_State))
+		m_State->SetStateAnimClip(anim->GetSpriteClip(GetAnimationIDForState(m_State)));
+
+	if (state != nullptr && typeid(*m_State) != typeid(*state))
+	{
+		if (anim->GetSpriteClip(GetAnimationIDForState(state)).id == 0)
+			return;
+		m_ActiveFrame = anim->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
+		m_State = state;
 	}
+	
 	
 }
 
 void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state)
 {
 	//TODO: Check if ID is valid saved texture ID;
-	if(/*ServiceLocator::GetAnimationManager()->GetAnimationClips(clipID).TextureList.size() == 0 && */ServiceLocator::GetAnimationManager()->GetSpriteClip(clipID).id == 0)
+	if(ServiceLocator::GetAnimationManager()->GetSpriteClip(clipID).id == 0)
 	{
 		std::cout << "SpriteComponent::SetAnimationToState() > id Not found in loaded textures! " << clipID << '\n';
 		return;
