@@ -1,13 +1,11 @@
 #pragma once
-#include "Service.h"
-
 namespace dae
 {
 	class Texture2D;
 	class Font;
-	class ResourceManager final : public Service
+	class ResourceManager final
 	{
-		std::string mDataPath;
+		
 	public:
 		ResourceManager() = default;
 
@@ -18,6 +16,7 @@ namespace dae
 
 		std::shared_ptr<Texture2D> GetTexture(UINT id);
 	private:
+		std::string mDataPath;
 		std::map<UINT, std::shared_ptr<Texture2D>> m_pLoadedTextures;
 	};
 

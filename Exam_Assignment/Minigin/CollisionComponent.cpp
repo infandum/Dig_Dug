@@ -70,12 +70,17 @@ void dae::CollisionComponent::Update(float deltaTime)
 				
 
 			//TODO:: CHANGE PUSH OUT EFFECT, MAYBE PREVENT OBJECT MOVING INTO A COLLISION?
-			std::cout << "PUSHOUT" << std::endl;
+			//std::cout << "PUSHOUT" << std::endl;
 			GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
 			m_HasCollision = false;
 
 			if ((GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>()) && GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
-				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
+			{
+				std::cout << "Collision" << std::endl;
+				if(GetGameObject()->GetComponent<SpriteComponent>()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
+					GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
+			}
+				
 		}
 	}
 }

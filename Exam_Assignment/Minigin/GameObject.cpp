@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Components.h"
 #include <complex>
+#include "ServiceLocator.h"
 
 UINT dae::GameObject::m_NumberOfGameObjects = 0;
 
@@ -12,6 +13,7 @@ dae::GameObject::GameObject()
 
 void dae::GameObject::Initialize()
 {
+	m_SceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
 	for (auto& component : m_pComponents)
 	{
 		component->Initialize();
@@ -25,7 +27,7 @@ void dae::GameObject::Initialize()
 
 void dae::GameObject::Update(float deltaTime)
 {
-	if(m_IsActive)
+	if(m_IsActive && m_SceneIndex == ServiceLocator::GetSceneManager()->GetActiveSceneIndex())
 	{
 		for (size_t i = 0; i < m_pChilds.size(); i++)
 		{

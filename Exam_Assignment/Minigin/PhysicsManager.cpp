@@ -2,19 +2,27 @@
 #include "PhysicsManager.h"
 #include "GameObject.h"
 #include "Components.h"
+#include "ServiceLocator.h"
+
+void dae::PhysicsManager::Initialize()
+{
+}
 
 void dae::PhysicsManager::Update(float deltaTime)
 {
+	//TODO: CLEAN THIS UP SO IT DOENS GET DONE EVERY UPDATE;
+	SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
+
 	//TODO: ENTER COLLISION
 	//TODO: LEAVE COLLISION
 	UNREFERENCED_PARAMETER(deltaTime);
-	for (auto& component : m_pCollisionComponents)
+	for (auto& component : m_pCollisionComponents[m_ActiveSceneIndex])
 	{
 		//Render Collision Debug Box 
 		if(!component->ShowCollisionBox())
 			component->ShowCollisionBox(ShowCollisionBox());
 
-		for (auto& otherComponent : m_pCollisionComponents)
+		for (auto& otherComponent : m_pCollisionComponents[m_ActiveSceneIndex])
 		{
 			if(component == otherComponent)
 				continue;
@@ -44,7 +52,14 @@ void dae::PhysicsManager::Update(float deltaTime)
 
 void dae::PhysicsManager::AddCollision(CollisionComponent* collision)
 {
-	for (auto& component : m_pCollisionComponents)
+	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
+	if (m_pCollisionComponents.empty() || m_pCollisionComponents.size() < m_ActiveSceneIndex)
+		for (auto i = m_pCollisionComponents.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		{
+			m_pCollisionComponents.push_back(std::vector<CollisionComponent*>());
+		}
+
+	for (auto& component : m_pCollisionComponents[m_ActiveSceneIndex])
 	{
 		if (component->GetGameObject() == collision->GetGameObject())
 		{
@@ -52,12 +67,12 @@ void dae::PhysicsManager::AddCollision(CollisionComponent* collision)
 			return;
 		}
 	}
-	m_pCollisionComponents.push_back(collision);
+	m_pCollisionComponents[m_ActiveSceneIndex].push_back(collision);
 }
 
 dae::CollisionComponent* dae::PhysicsManager::GetCollision(GameObject* owner)
 {
-	for (auto& component : m_pCollisionComponents)
+	for (auto& component : m_pCollisionComponents[m_ActiveSceneIndex])
 	{
 		if (component->GetGameObject() == owner)
 		{

@@ -4,15 +4,20 @@
 #include "InputManager.h"
 #include "Commands.h"
 
+void dae::InputComponent::ExecuteCommand()
+{
+	auto input = ServiceLocator::GetInputManager();
+	auto command = input->HandleInput(this->GetGameObject());
+
+	if (command != nullptr)
+		command->Execute();
+}
+
 void dae::InputComponent::Initialize()
 {
 }
 
 void dae::InputComponent::Update(float)
 {
-	auto input = ServiceLocator::GetInputManager();
-	auto command = input->HandleInput();
-
-	if (command != nullptr)
-		command->Execute();
+	ExecuteCommand();
 }

@@ -15,10 +15,11 @@ dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_T
 	
 }
 
+
 void dae::TileComponent::Initialize()
 {
-	auto tiles = ServiceLocator::GetLevelManager();
-	tiles->AddTile(this);
+	auto level = ServiceLocator::GetLevelManager();
+	level->AddTile(this);
 }
 
 void dae::TileComponent::Update(float)

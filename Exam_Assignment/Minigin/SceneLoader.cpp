@@ -11,9 +11,6 @@
 #include "ServiceLocator.h"
 
 //TODO: FILE READING LEVEL LOADING
-//TODO DECOUPLE MORE FUNCTION AWAY FROM PURE DIG USED FEATURES more
-
-
 void dae::SceneLoader::Initialize()
 {
 	auto resource = ServiceLocator::GetResourceManager();
@@ -46,10 +43,14 @@ void dae::SceneLoader::Initialize()
 
 }
 
+void dae::SceneLoader::Update(float )
+{
+}
+
+
 void dae::SceneLoader::InitScene(dae::SceneList scene)
 {
-	auto resource = ServiceLocator::GetResourceManager();
-	
+	const auto resource = ServiceLocator::GetResourceManager();
 
 	std::shared_ptr<Font> font;
 	SDL_Color color;
@@ -59,11 +60,11 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	case SceneList::MAIN_MENU:
 			m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Main menu");
 
-			
-
 			AddMenu();
-
+			//GenerateTile();
 			AddBackground(01);
+
+			GenerateTile();
 
 			font = resource->LoadFont("Lingua.otf", 32);
 			AddText(font, {0,0,0}, "Programming 4 Assignment", 16, 100);
@@ -76,12 +77,38 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		break;
 	case SceneList::LEVEL_SINGLE:
-		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level 1");
+		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level single");
+
+		AddMenu();
+
+
+		AddBackground(01);
+
+		GenerateTile();
+		//GenerateTile();
+
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
+
+		//AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12);
+
+
+		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
+
+		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
+
+		/*tiles->CreateTunnel(12, 12, Direction::UP, 2);
+		tiles->CreateTunnel(12, 12, Direction::LEFT, 2);*/
+
+		font = resource->LoadFont("emulogic.ttf", 12);
+		AddFPS(font, color);
+		break;
+	case SceneList::LEVEL_COOP:
+		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Coop");
 
 		AddMenu();
 
 		AddBackground(01);
-
+		//GetGameObject()->GetComponent<LevelManager>()->Reset();
 		GenerateTile();
 		//GenerateTile();
 
@@ -104,9 +131,9 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	}
 }
 
-void dae::SceneLoader::PostInitScene(SceneList scene)
+void dae::SceneLoader::PostInitScene(SceneList scene) const
 {
-	auto tiles = ServiceLocator::GetLevelManager();
+	auto level = ServiceLocator::GetLevelManager();
 
 	switch (scene)
 	{
@@ -115,8 +142,14 @@ void dae::SceneLoader::PostInitScene(SceneList scene)
 	case SceneList::MAIN_MENU:
 		break;
 	case SceneList::LEVEL_SINGLE:
-		tiles->CreateTunnel(12, 12, Direction::UP, 2);
-		tiles->CreateTunnel(12, 12, Direction::LEFT, 2);
+		//m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Coop");
+		
+		level->CreateTunnel(12, 12, Direction::UP, 2);
+		level->CreateTunnel(12, 12, Direction::LEFT, 2);
+		break;
+	case SceneList::LEVEL_COOP:
+		level->CreateTunnel(12, 12, Direction::UP, 2);
+		level->CreateTunnel(12, 12, Direction::LEFT, 2);
 		break;
 	
 	}
@@ -125,6 +158,12 @@ void dae::SceneLoader::PostInitScene(SceneList scene)
 
 void dae::SceneLoader::ResetScene(SceneList scene)
 {
+	auto level = ServiceLocator::GetLevelManager();
+	level->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
+	auto physics = ServiceLocator::GetPhysicsManager();
+	physics->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
+
+	level->Reset();
 	switch (scene)
 	{
 	default:
@@ -132,74 +171,136 @@ void dae::SceneLoader::ResetScene(SceneList scene)
 	case SceneList::MAIN_MENU:
 		break;
 	case SceneList::LEVEL_SINGLE:
+		
+		
+		/*AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
+
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12);*/
+		
+		level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
+		level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+		
+
+		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
+		//level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
+		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+
+		level->Reset();
+		break;
+
+	case SceneList::LEVEL_COOP:
+
+		level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
+		level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+
+		level->GetPlayer(1)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 12);
+		level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+
+
+		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
+		//level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
+		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
 		break;
 
 	}
+
+	PostInitScene(scene);
 }
+
+//TODO: REFRACTOR THIS ASAP o>
+//void dae::SceneLoader::AddLevelManager() const
+//{
+//	std::shared_ptr<GameObject> level = std::make_shared<GameObject>();
+//	level->SetName("Level: " + m_Scene->GetName());
+//	level->AddComponent(std::make_shared<LevelManager>());
+//	
+//	m_Scene->Add(level);
+//}
+//
+//void dae::SceneLoader::AddPhysicsManager(bool showCollision) const
+//{
+//	std::shared_ptr<GameObject> physics = std::make_shared<GameObject>();
+//	physics->SetName("Physics: " + m_Scene->GetName());
+//	physics->AddComponent(std::make_shared<PhysicsManager>());
+//	physics->GetComponent<PhysicsManager>()->ShowCollisionBox(showCollision);
+//	m_Scene->Add(physics);
+//}
 
 void dae::SceneLoader::AddMenu() const
 {
-	std::shared_ptr<GameObject> menu;
-	menu = std::make_shared<GameObject>();
+	std::shared_ptr<GameObject> menu = std::make_shared<GameObject>();
+	menu->SetName("Menu");
 	menu->AddComponent(std::make_shared<InputComponent>());
-	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonSelect, SDLK_ESCAPE, nullptr);
+	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonSelect, SDLK_ESCAPE, menu.get());
 	m_Scene->Add(menu);
 }
 
 void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
 {
+	auto level = ServiceLocator::GetLevelManager();
+	auto input = ServiceLocator::GetInputManager();
 	std::shared_ptr<GameObject> player = std::make_shared<GameObject>();
-	player->SetName("Player");
+	
 	player->AddComponent(std::make_shared<RenderComponent>());
 	player->AddComponent(std::make_shared<CollisionComponent>());
 	player->AddComponent(std::make_shared<TransformComponent>(x, y));
-	player->AddComponent(std::make_shared<MoveComponent>());
-	player->AddComponent(std::make_shared<PlayerComponent>(type));
 	player->AddComponent(std::make_shared<TextureComponent>());
 	player->AddComponent(std::make_shared<SpriteComponent>());
+	player->AddComponent(std::make_shared<MoveComponent>());
+	player->AddComponent(std::make_shared<PlayerComponent>(type));
 	player->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
-
-	
-
 
 	switch (type)
 	{
 	default:;
 
 	case PlayerType::PLAYER_DIGDUG:
+		player->SetName("PLAYER_DIGDUG: " + m_Scene->GetName());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdlePlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<MovePlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<DigPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
 
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_UP, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_DOWN, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_LEFT, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_x, player.get());
+		
 		break;
 
 	case PlayerType::PLAYER_FYGAR:
-
-
+		player->SetName("PLAYER_FYGAR: " + m_Scene->GetName());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(1, std::make_shared<IdlePlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(2, std::make_shared<MovePlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<DigPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
 
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_w, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_z, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_a, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_d, player.get());
-		ServiceLocator::GetInputManager()->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_LSHIFT, player.get());
+		
 		break;
+	}
+
+	level->AddPlayer(player->GetComponent<PlayerComponent>().get());
+	m_Scene->Add(player);
+	
+	if(level->GetPlayerCount() == 1)
+	{
+		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_UP, player.get());
+		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_DOWN, player.get());
+		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_LEFT, player.get());
+		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT, player.get());
+		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_x, player.get());
+	}
+	else
+	{
+		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_w, player.get());
+		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_s, player.get());
+		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_a, player.get());
+		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_d, player.get());
+		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_LSHIFT, player.get());
 	}
 	
 
-	m_Scene->Add(player);
 }
 
 void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
@@ -254,7 +355,6 @@ void dae::SceneLoader::AddFPS(std::shared_ptr<dae::Font> font, const SDL_Color& 
 
 void dae::SceneLoader::GenerateTile() const
 {
-	/*ServiceLocator::GetLevelManager()->Reset();*/
 	for (auto x = 0; x < 14; ++x)
 	{
 		for (auto y = 0; y < 17; ++y)

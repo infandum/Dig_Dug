@@ -1,18 +1,18 @@
 #pragma once
 #include <XInput.h>
 #include <SDL.h>
-#include "Service.h"
+#include "SceneObject.h"
 
 namespace dae
 {
 	class GameObject;
 	enum class ControllerButton;
 	class Command;
-	class InputManager final : public Service
+	class InputManager final
 	{
 	public:
 		bool ProcessInput();
-		std::shared_ptr<Command> HandleInput();
+		std::shared_ptr<Command> HandleInput(SceneObject* owner);
 			
 		bool IsPressed(ControllerButton button) const;
 		bool IsPressed(SDL_Keycode key) const;
@@ -23,6 +23,7 @@ namespace dae
 		void AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key, GameObject* owner);
 
 		void CloseWindow() { m_CloseWindow = true; }
+
 	private:
 		
 		XINPUT_STATE currentState{};

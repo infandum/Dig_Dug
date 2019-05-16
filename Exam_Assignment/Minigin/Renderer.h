@@ -1,5 +1,4 @@
 #pragma once
-#include "Service.h"
 #include <SDL.h>
 
 struct SDL_Window;
@@ -8,7 +7,7 @@ struct SDL_Renderer;
 namespace dae
 {
 	class Texture2D;
-	class Renderer final : public Service
+	class Renderer final 
 	{
 		SDL_Renderer* mRenderer = nullptr;
 

@@ -12,7 +12,8 @@ namespace dae
 	enum class PlayerType
 	{
 		PLAYER_DIGDUG,
-		PLAYER_FYGAR
+		PLAYER_FYGAR,
+		PLAYER_NONE
 	};
 	enum class NPCType
 	{

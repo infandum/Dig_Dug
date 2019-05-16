@@ -3,6 +3,27 @@
 #include "GameObject.h"
 #include "ServiceLocator.h"
 
+void dae::SpriteComponent::Initialize()
+{
+	if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
+		m_State = std::make_shared<IdlePlayerState>(); 
+	if (GetGameObject()->GetNPC())
+		m_State = std::make_shared<IdlePlayerState>();
+
+	m_Event = NotifyEvent::EVENT_SPAWN;
+}
+
+void dae::SpriteComponent::Update(float deltaTime)
+{
+	Swap();
+	if (typeid(*m_State) != typeid(DirectionState))
+	{
+		SetActiveAnimationFrame(deltaTime);
+		m_State->Update(deltaTime, *GetGameObject());
+		m_State->Animated(*GetGameObject());
+	}
+}
+
 void dae::SpriteComponent::Swap()
 {
 	//TODO:: INIT FUNCTION
@@ -20,6 +41,7 @@ void dae::SpriteComponent::Swap()
 
 		if (GetAnimationIDForState(m_State))
 			m_State->SetStateAnimClip(anim->GetSpriteClip(GetAnimationIDForState(m_State)));
+
 		if (state != nullptr && typeid(*m_State) != typeid(*state))
 		{
 			if (anim->GetSpriteClip(GetAnimationIDForState(state)).id == 0)
@@ -59,24 +81,14 @@ void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<Base
 
 void dae::SpriteComponent::onNotify(NotifyEvent event)
 {
-	if(m_Event != NotifyEvent::EVENT_COLLISION)
 		m_Event = event;
 }
 
-void dae::SpriteComponent::Initialize()
+void dae::SpriteComponent::Reset()
 {
+	Initialize();
 }
 
-void dae::SpriteComponent::Update(float deltaTime)
-{
-	Swap();
-	if (typeid(*m_State) != typeid(DirectionState))
-	{
-		SetActiveAnimationFrame(deltaTime);		
-		m_State->Update(deltaTime, *GetGameObject());
-		m_State->Animated(*GetGameObject());
-	}
-}
 
 void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 {
@@ -84,10 +96,10 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 	auto anim = ServiceLocator::GetAnimationManager();
 	//const auto clip = anim->GetAnimationClips(GetAnimationIDForState(m_State));
 	const auto clip = anim->GetSpriteClip(GetAnimationIDForState(m_State));
-	if (GetGameObject() && GetGameObject()->GetTransform() && clip.id != 0)
+	if (clip.id != 0)
 	{
 		
-		if (m_Event != NotifyEvent::EVENT_IDLE)
+		if (/*m_Event != NotifyEvent::EVENT_IDLE*/typeid(*m_State) != typeid(IdlePlayerState))
 		{
 			if(!clip.isLooping && m_ActiveFrame == clip.frames - 1)
 				return;

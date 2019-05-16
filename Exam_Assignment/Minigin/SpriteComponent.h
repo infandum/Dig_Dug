@@ -31,6 +31,9 @@ namespace dae
 		void SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state);
 
 		void onNotify(NotifyEvent event);
+		NotifyEvent GetCurrentEvent() const { return m_Event; }
+
+		void Reset();
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

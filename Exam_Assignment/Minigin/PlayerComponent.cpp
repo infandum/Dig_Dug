@@ -10,8 +10,9 @@ dae::PlayerComponent::PlayerComponent(PlayerType type) : m_Type(type)
 
 void dae::PlayerComponent::Initialize()
 {
-	auto tiles = ServiceLocator::GetLevelManager();
-	tiles->AddPlayer(this);
+	/*auto tiles = ServiceLocator::GetLevelManager();
+	tiles->AddPlayer(this);*/
+
 	auto attack = std::make_shared<GameObject>();
 	switch (m_Type)
 	{
@@ -39,7 +40,7 @@ void dae::PlayerComponent::Initialize()
 		attack->AddComponent(std::make_shared<MoveComponent>());
 		attack->AddComponent(std::make_shared<TextureComponent>());
 		/*attack->AddComponent(std::make_shared<SpriteComponent>());*/
-		attack->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(12));
+		attack->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(11));
 		GetGameObject()->AddChild(attack);
 		break;
 	}
@@ -47,9 +48,24 @@ void dae::PlayerComponent::Initialize()
 
 void dae::PlayerComponent::Update(float )
 {
-	auto input = ServiceLocator::GetInputManager();
-	auto command = input->HandleInput();
+	ExecuteCommand();
 
-	if (command != nullptr && command->GetOwner() == GetGameObject())
-		command->Execute();
+	switch (GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection())
+	{
+	case Direction::RIGHT:
+		GetGameObject()->GetChild(0)->GetTransform()->SetLocalPosition(32, 0);
+		break;
+	case Direction::LEFT:
+		GetGameObject()->GetChild(0)->GetTransform()->SetLocalPosition(-32, 0);
+		break;
+	case Direction::UP:
+		GetGameObject()->GetChild(0)->GetTransform()->SetLocalPosition(0, -32);
+		break;
+	case Direction::DOWN:
+		GetGameObject()->GetChild(0)->GetTransform()->SetLocalPosition(0, 32);
+		break;
+	case Direction::NONE:
+		GetGameObject()->GetChild(0)->GetTransform()->SetLocalPosition(32, 0);
+		break;
+	}
 }

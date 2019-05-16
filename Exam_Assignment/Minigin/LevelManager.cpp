@@ -2,6 +2,31 @@
 #include "LevelManager.h"
 #include "GameObject.h"
 #include <glm/detail/type_vec3.hpp>
+#include "ServiceLocator.h"
+
+void dae::LevelManager::Reset()
+{
+	for (auto x = 0; x < 14; ++x)
+	{
+		for (auto y = 0; y < 17; ++y)
+		{
+			auto tile = GetTile(x, y);
+			
+			tile->SetTileState(TileState::EMPITY);
+			if (y <= 1)
+				tile->SetTileState(TileState::EMPITY);
+			else
+				tile->SetTileState(TileState::FREE);
+			tile->Reset();
+		}
+	}
+	m_Reset = true;
+}
+
+void dae::LevelManager::Initialize()
+{
+	m_Reset = true;
+}
 
 void dae::LevelManager::Update(float deltaTime)
 {
@@ -10,40 +35,42 @@ void dae::LevelManager::Update(float deltaTime)
 	//TODO: TRACK NPCs
 	//TODO: CLEAN UP AND REFRACTOR
 	//TODO: MOVE DIGGING TO PLAYER
-	for (auto& player : m_pPlayers)
-	{
-		if (player != nullptr  && player->GetGameObject()->GetTransform() != nullptr)
-		{
 
-			if (m_StartTile == nullptr)
+	//TODO: CLEAN THIS UP SO IT DOENS GET DONE EVERY UPDATE;
+	SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
+	for(auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+	{
+			if (m_Reset)
 			{
-				m_StartTile = GetTile(player->GetGameObject()->GetTransform()->GetPositionIndex().x, player->GetGameObject()->GetTransform()->GetPositionIndex().y);
-				//Dig out starting tile if player starts underground
-				if (m_StartTile->GetTileState() == TileState::FREE)
-					m_StartTile->SetTileState(TileState::USED);
+				m_StartTile[m_ActiveSceneIndex][i] = GetTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().y);
+					m_StartTile[m_ActiveSceneIndex][i]->SetTileState(TileState::USED);
+
+				if (i >= m_pPlayers[m_ActiveSceneIndex].size() - 1 && m_StartTile[m_ActiveSceneIndex][i]->GetTileState() == TileState::USED)
+					m_Reset = false;
+
 			}
 
-			if (IsSwitchingTile(player->GetGameObject()->GetTransform()->GetPosition().x, player->GetGameObject()->GetTransform()->GetPosition().y))
+			if (IsSwitchingTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y))
 			{
-				int x = static_cast<int>(round(player->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
-				int y = static_cast<int>(round(player->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
+				int x = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
+				int y = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
 				const auto nextTile = GetTile(x, y);
-				if (nextTile != nullptr && nextTile != m_StartTile)
+				if (nextTile != nullptr && nextTile != m_StartTile[m_ActiveSceneIndex][i])
 				{
-					const auto dir = player->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
+					const auto dir = m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
 					if (dir != Direction::NONE)
 					{
-						DigConnection(m_StartTile, nextTile, dir);
-						player->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+						DigConnection(m_StartTile[m_ActiveSceneIndex][i], nextTile, dir);
+						m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
 						if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
 							GetTile(x, y)->SetTileState(TileState::USED);
-						m_StartTile = nextTile;
+						m_StartTile[m_ActiveSceneIndex][i] = nextTile;
 					}
 				}
-			}
-		}
+			}	
 	}
-	for(auto& entity : m_pEntities)
+
+	for(auto& entity : m_pEntities[m_ActiveSceneIndex])
 	{
 		if (entity != nullptr  && entity->GetGameObject()->GetTransform() != nullptr)
 		{
@@ -59,7 +86,15 @@ void dae::LevelManager::Update(float deltaTime)
 
 void dae::LevelManager::AddTile(TileComponent* tile)
 {
-	for (auto& component : m_pTileComponents)
+	//std::cout << this->GetGameObject()->GetName() << std::endl;
+	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
+	if (m_pTileComponents.empty() || m_pTileComponents.size() <= m_ActiveSceneIndex)
+		for (auto i = m_pTileComponents.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		{
+			m_pTileComponents.push_back(std::vector<TileComponent*>());
+		}
+
+	for (auto& component : m_pTileComponents[m_ActiveSceneIndex])
 	{
 		if (component->GetPositionIndex().x == tile->GetPositionIndex().x && component->GetPositionIndex().y == tile->GetPositionIndex().y)
 		{
@@ -68,12 +103,15 @@ void dae::LevelManager::AddTile(TileComponent* tile)
 		}
 	}
 
-	m_pTileComponents.push_back(tile);
+	m_pTileComponents[m_ActiveSceneIndex].push_back(tile);
 }
 
 dae::TileComponent* dae::LevelManager::GetTile(int x, int y)
 {
-	for (auto& component : m_pTileComponents)
+	if (m_pTileComponents[m_ActiveSceneIndex].empty())
+		return new TileComponent(TileState::OCCUPIED, 0, 0);
+
+	for (auto& component : m_pTileComponents[m_ActiveSceneIndex])
 	{
 		if (component->GetPositionIndex().x == x && component->GetPositionIndex().y == y)
 		{
@@ -83,33 +121,49 @@ dae::TileComponent* dae::LevelManager::GetTile(int x, int y)
 	return nullptr;
 }
 
-void dae::LevelManager::AddPlayer(InputComponent* pPlayer)
+void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 {
-	for (auto& component : m_pPlayers)
+	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
+	if (m_pPlayers.empty() || m_pPlayers.size() < m_ActiveSceneIndex)
+		for(auto i = m_pPlayers.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		{
+			m_pPlayers.push_back(std::vector<PlayerComponent*>());
+			m_StartTile.push_back(std::vector<TileComponent*>());
+		}
+
+	for (auto& player : m_pPlayers[m_ActiveSceneIndex])
 	{
-		if (component == pPlayer)
+		if (player == pPlayer)
 		{
 			std::cout << "LevelManager::Player Duplicate: " << typeid(*pPlayer).name() << " >> Already added!!";
 			return;
 		}
 	}
-	m_pPlayers.push_back(pPlayer);
+	m_pPlayers[m_ActiveSceneIndex].push_back(pPlayer);
+	m_StartTile[m_ActiveSceneIndex].push_back(nullptr);
 }
 
-void dae::LevelManager::RemovePlayer(InputComponent* pPlayer)
+void dae::LevelManager::RemovePlayer(PlayerComponent* pPlayer)
 {
-	const auto ent = std::find(m_pPlayers.begin(), m_pPlayers.end(), pPlayer);
-	if (ent == m_pPlayers.end())
+	const auto ent = std::find(m_pPlayers[m_ActiveSceneIndex].begin(), m_pPlayers[m_ActiveSceneIndex].end(), pPlayer);
+	if (ent == m_pPlayers[m_ActiveSceneIndex].end())
 	{
 		std::wcout << L"LevelManager::RemovePlayer > Player is not attached to this GameObject!" << std::endl;
 		return;
 	}
-	m_pPlayers.erase(ent);
+	m_pPlayers[m_ActiveSceneIndex].erase(ent);
 }
 
 void dae::LevelManager::AddEntity(NpcComponent* pEntity)
 {
-	for (auto& entity : m_pEntities)
+	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
+	if (m_pEntities.empty() || m_pEntities.size() < m_ActiveSceneIndex)
+		for (auto i = m_pEntities.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		{
+			m_pEntities.push_back(std::vector<NpcComponent*>());
+		}
+
+	for (auto& entity : m_pEntities[m_ActiveSceneIndex])
 	{
 		if (entity == pEntity)
 		{
@@ -117,18 +171,18 @@ void dae::LevelManager::AddEntity(NpcComponent* pEntity)
 			return;
 		}
 	}
-	m_pEntities.push_back(pEntity);
+	m_pEntities[m_ActiveSceneIndex].push_back(pEntity);
 }
 
 void dae::LevelManager::RemoveEntity(NpcComponent* pEntity)
 {
-	const auto entity = std::find(m_pEntities.begin(), m_pEntities.end(), pEntity);
-	if (entity == m_pEntities.end())
+	const auto entity = std::find(m_pEntities[m_ActiveSceneIndex].begin(), m_pEntities[m_ActiveSceneIndex].end(), pEntity);
+	if (entity == m_pEntities[m_ActiveSceneIndex].end())
 	{
 		std::wcout << L"GameObject::RemoveComponent > Component is not attached to this GameObject!" << std::endl;
 		return;
 	}
-	m_pEntities.erase(entity);
+	m_pEntities[m_ActiveSceneIndex].erase(entity);
 }
 
 void dae::LevelManager::DigConnection(TileComponent* start, TileComponent* end, Direction dir)

@@ -40,17 +40,17 @@ void dae::Minigin::Initialize()
 	
 	ServiceLocator::InitResourceManager(new ResourceManager());
 
-	ServiceLocator::InitPhysicsManager(new PhysicsManager());
-
 	ServiceLocator::InitSceneManager(new SceneManager());
 
 	ServiceLocator::InitSceneLoader(new SceneLoader());
 
 	ServiceLocator::InitInputManager(new InputManager());
 
+	ServiceLocator::InitAnimationManager(new AnimationManager());
+
 	ServiceLocator::InitLevelManager(new LevelManager());
 
-	ServiceLocator::InitAnimationManager(new AnimationManager());
+	ServiceLocator::InitPhysicsManager(new PhysicsManager());
 
 	ServiceLocator::GetRenderer()->Initialize(window);
 
@@ -66,6 +66,8 @@ void dae::Minigin::LoadGame() const
 	ServiceLocator::GetSceneLoader()->Initialize();
 	ServiceLocator::GetSceneLoader()->InitScene(SceneList::MAIN_MENU);
 	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_SINGLE);
+	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_COOP);
+
 	
 	ServiceLocator::GetSceneManager()->Initialize();
 	ServiceLocator::GetSceneManager()->SetActive("Level single");
@@ -89,10 +91,10 @@ void dae::Minigin::Run()
 	{
 		auto renderer = ServiceLocator::GetRenderer();
 		auto sceneManager = ServiceLocator::GetSceneManager();
-		auto input = ServiceLocator::GetInputManager();
-		auto tileManager = ServiceLocator::GetLevelManager();
-		auto physics = ServiceLocator::GetPhysicsManager();
-		physics->ShowCollisionBox(true);
+		auto inputManager = ServiceLocator::GetInputManager();
+		auto levelManager = ServiceLocator::GetLevelManager();
+		auto physicsManager = ServiceLocator::GetPhysicsManager();
+		physicsManager->ShowCollisionBox(true);
 		
 		auto t = std::chrono::high_resolution_clock::now();
 		auto doContinue = true;
@@ -105,11 +107,12 @@ void dae::Minigin::Run()
 			const auto deltatime = std::chrono::duration<float>(currentTime - previousTime).count();
 			previousTime = currentTime;
 			lag += deltatime;
-			doContinue = input->ProcessInput();
-
-			physics->Update(static_cast<float>(deltatime));
-			tileManager->Update(static_cast<float>(deltatime));
+			doContinue = inputManager->ProcessInput();
+				
 			sceneManager->Update(static_cast<float>(deltatime));
+			physicsManager->Update(static_cast<float>(deltatime));
+			levelManager->Update(static_cast<float>(deltatime));
+			
 
 			t += std::chrono::milliseconds(msPerFrame);
 			std::this_thread::sleep_until(t);

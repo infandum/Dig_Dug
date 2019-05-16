@@ -3,6 +3,7 @@
 #pragma warning(push)
 #pragma warning (disable:4201)
 #include <glm/vec3.hpp>
+#include "LevelManager.h"
 #pragma warning(pop)
 
 namespace dae
@@ -40,6 +41,9 @@ namespace dae
 
 		bool CheckOccupiedTileMove() const;
 		bool CheckTileSwapping();
+
+		void Reset(float x, float y, Direction dir = Direction::RIGHT);
+		void Reset(glm::vec3  pos, Direction dir = Direction::RIGHT);
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;
@@ -52,6 +56,7 @@ namespace dae
 	private:
 		float m_MoveSpeed = 90.f;
 		TransformComponent* m_pTransform;
+		LevelManager* m_pLevelManager;
 		bool m_IsStatic = false;
 		bool m_IsMoving = false;
 		bool isSwappingTile = false;

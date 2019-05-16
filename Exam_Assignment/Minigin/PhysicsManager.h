@@ -1,16 +1,19 @@
 #pragma once
-#include "Service.h"
 
 namespace dae
 {
 	class CollisionComponent;
 	class GameObject;
-	class PhysicsManager final : public Service
+	class PhysicsManager final
 	{
 	public:
-		PhysicsManager() = default;
+		PhysicsManager(const PhysicsManager& other) = delete;
+		PhysicsManager(PhysicsManager&& other) noexcept = delete;
+		PhysicsManager& operator=(const PhysicsManager& other) = delete;
+		PhysicsManager& operator=(PhysicsManager&& other) noexcept = delete;
 
-		void Update(float deltaTime);
+		PhysicsManager() = default;
+		virtual ~PhysicsManager() = default;
 
 		void AddCollision(CollisionComponent* collision);
 		CollisionComponent* GetCollision(GameObject* owner);
@@ -21,11 +24,17 @@ namespace dae
 		void SetCollisionPadding(const float padding = 2.0f) { m_CollisionPadding = padding; }
 		float GetCollisionPadding() const { return m_CollisionPadding; }
 
+		void Initialize();
+		void Update(float deltaTime);
 
-	protected:
 		bool CheckBoxesIntersect(CollisionBox firstCollision, CollisionBox SecondCollision) const { return (abs((firstCollision.x ) - SecondCollision.x) * 2 < (firstCollision.RadiusX + SecondCollision.RadiusX)) && (abs(firstCollision.y - SecondCollision.y) * 2 < (firstCollision.RadiusY + SecondCollision.RadiusY));}
+	
+		void SetActiveScene(size_t sceneIndex) { m_ActiveSceneIndex = sceneIndex; }
+
 	private:
-		std::vector<CollisionComponent*> m_pCollisionComponents{};
+		size_t m_ActiveSceneIndex = 0;
+
+		std::vector<std::vector<CollisionComponent*>> m_pCollisionComponents{};
 		bool m_ShowCollisionBox = false;
 		float m_CollisionPadding = 2.0f;	
 	};

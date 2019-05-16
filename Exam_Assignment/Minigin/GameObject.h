@@ -53,6 +53,9 @@ namespace dae
 		std::shared_ptr<GameObject> GetChild(UINT index);
 		UINT GetChildCount() const { return static_cast<UINT>(m_pChilds.size()); }
 
+		void SetScene(int index) { m_SceneIndex = index; }
+		size_t GetScene() const { return  m_SceneIndex; }
+
 		//TODO: RELEASE CHILD OBJECT HIERACHY
 
 		GameObject* GetParent() const { return m_pParent; }
@@ -77,5 +80,6 @@ namespace dae
 		bool m_IsActive = true;
 		bool m_IsActiveLastFrame = true;
 		bool m_IsFollowing = true;
+		size_t m_SceneIndex = 0;
 	};
 }

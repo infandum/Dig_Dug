@@ -1,5 +1,7 @@
 #include "MiniginPCH.h"
 #include "InputManager.h"
+#include "ServiceLocator.h"
+#include "Scene.h"
 #include "DataStructs.h"
 #include "Commands.h"
 
@@ -36,11 +38,11 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
-std::shared_ptr<dae::Command> dae::InputManager::HandleInput()
+std::shared_ptr<dae::Command> dae::InputManager::HandleInput(SceneObject* owner)
 {
 	for (auto& command : m_pCommands)
 	{
-		if (IsPressed(command->GetButton()) || IsPressed(command->GetKey()))
+		if ((IsPressed(command->GetButton()) || IsPressed(command->GetKey())) && command->GetOwner() == owner)
 		{
 			return command;
 		}

@@ -6,7 +6,7 @@
 
 std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(std::string name)
 {
-	for (const auto scene : m_spScenes)
+	for (const auto& scene : m_spScenes)
 	{
 		if (scene->GetName() == name)
 			return scene;
@@ -17,9 +17,10 @@ std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(std::string name)
 
 void dae::SceneManager::Initialize()
 {
-	for (const auto scene : m_spScenes)
+	for(ActiveSceneIndex = 0; ActiveSceneIndex < m_spScenes.size(); ++ActiveSceneIndex)
 	{
-		scene->Initialize();
+		ServiceLocator::GetSceneLoader()->m_Scene = m_spScenes[ActiveSceneIndex];
+		m_spScenes[ActiveSceneIndex]->Initialize();
 	}
 }
 
@@ -45,22 +46,27 @@ std::shared_ptr<dae::Scene> dae::SceneManager::CreateScene(const std::string& na
 	}
 
 	const auto scene = std::make_shared<Scene>(name);
+	ActiveSceneIndex = static_cast<int>(m_spScenes.size());
 	m_spScenes.push_back(scene);
 	return scene;
 }
 
 void dae::SceneManager::NextScene()
 {
-	++ActiveSceneIndex;
-	if (ActiveSceneIndex >= m_spScenes.size())
-		ActiveSceneIndex = 0;
+	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
+	auto i = ActiveSceneIndex;
+	i++;
+	SetActive(i);
+	ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 }
 
 void dae::SceneManager::PreviousScene()
 {
-	--ActiveSceneIndex;
-	if (ActiveSceneIndex <0)
-		ActiveSceneIndex = static_cast<int>(m_spScenes.size()) - 1;
+	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
+	auto i = ActiveSceneIndex;
+	i--;
+	SetActive(i);
+	ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 }
 
 void dae::SceneManager::SetActive(const std::string& sceneName)
@@ -68,11 +74,24 @@ void dae::SceneManager::SetActive(const std::string& sceneName)
 	for(auto i = 0; i < m_spScenes.size(); i++)
 	{
 		if (m_spScenes[i]->GetName() == sceneName)
-			ActiveSceneIndex = i;
+			SetActive(i);
 	}
+
+	
 }
 
-void dae::SceneManager::SetActive(int index)
+void dae::SceneManager::SetActive(int& index)
 {
 	ActiveSceneIndex = index;
+
+	if (ActiveSceneIndex < 0)
+		ActiveSceneIndex = static_cast<int>(m_spScenes.size()) - 1;
+
+	if (ActiveSceneIndex >= m_spScenes.size())
+		ActiveSceneIndex = 0;
+
+	if (ServiceLocator::GetSceneLoader()->m_Scene != m_spScenes[ActiveSceneIndex])
+		ServiceLocator::GetSceneLoader()->m_Scene = m_spScenes[ActiveSceneIndex];
+
+	m_isSceneSwitch = true;
 }

@@ -1,9 +1,8 @@
 #pragma once
-#include "Service.h"
 
 namespace dae
 { 
-	class AnimationManager : public Service
+	class AnimationManager final
 	{
 	public:
 		AnimationManager() = default;

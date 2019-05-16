@@ -6,19 +6,38 @@
 #include "GameObject.h"
 
 extern const float g_TileCenterPadding;
+void dae::MoveComponent::Reset(float x, float y, Direction dir)
+{
+	Reset({ x,y,0 }, dir);
+}
+
+void dae::MoveComponent::Reset(glm::vec3 pos, Direction dir)
+{
+	GetGameObject()->GetTransform()->SetPosition(pos.x, pos.y, pos.z);
+
+	int x = static_cast<int>(round(pos.x / 32.0f));
+	int y = static_cast<int>(round(pos.y / 32.0f));
+	GetGameObject()->GetTransform()->SetPositionIndex({ x, y });
+	
+	SetVelocity({ 0,0,0 });
+
+	m_PreviousDirection = m_CurrentDirection = dir;
+}
 
 void dae::MoveComponent::Initialize()
 {
 	m_pTransform = GetGameObject()->GetTransform();
+	m_pLevelManager = ServiceLocator::GetLevelManager();
+
 }
 
 void dae::MoveComponent::Update(float deltaTime)
 {
-	
 	m_pTransform = GetGameObject()->GetTransform();
+	
 	if (m_IsStatic)
 	{
-		const auto tile = ServiceLocator::GetLevelManager()->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
+		const auto tile = m_pLevelManager->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
 		if (tile->GetTileState() != TileState::OCCUPIED)
 			tile->SetTileState(TileState::OCCUPIED);
 	}
@@ -193,8 +212,9 @@ bool dae::MoveComponent::CheckTileSwapping()
 {
 	const iVector2 nextTileIndex = { m_pTransform->GetPositionIndex().x + GetNextTileDirectionFromVelocity().x, m_pTransform->GetPositionIndex().y + GetNextTileDirectionFromVelocity().y };
 
-	const auto currTile = ServiceLocator::GetLevelManager()->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
-	const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
+	m_pLevelManager = ServiceLocator::GetLevelManager();
+	const auto currTile = m_pLevelManager->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
+	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
 	/*if(GetGameObject()->GetInput())
 	{
 		std::cout << "CURRENT TILE: X =" << m_pTransform->GetPositionIndex().x << " , Y = " << m_pTransform->GetPositionIndex().y << "\n";
@@ -222,10 +242,11 @@ bool dae::MoveComponent::CheckTileSwapping()
 	return isSwappingTile;
 }
 
+
 bool dae::MoveComponent::CheckOccupiedTileMove() const
 {
 	const iVector2 nextTileIndex = { m_pTransform->GetPositionIndex().x + GetNextTileDirectionFromVelocity().x, m_pTransform->GetPositionIndex().y + GetNextTileDirectionFromVelocity().y };
-	const auto nextTile = ServiceLocator::GetLevelManager()->GetTile(nextTileIndex.x, nextTileIndex.y);
+	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
 	if (nextTile != nullptr)
 		if (nextTile->GetTileState() == TileState::OCCUPIED && IsCentered())
 			return false;

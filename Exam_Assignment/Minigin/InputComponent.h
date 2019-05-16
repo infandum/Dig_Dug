@@ -16,6 +16,7 @@ namespace dae
 		InputComponent() = default;
 		virtual ~InputComponent() = default;
 
+		void ExecuteCommand();
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

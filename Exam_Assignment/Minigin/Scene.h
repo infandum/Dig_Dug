@@ -22,6 +22,8 @@ namespace dae
 		Scene& operator=(Scene&& other) = delete;
 		
 		explicit Scene(const std::string& name);
+
+		SceneObject* GetSceneObject(UINT index) const { if (index >= mObjects.size()) return nullptr; return mObjects[index].get(); }
 	private:
 		std::string mName{};
 		std::vector <std::shared_ptr<SceneObject>> mObjects{};
