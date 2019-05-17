@@ -30,8 +30,11 @@ namespace  dae
 		void SetCollision(CollisionComponent* pOtherCollider) { m_pOtherCollider = pOtherCollider; }
 
 		void EnableCollision(const bool& enable = true) { m_Collide = enable; }
+		bool CanCollide() const { return m_Collide; }
 		void EnableTrigger(const bool& enable = true) { m_Trigger = enable; }
 		bool IsTrigger() const { return m_Trigger; }
+
+		void Reset();
 
 	protected:
 		void Initialize() override;

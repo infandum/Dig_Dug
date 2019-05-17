@@ -42,6 +42,8 @@ namespace dae
 		NotifyEvent GetCurrentEvent() const { return m_Event; }
 
 		void Reset();
+
+		bool IsAnimationEnded() const { return m_IsAnimationEnd; }
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;
@@ -55,6 +57,8 @@ namespace dae
 
 		NotifyEvent m_Event = NotifyEvent::EVENT_IDLE;
 		SDL_RendererFlip m_FlipDirection = SDL_FLIP_NONE;
+
+		bool m_IsAnimationEnd = false;
 
 		double m_FrameTime = 0;
 		UINT m_ActiveFrame = 0;

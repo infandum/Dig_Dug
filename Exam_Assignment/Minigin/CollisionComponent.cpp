@@ -23,6 +23,7 @@ void dae::CollisionComponent::Initialize()
 
 void dae::CollisionComponent::Update(float deltaTime)
 {
+	
 	UNREFERENCED_PARAMETER(deltaTime);
 	if (!m_pTransformComponent && m_pTransformComponent == nullptr && GetGameObject()->GetTransform() != nullptr)
 	{
@@ -56,11 +57,14 @@ void dae::CollisionComponent::Update(float deltaTime)
 		m_Position.y = m_pTransformComponent->GetPosition().y - (m_offSet.x / 2);
 	}
 
+
+	if (!m_Collide)
+		return;
 	ShowCollisionBox(m_Collide);
 	//Prevent Overlapping
 	if(m_HasCollision && m_Collide)
 	{	
-		if(GetCollision() != this)
+		if(GetCollision() != this && GetCollision()->m_Collide)
 		{
 			//Don't trigger collision with child/parents 
 			if (GetGameObject()->IsChild(GetCollision()->GetGameObject()) || GetGameObject()->GetParent() == GetCollision()->GetGameObject())

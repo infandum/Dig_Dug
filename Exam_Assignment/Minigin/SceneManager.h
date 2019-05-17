@@ -16,6 +16,7 @@ namespace dae
 		std::shared_ptr<Scene> GetActiveScene() const { return m_spScenes[ActiveSceneIndex]; }
 		std::shared_ptr<Scene> GetScene(std::string name);
 		std::shared_ptr<Scene> GetScene(size_t index) { return m_spScenes[index]; }
+		size_t GetSceneCount() const { return m_spScenes.size(); }
 		size_t GetActiveSceneIndex() const { return ActiveSceneIndex; }
 
 	
@@ -26,6 +27,7 @@ namespace dae
 	private:
 		std::vector<std::shared_ptr<Scene>> m_spScenes;
 		int ActiveSceneIndex = 0;
+		int CurrentSceneIndex = 0;
 		bool m_isSceneSwitch = false;
 	};
 

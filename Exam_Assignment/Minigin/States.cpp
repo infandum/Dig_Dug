@@ -270,14 +270,14 @@ std::shared_ptr<dae::BaseState> dae::AttackPlayerState::Swap(NotifyEvent event, 
 	case NotifyEvent::EVENT_COLLISION:
 		return std::make_shared<DeadPlayerState>();
 	case NotifyEvent::EVENT_INTERACT:
-		return std::make_shared<PumpPlayerState>();
+		return std::make_shared<ActionPlayerState>();
 	default:;
 	}
 
 	return nullptr;
 }
 
-std::shared_ptr<dae::BaseState> dae::PumpPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
+std::shared_ptr<dae::BaseState> dae::ActionPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	UNREFERENCED_PARAMETER(event);
 	UNREFERENCED_PARAMETER(gameObject);
@@ -303,6 +303,8 @@ std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, Ga
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
+		//if(gameObject.GetComponent<PlayerComponent>()->IsDead())
+			//return std::make_shared<IdlePlayerState>();
 		return nullptr;
 	case NotifyEvent::EVENT_MOVE:
 		return nullptr;
@@ -320,7 +322,166 @@ std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, Ga
 	return nullptr;
 }
 
+std::shared_ptr<dae::BaseState> dae::CrushedPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	UNREFERENCED_PARAMETER(event);
+	UNREFERENCED_PARAMETER(gameObject);
+	return nullptr;
+}
+
 std::shared_ptr<dae::BaseState> dae::WeaponState::Swap(NotifyEvent , GameObject& )
 {
+	return nullptr;
+}
+
+
+
+std::shared_ptr<dae::BaseState> dae::IdleEnemyState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	switch(event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdleEnemyState>();
+	case NotifyEvent::EVENT_MOVE:
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
+			return nullptr;
+
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
+			return std::make_shared<GhostEnemyState>();
+
+		return std::make_shared<MoveEnemyState>();
+	case NotifyEvent::EVENT_ACTION:
+		return std::make_shared<AttackEnemyState>();
+	case NotifyEvent::EVENT_COLLISION:
+		return std::make_shared<DeadEnemyState>();
+	case NotifyEvent::EVENT_SPAWN:
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
+		return nullptr;
+	default:;
+	}
+	return nullptr;
+}
+
+
+std::shared_ptr<dae::BaseState> dae::MoveEnemyState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	switch (event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdleEnemyState>();
+	case NotifyEvent::EVENT_MOVE:
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
+			return nullptr;
+
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
+			return std::make_shared<GhostEnemyState>();
+
+		return std::make_shared<MoveEnemyState>();
+	case NotifyEvent::EVENT_ACTION:
+		return std::make_shared<AttackEnemyState>();
+	case NotifyEvent::EVENT_COLLISION:
+		return std::make_shared<DeadEnemyState>();
+	case NotifyEvent::EVENT_SPAWN:
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
+		return nullptr;
+	default:;
+	}
+	return nullptr;
+}
+
+
+std::shared_ptr<dae::BaseState> dae::AttackEnemyState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	switch (event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdleEnemyState>();
+	case NotifyEvent::EVENT_MOVE:
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
+			return nullptr;
+
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
+			return std::make_shared<GhostEnemyState>();
+
+		return std::make_shared<MoveEnemyState>();
+	case NotifyEvent::EVENT_ACTION:
+		return std::make_shared<AttackEnemyState>();
+	case NotifyEvent::EVENT_COLLISION:
+		return std::make_shared<DeadEnemyState>();
+	case NotifyEvent::EVENT_SPAWN:
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
+		return nullptr;
+	default:;
+	}
+	return nullptr;
+}
+
+
+std::shared_ptr<dae::BaseState> dae::ActionEnemyState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	switch (event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdleEnemyState>();
+	case NotifyEvent::EVENT_MOVE:
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
+			return nullptr;
+
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
+			return std::make_shared<GhostEnemyState>();
+
+		return std::make_shared<MoveEnemyState>();
+	case NotifyEvent::EVENT_ACTION:
+		return std::make_shared<AttackEnemyState>();
+	case NotifyEvent::EVENT_COLLISION:
+		return std::make_shared<DeadEnemyState>();
+	case NotifyEvent::EVENT_SPAWN:
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
+		return nullptr;
+	default:;
+	}
+	return nullptr;
+}
+
+
+std::shared_ptr<dae::BaseState> dae::GhostEnemyState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	switch (event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdleEnemyState>();
+	case NotifyEvent::EVENT_MOVE:
+		if (!gameObject.GetComponent<MoveComponent>()->CheckOccupiedTileMove())
+			return nullptr;
+
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
+			return std::make_shared<GhostEnemyState>();
+
+		return std::make_shared<MoveEnemyState>();
+	case NotifyEvent::EVENT_ACTION:
+		return std::make_shared<AttackEnemyState>();
+	case NotifyEvent::EVENT_COLLISION:
+		return nullptr;
+	case NotifyEvent::EVENT_SPAWN:
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
+		return nullptr;
+	default:;
+	}
+	return nullptr;
+}
+
+std::shared_ptr<dae::BaseState> dae::DeadEnemyState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	switch (event)
+	{
+	case NotifyEvent::EVENT_IDLE:
+		return std::make_shared<IdleEnemyState>();
+	case NotifyEvent::EVENT_COLLISION:
+		return nullptr;
+	case NotifyEvent::EVENT_SPAWN:
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
+		return std::make_shared<IdleEnemyState>();
+	default:;
+	}
 	return nullptr;
 }

@@ -10,7 +10,7 @@ void dae::SpriteComponent::Initialize()
 		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
 			m_State = std::make_shared<IdlePlayerState>();
 		if (GetGameObject()->GetNPC())
-			m_State = std::make_shared<IdlePlayerState>();
+			m_State = std::make_shared<IdleEnemyState>();
 
 	}
 		
@@ -95,11 +95,15 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 	const auto clip = anim->GetSpriteClip(GetAnimationIDForState(m_State));
 	if (clip.id != 0)
 	{
-		
-		if (/*m_Event != NotifyEvent::EVENT_IDLE*/typeid(*m_State) != typeid(IdlePlayerState))
+		m_IsAnimationEnd = false;
+		if (/*m_Event != NotifyEvent::EVENT_IDLE*/typeid(*m_State) != typeid(IdlePlayerState) && typeid(*m_State) != typeid(IdleEnemyState) && typeid(*m_State) != typeid(WeaponState))
 		{
 			if(!clip.isLooping && m_ActiveFrame == clip.frames - 1)
+			{
+				m_IsAnimationEnd = true;
 				return;
+			}
+
 			auto speed = anim->GetAnimationSpeed()*clip.Speed;
 			m_FrameTime += deltaTime;
 			if (m_FrameTime >= double(1.0f / speed))

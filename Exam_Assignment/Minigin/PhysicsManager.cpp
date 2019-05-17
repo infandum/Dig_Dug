@@ -22,8 +22,14 @@ void dae::PhysicsManager::Update(float deltaTime)
 		if(!component->ShowCollisionBox())
 			component->ShowCollisionBox(ShowCollisionBox());
 
+		if(!component->GetGameObject()->GetIsActive())
+			continue;
+
 		for (auto& otherComponent : m_pCollisionComponents[m_ActiveSceneIndex])
 		{
+			if (!otherComponent->GetGameObject()->GetIsActive())
+				continue;
+
 			if(component == otherComponent)
 				continue;
 

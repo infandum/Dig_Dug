@@ -16,7 +16,7 @@ namespace dae
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
 		//TransformComponent() = default;
-		TransformComponent(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+		TransformComponent(float x , float y , float z = 0.0f);
 		virtual ~TransformComponent() = default;
 
 		const glm::vec3& GetPosition() const { return m_Position; }
@@ -26,7 +26,10 @@ namespace dae
 		const glm::vec3& GetLocalPosition() const { return m_localPosition; }
 		void SetLocalPosition(float x = 0, float y = 0, float z = 0) { m_localPosition = { x,y,z }; }
 		void SetLocalPosition(const glm::vec3& offset = { 0, 0, 0 }) { SetLocalPosition(offset.x, offset.y, offset.y); }
-	
+
+
+		const glm::vec3& GetInitPosition() const { return m_InitPosition; }
+
 		const iVector2& GetPositionIndex() const { return m_CurrentTileIndex; }
 		void SetPositionIndex(iVector2 index) {/* std::cout << "SET TILE: " << m_CurrentTileIndex.x << " , " << m_CurrentTileIndex.y << "\n";*/ m_CurrentTileIndex = index; }
 		

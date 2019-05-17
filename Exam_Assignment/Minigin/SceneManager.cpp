@@ -19,14 +19,14 @@ void dae::SceneManager::Initialize()
 {
 	for(ActiveSceneIndex = 0; ActiveSceneIndex < m_spScenes.size(); ++ActiveSceneIndex)
 	{
-		ServiceLocator::GetSceneLoader()->m_Scene = m_spScenes[ActiveSceneIndex];
 		m_spScenes[ActiveSceneIndex]->Initialize();
 	}
 }
 
 void dae::SceneManager::Update(const float deltaTime)
 {
-	m_spScenes[ActiveSceneIndex]->Update(deltaTime);
+	CurrentSceneIndex = ActiveSceneIndex;
+	m_spScenes[CurrentSceneIndex]->Update(deltaTime);
 }
 
 void dae::SceneManager::Render()

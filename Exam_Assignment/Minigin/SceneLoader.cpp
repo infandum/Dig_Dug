@@ -162,11 +162,13 @@ void dae::SceneLoader::PostInitScene(SceneList scene) const
 void dae::SceneLoader::ResetScene(SceneList scene)
 {
 	auto level = ServiceLocator::GetLevelManager();
+	
 	level->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
+
 	auto physics = ServiceLocator::GetPhysicsManager();
 	physics->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
-
-	level->Reset();
+	
+	
 	switch (scene)
 	{
 	default:
@@ -183,13 +185,13 @@ void dae::SceneLoader::ResetScene(SceneList scene)
 		level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
 		level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 		
-
+		level->GetNPC(0)->GetGameObject()->SetIsActive(true);
 		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
-		//level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+		level->GetNPC(1)->GetGameObject()->SetIsActive(true);
 		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
 		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
-		level->Reset();
+		
 		break;
 
 	case SceneList::LEVEL_COOP:
@@ -202,35 +204,16 @@ void dae::SceneLoader::ResetScene(SceneList scene)
 
 
 		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
-		//level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+		level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
 		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
 		break;
 
 	}
-
+	level->Reset();
 	PostInitScene(scene);
 }
-
-//TODO: REFRACTOR THIS ASAP o>
-//void dae::SceneLoader::AddLevelManager() const
-//{
-//	std::shared_ptr<GameObject> level = std::make_shared<GameObject>();
-//	level->SetName("Level: " + m_Scene->GetName());
-//	level->AddComponent(std::make_shared<LevelManager>());
-//	
-//	m_Scene->Add(level);
-//}
-//
-//void dae::SceneLoader::AddPhysicsManager(bool showCollision) const
-//{
-//	std::shared_ptr<GameObject> physics = std::make_shared<GameObject>();
-//	physics->SetName("Physics: " + m_Scene->GetName());
-//	physics->AddComponent(std::make_shared<PhysicsManager>());
-//	physics->GetComponent<PhysicsManager>()->ShowCollisionBox(showCollision);
-//	m_Scene->Add(physics);
-//}
 
 void dae::SceneLoader::AddMenu() const
 {
@@ -267,7 +250,7 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(3, std::make_shared<DigPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
-		player->GetComponent<SpriteComponent>()->SetAnimationToState(6, std::make_shared<PumpPlayerState>());
+		player->GetComponent<SpriteComponent>()->SetAnimationToState(6, std::make_shared<ActionPlayerState>());
 
 		
 		break;
@@ -330,11 +313,11 @@ void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
 	case NPCType::POOKA:
 		NPC->SetName("Pooka");
 
-		NPC->AddComponent(std::make_shared<SpriteComponent>());
+		NPC->AddComponent(std::make_shared<SpriteComponent>(IdleEnemyState()));
 		NPC->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(11, std::make_shared<IdlePlayerState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(12, std::make_shared<MovePlayerState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(15, std::make_shared<DeadPlayerState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(11, std::make_shared<IdleEnemyState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(12, std::make_shared<MoveEnemyState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(15, std::make_shared<DeadEnemyState>());
 		break;
 	case NPCType::FYGAR:
 		NPC->SetName("Fygar");

@@ -27,7 +27,7 @@ void dae::GameObject::Initialize()
 
 void dae::GameObject::Update(float deltaTime)
 {
-	if(m_IsActive && m_SceneIndex == ServiceLocator::GetSceneManager()->GetActiveSceneIndex())
+	if(/*m_IsActive &&*/ m_SceneIndex == ServiceLocator::GetSceneManager()->GetActiveSceneIndex())
 	{
 		for (size_t i = 0; i < m_pChilds.size(); i++)
 		{

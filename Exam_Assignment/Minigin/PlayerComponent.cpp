@@ -27,6 +27,10 @@ void dae::PlayerComponent::ChangeHealth(int amount)
 void dae::PlayerComponent::Reset()
 {
 	m_IsDead = false;
+	m_IsReset = true;
+	m_isAttacking = false;
+	m_IsAttackHit = false;
+	GetGameObject()->SetIsActive(true);
 }
 
 void dae::PlayerComponent::Initialize()
@@ -83,10 +87,15 @@ void dae::PlayerComponent::Initialize()
 
 void dae::PlayerComponent::Update(float)
 {
-	if (IsDead())
-		return;
+	
 
-	ExecuteCommand();
+	if (!IsDead())
+	{
+		ExecuteCommand();
+
+	
+
+	}
 
 	if (!m_isAttacking)
 		AllignAttack();
@@ -94,6 +103,13 @@ void dae::PlayerComponent::Update(float)
 		MoveAttack();
 
 	CollisionEvents();
+
+	if (m_IsReset)
+	{
+		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+		m_IsReset = false;
+	}
+	
 }
 
 
@@ -112,8 +128,9 @@ void dae::PlayerComponent::AllignAttack() const
 
 	m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
 
-	if(GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_MOVE)
-		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+	if(GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
+		if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_MOVE)
+			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 
 	m_Attack->GetTransform()->SetLocalPosition(0, 0);
 
@@ -127,11 +144,6 @@ void dae::PlayerComponent::AllignAttack() const
 		m_AttackSprite->GetTransform()->SetLocalPosition(0.f, 0.f);
 		break;
 	case Direction::UP:
-		/*if (AttackSpriteMove->GetPreviousDirection() == Direction::RIGHT)
-			m_AttackSprite->GetTransform()->SetLocalPosition(0.f, 0.f);
-		else if (AttackSpriteMove->GetPreviousDirection() == Direction::LEFT)
-			m_AttackSprite->GetTransform()->SetLocalPosition(-32.f, 0.f);
-		else*/
 		if(m_AttackSprite->GetSprite()->GetFlipSprite() == SDL_FLIP_NONE)
 			m_AttackSprite->GetTransform()->SetLocalPosition(0.f, 0.f);
 		else
@@ -139,11 +151,6 @@ void dae::PlayerComponent::AllignAttack() const
 
 		break;
 	case Direction::DOWN:
-		//if (AttackSpriteMove->GetPreviousDirection() == Direction::RIGHT)
-		//	m_AttackSprite->GetTransform()->SetLocalPosition(-32.f, -32.f);
-		//else if (AttackSpriteMove->GetPreviousDirection() == Direction::LEFT)
-		//	m_AttackSprite->GetTransform()->SetLocalPosition(0.f, -32.f);
-		//else
 		if (m_AttackSprite->GetSprite()->GetFlipSprite() == SDL_FLIP_NONE)
 			m_AttackSprite->GetTransform()->SetLocalPosition(0.f, -32.f);
 		else
@@ -168,11 +175,12 @@ void dae::PlayerComponent::MoveAttack()
 	{
 		AttackMove->SetVelocity({ 0 ,0 ,0 });
 		AttackSpriteMove->SetVelocity({ 0 ,0 ,0 });
-		m_Attack->GetTransform()->SetPosition(GetGameObject()->GetTransform()->GetPosition() + DirectionAxis(PlayerMove->GetCurrentDirection()));
 
 		m_AttackAtMaxRange = true;
 		m_Attack->GetComponent<CollisionComponent>()->EnableCollision(false);
 		m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
+		if(!m_IsAttackHit)
+			m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
 	}
 	else
 	{
@@ -209,7 +217,7 @@ void dae::PlayerComponent::CollisionEvents()
 		if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
 		{
 			std::cout << "Collision" << std::endl;
-			if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
+			if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN && !collision->GetCollision()->GetGameObject()->GetNPC()->IsDead())
 			{
 				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
 				m_IsDead = true;
@@ -223,16 +231,25 @@ void dae::PlayerComponent::CollisionEvents()
 	{
 		if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
 		{
-			if(collision->GetCollision()->GetGameObject()->GetSprite() && !collision->GetGameObject()->GetComponent<MoveComponent>()->GetIsStatic())
-				if (collision->GetCollision()->GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
-				{
-					collision->GetCollision()->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
-					GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_INTERACT);
-					m_IsAttackHit = true;
-				}		
+			if (!collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->IsDead())
+				if (collision->GetCollision()->GetGameObject()->GetSprite() && !collision->GetGameObject()->GetComponent<MoveComponent>()->GetIsStatic())
+					if (collision->GetCollision()->GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
+					{
+						collision->GetCollision()->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
+						collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->SetHit(true);
+						GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_INTERACT);
+						m_IsAttackHit = true;
+					}
+
 			collision->SetHasCollision(false);
+
+			if(!m_isAttacking)
+				collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->SetHit(false);
 		}
 	}
 	else
+	{
 		m_IsAttackHit = false;
+	}
+		
 }

@@ -6,6 +6,7 @@
 
 void dae::LevelManager::Reset()
 {
+	//SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 	for (auto x = 0; x < 14; ++x)
 	{
 		for (auto y = 0; y < 17; ++y)
@@ -21,16 +22,26 @@ void dae::LevelManager::Reset()
 		}
 	}
 
+	
+
 	for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
 	{
 		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
 	}
+
+	for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
+	{
+		m_pEntities[m_ActiveSceneIndex][i]->Reset();
+	}
+
+	
 	m_Reset = true;
 }
 
 void dae::LevelManager::Initialize()
 {
 	m_Reset = true;
+	SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 }
 
 void dae::LevelManager::Update(float deltaTime)

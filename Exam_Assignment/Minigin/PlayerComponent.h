@@ -44,6 +44,7 @@ namespace dae
 		bool m_AttackAtMaxRange = false;
 		bool m_IsDead = false;
 		bool m_IsAttackHit = false;
+		bool m_IsReset = false;
 
 
 		int m_Health = 3;
