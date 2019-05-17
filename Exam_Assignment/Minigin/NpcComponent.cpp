@@ -11,6 +11,9 @@ void dae::NpcComponent::Initialize()
 {
 	auto tiles = ServiceLocator::GetLevelManager();
 	tiles->AddEntity(this);
+
+	if (m_Type == NPCType::POOKA)
+		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 }
 
 void dae::NpcComponent::Update(float )
@@ -21,7 +24,10 @@ void dae::NpcComponent::Update(float )
 		//GetGameObject()->GetTransform()->SetVelocity({ g_MoveSpeed , -g_MoveSpeed, 0 });
 		GetGameObject()->GetComponent<MoveComponent>()->MoveToTile(0, 10);
 		//GetGameObject()->GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
-		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+		//
+
+		if(GetGameObject()->GetSprite()->GetCurrentEvent() == NotifyEvent::EVENT_COLLISION)
+			return;
 	}
 	
 }

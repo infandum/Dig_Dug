@@ -14,7 +14,7 @@ void dae::SpriteComponent::Initialize()
 
 	}
 		
-	m_Event = NotifyEvent::EVENT_SPAWN;
+	m_Event = NotifyEvent::EVENT_IDLE;
 }
 
 void dae::SpriteComponent::Update(float deltaTime)
@@ -100,17 +100,17 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 		{
 			if(!clip.isLooping && m_ActiveFrame == clip.frames - 1)
 				return;
-
+			auto speed = anim->GetAnimationSpeed()*clip.Speed;
 			m_FrameTime += deltaTime;
-			if (m_FrameTime >= double(1.0f / anim->GetAnimationSpeed()))
+			if (m_FrameTime >= double(1.0f / speed))
 			{
 				// the number of frames to increment is the integral result of frameTime / (1 / animationFPS), thus frameTime * animationFPS
-				m_ActiveFrame += static_cast<UINT>(m_FrameTime *  anim->GetAnimationSpeed());
+				m_ActiveFrame += static_cast<UINT>(m_FrameTime *  speed);
 				// use modulo computation to make sure to not jump past the last frame
 				if (m_ActiveFrame >= 2)
 					m_ActiveFrame = m_ActiveFrame % clip.frames;
 			}
-			m_FrameTime = std::fmod(m_FrameTime, 1.0f / static_cast<double>(anim->GetAnimationSpeed()));
+			m_FrameTime = std::fmod(m_FrameTime, 1.0f / static_cast<double>(speed));
 		}
 		else
 		{

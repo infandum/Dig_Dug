@@ -54,14 +54,13 @@ void dae::GameObject::Render() const
 {
 	if (m_IsActive && m_IsActiveLastFrame)
 	{
-		//TODO: REFRACTOR
-		if(m_pRenderComponent)
-			m_pRenderComponent->Render();
-
 		for (size_t i = 0; i < m_pChilds.size(); i++)
 		{
 			m_pChilds[i]->Render();
 		}
+		//TODO: REFRACTOR
+		if(m_pRenderComponent)
+			m_pRenderComponent->Render();	
 	}
 }
 

@@ -16,7 +16,7 @@ namespace dae
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
 		//TransformComponent() = default;
-		TransformComponent(float x , float y , float z = 0.0f);
+		TransformComponent(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 		virtual ~TransformComponent() = default;
 
 		const glm::vec3& GetPosition() const { return m_Position; }
@@ -37,6 +37,7 @@ namespace dae
 	private:
 		iVector2 m_CurrentTileIndex{};
 
+		glm::vec3 m_InitPosition = { 0,0,0 };
 		glm::vec3 m_Position = { 0,0,0 };
 		glm::vec3 m_localPosition = { 0,0,0 };
 		

@@ -28,6 +28,8 @@ namespace dae
 		Direction GetDirectionFromVelocity() const;
 		iVector2 GetNextTileDirectionFromVelocity() const;
 
+
+		void SetCurrentDirection(const Direction& dir) { m_PreviousDirection = m_CurrentDirection;  m_CurrentDirection = dir; }
 		Direction GetCurrentDirection() const { return m_CurrentDirection; }
 		Direction GetPreviousDirection() const { return m_PreviousDirection; }
 

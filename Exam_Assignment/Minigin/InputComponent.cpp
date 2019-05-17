@@ -4,7 +4,7 @@
 #include "InputManager.h"
 #include "Commands.h"
 
-void dae::InputComponent::ExecuteCommand()
+void dae::InputComponent::ExecuteCommand() const
 {
 	auto input = ServiceLocator::GetInputManager();
 	auto command = input->HandleInput(this->GetGameObject());

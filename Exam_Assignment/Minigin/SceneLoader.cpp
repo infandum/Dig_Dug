@@ -42,7 +42,7 @@ void dae::SceneLoader::Initialize()
 	//POOKA
 	animations->LoadSpriteClip(SpriteClip{ 0, {32, 256}, { 32 , 32 }, 0, 1, false, false }, 11);
 	animations->LoadSpriteClip(SpriteClip{ 0, {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);
-	animations->LoadSpriteClip(SpriteClip{ 0, {0, 288}, { 64 , 64 }, 0, 4, true, false }, 15);
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 288}, { 64 , 64 }, 0, 4, true, false, 0.5f }, 15);
 
 }
 

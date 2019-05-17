@@ -45,7 +45,7 @@ void dae::MoveComponent::Update(float deltaTime)
 	{
 		glm::vec3 velocity{ 0 };
 		if (m_Velocity.x != 0 || m_Velocity.y != 0)
-			if (m_IsOmniDirectional)
+			if (m_IsOmniDirectional || GetGameObject()->GetParent())
 				velocity = MoveOmniDirectional();
 			else
 				velocity = MoveDirectional();
@@ -58,12 +58,40 @@ void dae::MoveComponent::Update(float deltaTime)
 
 			CheckTileSwapping();
 
-			double newPositionX = m_pTransform->GetPosition().x + round(deltaTime * velocity.x);
-			double newPositionY = m_pTransform->GetPosition().y + round(deltaTime * velocity.y);
+			double newPositionX;
+			double newPositionY;
+
+			if (GetGameObject()->GetParent())
+			{
+				if (GetGameObject()->GetIsFollowingParent())
+				{
+					newPositionX = m_pTransform->GetLocalPosition().x + round(deltaTime * velocity.x);
+					newPositionY = m_pTransform->GetLocalPosition().y + round(deltaTime * velocity.y);
+				}
+				else
+				{
+					newPositionX = m_pTransform->GetPosition().x + round(deltaTime * velocity.x);
+					newPositionY = m_pTransform->GetPosition().y + round(deltaTime * velocity.y);
+				}
+			}
+			else
+			{
+				newPositionX = m_pTransform->GetPosition().x + round(deltaTime * velocity.x);
+				newPositionY = m_pTransform->GetPosition().y + round(deltaTime * velocity.y);
+			}
+				
+
+			
 
 			BorderControl(newPositionX, newPositionY);
 
-			m_pTransform->SetPosition( static_cast<float>(newPositionX), static_cast<float>(newPositionY), m_pTransform->GetPosition().z );
+			if (GetGameObject()->GetParent())
+				if (GetGameObject()->GetIsFollowingParent())
+					m_pTransform->SetLocalPosition(static_cast<float>(newPositionX), static_cast<float>(newPositionY), m_pTransform->GetLocalPosition().z);
+				else
+					m_pTransform->SetPosition(static_cast<float>(newPositionX), static_cast<float>(newPositionY), m_pTransform->GetPosition().z);
+			else
+				m_pTransform->SetPosition( static_cast<float>(newPositionX), static_cast<float>(newPositionY), m_pTransform->GetPosition().z );
 			m_IsMoving = false;
 		}
 	}

@@ -24,6 +24,8 @@ namespace dae
 		bool IsDead() const { return m_IsDead; }
 		void SetHealth(int health);
 		void ChangeHealth(int amount);
+
+		void Reset();
 	protected:
 		void Initialize() override;
 		void AllignAttack() const;
@@ -41,6 +43,7 @@ namespace dae
 		bool m_isAttacking = false;
 		bool m_AttackAtMaxRange = false;
 		bool m_IsDead = false;
+		bool m_IsAttackHit = false;
 
 
 		int m_Health = 3;

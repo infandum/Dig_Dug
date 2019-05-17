@@ -20,6 +20,11 @@ void dae::LevelManager::Reset()
 			tile->Reset();
 		}
 	}
+
+	for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+	{
+		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
+	}
 	m_Reset = true;
 }
 

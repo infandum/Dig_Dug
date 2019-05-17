@@ -191,6 +191,7 @@ namespace dae
 		UINT frames = 1;
 		bool hasUpDown = false;
 		bool isLooping = false;
+		float Speed = 1.0f;
 	};
 
 	struct CollisionBox

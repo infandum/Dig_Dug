@@ -11,8 +11,8 @@ void dae::TransformComponent::Update(float )
 
 dae::TransformComponent::TransformComponent(float x, float y, float z)
 {
-	SetPosition(x, y,  z);
-	SetPositionIndex({ static_cast<int>(x / 32), static_cast<int>(y / 32) });
+
+	m_InitPosition = { x, y, z };
 }
 
 void dae::TransformComponent::SetPosition(float x, float y, float z)
@@ -23,5 +23,22 @@ void dae::TransformComponent::SetPosition(float x, float y, float z)
 
 void dae::TransformComponent::Initialize()
 {
-	SetPositionIndex({ static_cast<int>(m_Position.x / 32), static_cast<int>(m_Position.y / 32) });
+	if (GetGameObject()->GetParent())
+	{
+		if (GetGameObject()->GetIsFollowingParent())
+		{
+			SetLocalPosition(m_InitPosition.x, m_InitPosition.y, m_InitPosition.y);
+			SetPositionIndex({ static_cast<int>(GetGameObject()->GetParent()->GetTransform()->GetPosition().x + static_cast<int>(m_InitPosition.x / 32)),  static_cast<int>(GetGameObject()->GetParent()->GetTransform()->GetPosition().y + static_cast<int>(m_InitPosition.y / 32)) });
+		}
+		else
+		{
+			SetPosition(m_InitPosition.x, m_InitPosition.y, m_InitPosition.z);
+			SetPositionIndex({ static_cast<int>(m_InitPosition.x / 32), static_cast<int>(m_InitPosition.y / 32) });
+		}
+	}
+	else
+	{
+		SetPosition(m_InitPosition.x, m_InitPosition.y, m_InitPosition.z);
+		SetPositionIndex({ static_cast<int>(m_InitPosition.x / 32), static_cast<int>(m_InitPosition.y / 32) });
+	}
 }

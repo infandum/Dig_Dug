@@ -70,7 +70,7 @@ void dae::CollisionComponent::Update(float deltaTime)
 			}
 
 			//TODO:: CHANGE PUSH OUT EFFECT, MAYBE PREVENT OBJECT MOVING INTO A COLLISION?
-			if(!m_Trigger || !GetCollision()->IsTrigger())
+			if(!m_Trigger && !GetCollision()->IsTrigger())
 				GetGameObject()->GetComponent<TransformComponent>()->SetPosition(float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().x * 32), float(GetGameObject()->GetComponent<TransformComponent>()->GetPositionIndex().y * 32));
 				
 		}
