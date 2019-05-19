@@ -8,10 +8,18 @@ void dae::SpriteComponent::Initialize()
 	if(!m_State)
 	{
 		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
-			m_State = std::make_shared<IdlePlayerState>();
+			m_State = GetState<IdlePlayerState>();
 		if (GetGameObject()->GetNPC())
-			m_State = std::make_shared<IdleEnemyState>();
-
+			m_State = GetState<IdleEnemyState>();
+	}
+	else
+	{
+		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
+			m_State = GetState<IdlePlayerState>();
+		if (GetGameObject()->GetNPC())
+			m_State = GetState<IdleEnemyState>();
+		if(typeid(*m_State.get()) == typeid(WeaponState))
+			m_State = GetState<WeaponState>();
 	}
 		
 	m_Event = NotifyEvent::EVENT_IDLE;
@@ -20,31 +28,29 @@ void dae::SpriteComponent::Initialize()
 void dae::SpriteComponent::Update(float deltaTime)
 {
 	Swap();
-	if (typeid(*m_State) != typeid(DirectionState))
+	/*if (typeid(*m_State) != typeid(DirectionState))
 	{
 		SetActiveAnimationFrame(deltaTime);
 		m_State->Update(deltaTime, *GetGameObject());
 		m_State->Animated(*GetGameObject());
-	}
+	}*/
+	SetActiveAnimationFrame(deltaTime);
+	m_State->Update(deltaTime, *GetGameObject());
+	m_State->Animated(*GetGameObject());
 }
 
 
 void dae::SpriteComponent::Swap()
 {
-	//TODO:: INIT FUNCTION
-	std::shared_ptr<BaseState> pBase2 = m_State;
-
-	const auto state = m_State->Swap(m_Event, *GetGameObject());
 	auto anim = ServiceLocator::GetAnimationManager();
 
-	if (GetAnimationIDForState(m_State))
-		m_State->SetStateAnimClip(anim->GetSpriteClip(GetAnimationIDForState(m_State)));
-
-	if (state != nullptr && typeid(*m_State) != typeid(*state))
+	const auto state = m_State->Swap(m_Event, *GetGameObject());
+	
+	if (state != nullptr)
 	{
-		if (anim->GetSpriteClip(GetAnimationIDForState(state)).id == 0)
-			return;
 		m_ActiveFrame = anim->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
+		m_IsAnimationEnd = false;
+		m_FrameTime = 0;
 		m_State = state;
 	}
 	
@@ -53,8 +59,8 @@ void dae::SpriteComponent::Swap()
 
 void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<BaseState> state)
 {
-	//TODO: Check if ID is valid saved texture ID;
-	if(ServiceLocator::GetAnimationManager()->GetSpriteClip(clipID).id == 0)
+	auto anim = ServiceLocator::GetAnimationManager();
+	if(anim->GetSpriteClip(clipID).id == 0)
 	{
 		std::cout << "SpriteComponent::SetAnimationToState() > id Not found in loaded textures! " << clipID << '\n';
 		return;
@@ -73,6 +79,7 @@ void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<Base
 			return;
 		}
 	}
+	state->SetStateAnimClip(anim->GetSpriteClip(clipID));
 	m_StateClips[clipID] = state;
 }
 
@@ -87,40 +94,57 @@ void dae::SpriteComponent::Reset()
 }
 
 
+void dae::SpriteComponent::AnimationTime(float deltaTime, const SpriteClip& clip)
+{
+	auto anim = ServiceLocator::GetAnimationManager();
+	auto speed = anim->GetAnimationSpeed()*clip.Speed;
+	m_FrameTime += deltaTime;
+	if (m_FrameTime >= double(1.0f / speed))
+	{
+		// the number of Frames to increment is the integral result of frameTime / (1 / animationFPS), thus frameTime * animationFPS
+		m_ActiveFrame += static_cast<UINT>(m_FrameTime *  speed);
+		// use modulo computation to make sure to not jump past the last frame
+		if (m_ActiveFrame >= 2)
+			m_ActiveFrame = m_ActiveFrame % clip.Frames;
+	}
+	m_FrameTime = std::fmod(m_FrameTime, 1.0f / static_cast<double>(speed));
+}
+
 void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 {
 
 	auto anim = ServiceLocator::GetAnimationManager();
 	//const auto clip = anim->GetAnimationClips(GetAnimationIDForState(m_State));
 	const auto clip = anim->GetSpriteClip(GetAnimationIDForState(m_State));
-	if (clip.id != 0)
+
+	if (clip.id != 0 || !m_IsAnimationEnd)
 	{
-		m_IsAnimationEnd = false;
-		if (/*m_Event != NotifyEvent::EVENT_IDLE*/typeid(*m_State) != typeid(IdlePlayerState) && typeid(*m_State) != typeid(IdleEnemyState) && typeid(*m_State) != typeid(WeaponState))
-		{
-			if(!clip.isLooping && m_ActiveFrame == clip.frames - 1)
+		
+			if(!clip.IsLooping/* && m_ActiveFrame == clip.Frames - 1*/)
 			{
-				m_IsAnimationEnd = true;
-				return;
+				if (m_ActiveFrame == clip.Frames - 1)
+					m_IsAnimationEnd = true;
+
+				if(m_IsAnimationEnd)
+				{
+					//m_ActiveFrame = clip.StartFrame;
+					m_FrameTime = 0;
+				}
+				else
+				{
+					AnimationTime(deltaTime, clip);
+				}
+				///*m_ActiveFrame = clip.StartFrame;
+				//m_FrameTime = 0;
+				//m_IsAnimationEnd = true;*/
+			}
+			else
+			{
+				AnimationTime(deltaTime, clip);
 			}
 
-			auto speed = anim->GetAnimationSpeed()*clip.Speed;
-			m_FrameTime += deltaTime;
-			if (m_FrameTime >= double(1.0f / speed))
-			{
-				// the number of frames to increment is the integral result of frameTime / (1 / animationFPS), thus frameTime * animationFPS
-				m_ActiveFrame += static_cast<UINT>(m_FrameTime *  speed);
-				// use modulo computation to make sure to not jump past the last frame
-				if (m_ActiveFrame >= 2)
-					m_ActiveFrame = m_ActiveFrame % clip.frames;
-			}
-			m_FrameTime = std::fmod(m_FrameTime, 1.0f / static_cast<double>(speed));
-		}
-		else
-		{
-			m_ActiveFrame = clip.StartFrame;
-			m_FrameTime = 0;
-		}
+			
+		
 	}
 }
 

@@ -26,8 +26,6 @@ namespace dae
 		void MoveToTile(unsigned int xIndex = 0, unsigned int yIndex = 0);
 
 		Direction GetDirectionFromVelocity() const;
-		iVector2 GetNextTileDirectionFromVelocity() const;
-
 
 		void SetCurrentDirection(const Direction& dir) { m_PreviousDirection = m_CurrentDirection;  m_CurrentDirection = dir; }
 		Direction GetCurrentDirection() const { return m_CurrentDirection; }

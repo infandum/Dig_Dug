@@ -30,7 +30,7 @@ namespace dae
 		void Reset();
 	protected:
 		void Initialize() override;
-		void AllignAttack() const;
+		void AllignAttack();
 		void MoveAttack();
 		void CollisionEvents();
 		void Update(float deltaTime) override;
@@ -47,7 +47,7 @@ namespace dae
 		bool m_IsDead = false;
 		bool m_IsAttackHit = false;
 		bool m_IsReset = false;
-
+		Direction m_LastHorDir = Direction::RIGHT;
 
 		int m_Health = 3;
 	};

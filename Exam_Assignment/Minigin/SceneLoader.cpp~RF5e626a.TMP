@@ -30,35 +30,35 @@ void dae::SceneLoader::Initialize()
 	animations->SetAnimationSpeed(10.0f);
 
 	//DIG DUG
-	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 0}, { 32 , 32 }, 1, 2, true, false }, 1);				//Idle
-	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 0}, { 32 , 32 }, 1, 2, true, true }, 2);					//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Dig", {0, 32}, { 32 , 32 }, 1, 2, true, true }, 3);					//Dig
-	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 64}, { 32 , 32 }, 0, 1, true, false }, 4);				//Attack
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);				//Dead
-	animations->LoadSpriteClip(SpriteClip{ "Pump", {0, 160}, { 32 , 32 }, 0, 2, true, true }, 6);				//Pump
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {0, 384}, { 64 , 64 }, 0, 2, true, true }, 7);			//Crushed
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 0}, { 32 , 32 }, 1, 2, true, false }, 1);				//Idle
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 0}, { 32 , 32 }, 1, 2, true, true }, 2);				//Walk
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 32}, { 32 , 32 }, 1, 2, true, true }, 3);				//Dig
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 64}, { 32 , 32 }, 0, 1, true, false }, 4);			//Attack
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);			//Dead
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 160}, { 32 , 32 }, 0, 2, true, true }, 6);			//Pump
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 384}, { 64 , 64 }, 0, 2, false, true }, 7);			//Crushed
 
-	animations->LoadSpriteClip(SpriteClip{ "Spear", {0, 96}, { 64 , 64 }, 0, 1, true, false }, 9);				//Spear
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 96}, { 64 , 64 }, 0, 1, true, false }, 9);			//Spear
 
 	//POOKA
-	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 256}, { 32 , 32 }, 1, 2, false, false }, 11);			//Idle
-	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 1, false, true }, 13);			//Ghost
-										   
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 288}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 15);		//Dead
-										   
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 256}, { 32 , 32 }, 0, 2, false, true }, 17);		//Crushed
-																									
-	//Fygar																							
-	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 21);			//Idle
-	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 1, false, true }, 23);			//Ghost
-	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);			//Attack
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);			//Dead
-										   
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 352}, { 64 , 64 }, 0, 1, false, false }, 27);		//Crushed
-										   
-	animations->LoadSpriteClip(SpriteClip{ "Fire", {0, 416}, { 96 , 32 }, 0, 3, false, false }, 29);			//Fire
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 256}, { 32 , 32 }, 0, 1, false, false }, 11);			//Idle
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);			//Walk
+	animations->LoadSpriteClip(SpriteClip{ 0, {192, 256}, { 32 , 32 }, 0, 2, false, true }, 13);		//Ghost
+
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 288}, { 64 , 64 }, 0, 4, true, false, 0.5f }, 15);	//Dead
+
+	animations->LoadSpriteClip(SpriteClip{ 0, {128, 256}, { 32 , 32 }, 0, 2, false, true }, 17);		//Crushed
+																										
+	//Fygar																								
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 352}, { 32 , 32 }, 0, 1, false, false }, 21);			//Idle
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);			//Walk
+	animations->LoadSpriteClip(SpriteClip{ 0, {192, 532}, { 32 , 32 }, 0, 1, false, true }, 23);		//Ghost
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);			//Attack
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 448}, { 64 , 64 }, 0, 2, false, false }, 25);			//Dead
+
+	animations->LoadSpriteClip(SpriteClip{ 0, {128, 352}, { 64 , 64 }, 0, 2, false, false }, 27);		//Crushed
+
+	animations->LoadSpriteClip(SpriteClip{ 0, {0, 416}, { 64 , 32 }, 0, 3, false, true }, 29);			//Fire
 
 }
 

@@ -33,7 +33,7 @@ namespace  dae
 		bool CanCollide() const { return m_Collide; }
 		void EnableTrigger(const bool& enable = true) { m_Trigger = enable; }
 		bool IsTrigger() const { return m_Trigger; }
-
+		void EnablePushOut(const bool& enable) { m_PushOut = enable; }
 		void Reset();
 
 	protected:
@@ -48,6 +48,7 @@ namespace  dae
 		TransformComponent* m_pTransformComponent = nullptr;
 		bool m_ShowCollisionBox = false;
 		bool m_Collide = true;
+		bool m_PushOut = false;
 		bool m_Trigger = false;
 		std::shared_ptr<Texture2D> m_pCollisionBox = nullptr;
 

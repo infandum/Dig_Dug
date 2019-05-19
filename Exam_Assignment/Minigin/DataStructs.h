@@ -147,6 +147,23 @@ namespace dae
 		return {};
 	}
 
+	inline Direction VelocityDirection(glm::vec3 velocity)
+	{
+		if (velocity.x < 0.0f)
+			return Direction::LEFT;
+
+		if (velocity.x > 0.0f)
+			return Direction::RIGHT;
+
+		if (velocity.y < 0.0f)
+			return Direction::UP;
+
+		if (velocity.y > 0.0f)
+			return Direction::DOWN;
+
+		return Direction::NONE;
+	}
+
 	enum class TileState
 	{
 		FREE,
@@ -187,13 +204,27 @@ namespace dae
 	struct SpriteClip
 	{
 		UINT id = 0;
+		std::string Name = "";
 		iVector2 UV = { 0 , 0 };
 		iVector2 Size = { 32 , 32 };
 		UINT StartFrame = 0;
-		UINT frames = 1;
-		bool hasUpDown = false;
-		bool isLooping = false;
+		UINT Frames = 1;
+		bool HasUpDown = false;
+		bool IsLooping = false;
 		float Speed = 1.0f;
+
+		SpriteClip(){}
+		SpriteClip(std::string name, iVector2 uv = {0, 0}, iVector2 size = { 32,32 }, UINT startFrame = 0, UINT frames = 1, bool hasUpDown = false, bool isLooping = false, float speed = 1.0f)
+		{
+			Name = name;
+			UV = uv;
+			Size = size;
+			StartFrame = startFrame;
+			Frames = frames;
+			HasUpDown = hasUpDown;
+			IsLooping = isLooping;
+			Speed = speed;
+		}
 	};
 
 	struct CollisionBox

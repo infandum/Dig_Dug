@@ -42,8 +42,22 @@ namespace dae
 		NotifyEvent GetCurrentEvent() const { return m_Event; }
 
 		void Reset();
+		void AnimationTime(float deltaTime, const SpriteClip& clip);
 
 		bool IsAnimationEnded() const { return m_IsAnimationEnd; }
+
+		BaseState* GetCurrentState() const { return m_State.get(); }
+		template <class T>
+		std::shared_ptr<T> GetState()
+		{
+			for (auto& state : m_StateClips)
+				if(state.second && typeid(*state.second.get()) == typeid(T))
+				{
+					return std::static_pointer_cast<T>(state.second);
+				}
+			return nullptr;
+		}
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

@@ -81,7 +81,7 @@ namespace dae
 	};
 	inline void UpCommand::Execute()
 	{
-		if (m_pOwner->GetComponent<MoveComponent>() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
+		if (m_pOwner->GetComponent<MoveComponent>())
 		{
 			if (m_Input->IsKeyDown())
 			{
@@ -108,7 +108,7 @@ namespace dae
 
 	inline void DownCommand::Execute()
 	{
-		if (m_pOwner->GetComponent<MoveComponent>() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
+		if (m_pOwner->GetComponent<MoveComponent>())
 		{
 			if (m_Input->IsKeyDown())
 			{
@@ -135,19 +135,17 @@ namespace dae
 
 	inline void LeftCommand::Execute()
 	{
-		if (m_pOwner->GetTransform() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
+		if (m_pOwner->GetTransform())
 		{
 			if (m_Input->IsKeyDown())
 			{
 				notify(NotifyEvent::EVENT_MOVE);
-
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ -g_MoveSpeed, 0, 0 });
 			}
 
 			if (m_Input->IsKeyUp())
 			{
 				notify(NotifyEvent::EVENT_IDLE);
-
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			}
 
@@ -163,12 +161,11 @@ namespace dae
 	inline void RightCommand::Execute()
 	{
 		
-		if (m_pOwner->GetTransform() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
+		if (m_pOwner->GetTransform())
 		{
 			if (m_Input->IsKeyDown())
 			{
 				notify(NotifyEvent::EVENT_MOVE);
-
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ g_MoveSpeed, 0, 0 });
 			}
 				
@@ -195,7 +192,7 @@ namespace dae
 		{
 			notify(NotifyEvent::EVENT_ACTION);
 			m_pOwner->GetComponent<PlayerComponent>()->Attack(attack = true);
-			m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
+			//m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			/*if (gameObject.GetChildCount() > 0)
 				if (gameObject.GetChild(0).get()->GetIsFollowingParent())
 					gameObject.GetChild(0).get()->SetIsFollowParent(false);

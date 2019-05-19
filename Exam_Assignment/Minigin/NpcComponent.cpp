@@ -38,12 +38,12 @@ void dae::NpcComponent::Update(float )
 		if (!m_IsHit)
 			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 		else
-			if (GetGameObject()->GetSprite()->IsAnimationEnded())
+			if (GetGameObject()->GetSprite()->IsAnimationEnded() && typeid(* GetGameObject()->GetSprite()->GetCurrentState()) == typeid(DeadEnemyState))
 				Dead();
 
-		GetGameObject()->GetComponent<MoveComponent>()->SetIsOmniDirectional(true);
+		//GetGameObject()->GetComponent<MoveComponent>()->SetIsOmniDirectional(true);
 		//GetGameObject()->GetTransform()->SetVelocity({ g_MoveSpeed , -g_MoveSpeed, 0 });
-		GetGameObject()->GetComponent<MoveComponent>()->MoveToTile(0, 10);
+		//GetGameObject()->GetComponent<MoveComponent>()->MoveToTile(0, 10);
 		//GetGameObject()->GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
 		//
 

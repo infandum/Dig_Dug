@@ -203,18 +203,6 @@ dae::Direction dae::MoveComponent::GetDirectionFromVelocity() const
 	return Direction::NONE;
 }
 
-dae::iVector2 dae::MoveComponent::GetNextTileDirectionFromVelocity() const
-{
-	iVector2 dir{ 0,0 };
-
-	if (m_Velocity.x != 0)
-		dir.x = static_cast<int>(m_Velocity.x) / abs(static_cast<int>(m_Velocity.x));
-	if (m_Velocity.y != 0)
-		dir.y = static_cast<int>(m_Velocity.y) / abs(static_cast<int>(m_Velocity.y));
-
-	return dir;
-}
-
 void dae::MoveComponent::MoveToTile(unsigned int xIndex, unsigned int yIndex)
 {
 	glm::vec3 velocity{ 0 };
@@ -238,7 +226,7 @@ void dae::MoveComponent::MoveToTile(unsigned int xIndex, unsigned int yIndex)
 
 bool dae::MoveComponent::CheckTileSwapping()
 {
-	const iVector2 nextTileIndex = { m_pTransform->GetPositionIndex().x + GetNextTileDirectionFromVelocity().x, m_pTransform->GetPositionIndex().y + GetNextTileDirectionFromVelocity().y };
+	const iVector2 nextTileIndex = { m_pTransform->GetPositionIndex().x + static_cast<int>(DirectionAxis(m_CurrentDirection).x), m_pTransform->GetPositionIndex().y + static_cast<int>(DirectionAxis(m_CurrentDirection).y) };
 
 	m_pLevelManager = ServiceLocator::GetLevelManager();
 	const auto currTile = m_pLevelManager->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
@@ -273,7 +261,7 @@ bool dae::MoveComponent::CheckTileSwapping()
 
 bool dae::MoveComponent::CheckOccupiedTileMove() const
 {
-	const iVector2 nextTileIndex = { m_pTransform->GetPositionIndex().x + GetNextTileDirectionFromVelocity().x, m_pTransform->GetPositionIndex().y + GetNextTileDirectionFromVelocity().y };
+	const iVector2 nextTileIndex = { m_pTransform->GetPositionIndex().x + static_cast<int>(DirectionAxis(m_CurrentDirection).x), m_pTransform->GetPositionIndex().y + static_cast<int>(DirectionAxis(m_CurrentDirection).y) };
 	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
 	if (nextTile != nullptr)
 		if (nextTile->GetTileState() == TileState::OCCUPIED && IsCentered())
