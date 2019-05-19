@@ -78,6 +78,17 @@ void dae::PlayerComponent::Initialize()
 		/*attack->AddComponent(std::make_shared<SpriteComponent>());*/
 		m_Attack->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(11));
 		GetGameObject()->AddChild(m_Attack);
+
+		m_AttackSprite->SetName("Fire Sprite");
+		m_AttackSprite->AddComponent(std::make_shared<RenderComponent>());
+		m_AttackSprite->AddComponent(std::make_shared<TransformComponent>(-32.f, 0.f));
+		m_AttackSprite->AddComponent(std::make_shared<MoveComponent>());
+		m_AttackSprite->AddComponent(std::make_shared<TextureComponent>(ServiceLocator::GetResourceManager()->GetTexture(02)));
+		m_AttackSprite->AddComponent(std::make_shared<SpriteComponent>(WeaponState()));
+		m_AttackSprite->GetComponent<SpriteComponent>()->SetAnimationToState(7, std::make_shared<WeaponState>());
+		//m_AttackSprite->GetComponent<TextureComponent>()->
+
+		m_Attack->AddChild(m_AttackSprite);
 		break;
 	}
 
@@ -92,9 +103,6 @@ void dae::PlayerComponent::Update(float)
 	if (!IsDead())
 	{
 		ExecuteCommand();
-
-	
-
 	}
 
 	if (!m_isAttacking)
@@ -214,14 +222,24 @@ void dae::PlayerComponent::CollisionEvents()
 	auto collision = GetGameObject()->GetComponent<CollisionComponent>();
 	if(collision->GetHasCollision())
 	{
-		if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
+		if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>() || collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>())
 		{
 			std::cout << "Collision" << std::endl;
-			if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN && !collision->GetCollision()->GetGameObject()->GetNPC()->IsDead())
-			{
-				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
-				m_IsDead = true;
-			}			
+			if(collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>())
+				if(collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->GetType() != m_Type/* && !collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->IsDead()*/)
+				{
+					GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
+					m_IsDead = true;
+					/*collision->GetCollision()->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
+					collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->m_IsDead = true;*/
+				}
+
+			if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
+				if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN && !collision->GetCollision()->GetGameObject()->GetNPC()->IsDead())
+				{
+					GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
+					m_IsDead = true;
+				}			
 			collision->SetHasCollision(false);
 		}
 	}

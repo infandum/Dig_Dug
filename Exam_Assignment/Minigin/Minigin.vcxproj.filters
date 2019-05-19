@@ -32,6 +32,15 @@
     <Filter Include="SceneGraph\Scene">
       <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{307788f5-b3a4-4e48-82d6-1031c8b48891}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Components">
+      <UniqueIdentifier>{2e7be903-2a8e-48bd-b945-50189095c11e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Scene">
+      <UniqueIdentifier>{e173b1ae-002d-479c-9b22-9aebe9d1c3f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
@@ -41,9 +50,6 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
-      <Filter>Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Minigin.h">
       <Filter>Base</Filter>
     </ClInclude>
     <ClInclude Include="MiniginPCH.h">
@@ -106,9 +112,6 @@
     <ClInclude Include="InputManager.h">
       <Filter>Managers\Input</Filter>
     </ClInclude>
-    <ClInclude Include="TileComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -139,9 +142,6 @@
     <ClInclude Include="AnimationManager.h">
       <Filter>Managers\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="NpcComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="Subject.h">
       <Filter>Managers</Filter>
     </ClInclude>
@@ -151,20 +151,28 @@
     <ClInclude Include="MoveComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsManager.h">
       <Filter>Managers\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="DemoScene.h" />
+    <ClInclude Include="Minigin.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="NpcComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TileComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoScene.h">
+      <Filter>Game\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
       <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Minigin.cpp">
-      <Filter>Base</Filter>
     </ClCompile>
     <ClCompile Include="MiniginPCH.cpp">
       <Filter>Base</Filter>
@@ -214,9 +222,6 @@
     <ClCompile Include="InputManager.cpp">
       <Filter>Managers\Input</Filter>
     </ClCompile>
-    <ClCompile Include="TileComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="CollisionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
@@ -241,22 +246,30 @@
     <ClCompile Include="AnimationManager.cpp">
       <Filter>Managers\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="NpcComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="MoveComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="PhysicsManager.cpp">
       <Filter>Managers\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="DemoScene.cpp" />
+    <ClCompile Include="Minigin.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="NpcComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TileComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoScene.cpp">
+      <Filter>Game\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc">

@@ -113,6 +113,8 @@ namespace dae
 		EVENT_CHARGE,
 		EVENT_COLLISION,
 		EVENT_CRUSHED,
+		EVENT_LIFE_CHECK,
+		EVENT_GAME_OVER
 	};
 
 	enum class Direction

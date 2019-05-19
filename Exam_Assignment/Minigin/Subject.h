@@ -11,11 +11,11 @@ namespace dae
 	public:
 		void addObserver(std::shared_ptr<Observer>pObserver)
 		{
-			for (auto& observ : m_pObservers)
+			for (auto& observer : m_pObservers)
 			{
-				if (typeid(*observ) == typeid(*pObserver))
+				if (typeid(*observer) == typeid(*pObserver))
 				{
-					std::cout << "Observer::AddObserver > Duplicate: " << typeid(*pObserver).name() << " >> Already added!!";
+					std::cout << "Subject::AddObserver > Duplicate: " << typeid(*pObserver).name() << " >> Already added!!";
 					return;
 				}
 			}
@@ -25,17 +25,17 @@ namespace dae
 
 		void removeObserver(std::shared_ptr<Observer> pObserver)
 		{
-			const auto comp = std::find(m_pObservers.begin(), m_pObservers.end(), pObserver);
-			if (comp == m_pObservers.end())
+			const auto observer = std::find(m_pObservers.begin(), m_pObservers.end(), pObserver);
+			if (observer == m_pObservers.end())
 			{
-				std::wcout << L"Observer::RemoveObserver > Observer is not attached to this GameObject!" << std::endl;
+				std::cout << "Subject::RemoveObserver > Observer NOT FOUND!" << std::endl;
 				return;
 			}
-			m_pObservers.erase(comp);
+			m_pObservers.erase(observer);
 		}
 
 	protected:
-		void notify(GameObject& gameObject, Event event)
+		void notify(GameObject& gameObject, NotifyEvent event)
 		{
 			for (auto& m_observer : m_pObservers)
 			{

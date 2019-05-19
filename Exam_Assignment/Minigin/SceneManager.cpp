@@ -21,6 +21,8 @@ void dae::SceneManager::Initialize()
 	{
 		m_spScenes[ActiveSceneIndex]->Initialize();
 	}
+
+	ActiveSceneIndex = 0;
 }
 
 void dae::SceneManager::Update(const float deltaTime)

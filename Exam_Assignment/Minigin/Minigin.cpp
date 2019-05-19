@@ -67,10 +67,10 @@ void dae::Minigin::LoadGame() const
 	ServiceLocator::GetSceneLoader()->InitScene(SceneList::MAIN_MENU);
 	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_SINGLE);
 	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_COOP);
-
+	ServiceLocator::GetSceneLoader()->InitScene(SceneList::LEVEL_VS);
 	
 	ServiceLocator::GetSceneManager()->Initialize();
-	ServiceLocator::GetSceneManager()->SetActive("Level single");
+	//ServiceLocator::GetSceneManager()->SetActive("Level single");
 }
 
 void dae::Minigin::Cleanup()

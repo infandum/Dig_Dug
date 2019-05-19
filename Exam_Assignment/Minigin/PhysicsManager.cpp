@@ -16,22 +16,32 @@ void dae::PhysicsManager::Update(float deltaTime)
 	//TODO: ENTER COLLISION
 	//TODO: LEAVE COLLISION
 	UNREFERENCED_PARAMETER(deltaTime);
+	auto isOverlapping = false;
 	for (auto& component : m_pCollisionComponents[m_ActiveSceneIndex])
 	{
 		//Render Collision Debug Box 
 		if(!component->ShowCollisionBox())
 			component->ShowCollisionBox(ShowCollisionBox());
 
-		if(!component->GetGameObject()->GetIsActive())
+		if (!component->GetGameObject()->GetIsActive())
+		{
+			isOverlapping = false;
 			continue;
+		}
 
 		for (auto& otherComponent : m_pCollisionComponents[m_ActiveSceneIndex])
 		{
-			if (!otherComponent->GetGameObject()->GetIsActive())
+			if(component == otherComponent
+				|| !otherComponent->GetGameObject()->GetIsActive()
+				|| component->GetGameObject()->IsChild(otherComponent->GetGameObject()) 
+				|| component->GetGameObject()->GetParent() == otherComponent->GetGameObject() 
+				|| otherComponent->GetGameObject()->IsChild(component->GetGameObject())
+				|| otherComponent->GetGameObject()->GetParent() == component->GetGameObject())
+			{
+				isOverlapping = false; 
 				continue;
-
-			if(component == otherComponent)
-				continue;
+			}
+				
 
 			CollisionBox compBox;
 			compBox.x = static_cast<int>(component->GetPosition().x);
@@ -44,7 +54,7 @@ void dae::PhysicsManager::Update(float deltaTime)
 			otherCompBox.y = static_cast<int>(otherComponent->GetPosition().y);
 			otherCompBox.RadiusX = static_cast<int>(otherComponent->GetSize().x - m_CollisionPadding);
 			otherCompBox.RadiusY = static_cast<int>(otherComponent->GetSize().y - m_CollisionPadding);
-			const auto isOverlapping = CheckBoxesIntersect(compBox, otherCompBox);
+			isOverlapping = CheckBoxesIntersect(compBox, otherCompBox);
 			if(isOverlapping)
 			{
 				component->SetHasCollision(isOverlapping);
@@ -59,7 +69,7 @@ void dae::PhysicsManager::Update(float deltaTime)
 void dae::PhysicsManager::AddCollision(CollisionComponent* collision)
 {
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
-	if (m_pCollisionComponents.empty() || m_pCollisionComponents.size() < m_ActiveSceneIndex)
+	if (m_pCollisionComponents.empty() || m_pCollisionComponents.size() <= m_ActiveSceneIndex)
 		for (auto i = m_pCollisionComponents.size(); i <= m_ActiveSceneIndex + 1; ++i)
 		{
 			m_pCollisionComponents.push_back(std::vector<CollisionComponent*>());

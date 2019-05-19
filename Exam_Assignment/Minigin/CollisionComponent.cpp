@@ -60,11 +60,12 @@ void dae::CollisionComponent::Update(float deltaTime)
 
 	if (!m_Collide)
 		return;
+
 	ShowCollisionBox(m_Collide);
 	//Prevent Overlapping
 	if(m_HasCollision && m_Collide)
 	{	
-		if(GetCollision() != this && GetCollision()->m_Collide)
+		if(m_pOtherCollider != this && GetCollision()->m_Collide)
 		{
 			//Don't trigger collision with child/parents 
 			if (GetGameObject()->IsChild(GetCollision()->GetGameObject()) || GetGameObject()->GetParent() == GetCollision()->GetGameObject())

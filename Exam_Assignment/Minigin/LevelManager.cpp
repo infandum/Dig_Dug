@@ -140,7 +140,7 @@ dae::TileComponent* dae::LevelManager::GetTile(int x, int y)
 void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 {
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
-	if (m_pPlayers.empty() || m_pPlayers.size() < m_ActiveSceneIndex)
+	if (m_pPlayers.empty() || m_pPlayers.size() <= m_ActiveSceneIndex)
 		for(auto i = m_pPlayers.size(); i <= m_ActiveSceneIndex + 1; ++i)
 		{
 			m_pPlayers.push_back(std::vector<PlayerComponent*>());
@@ -173,7 +173,7 @@ void dae::LevelManager::RemovePlayer(PlayerComponent* pPlayer)
 void dae::LevelManager::AddEntity(NpcComponent* pEntity)
 {
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
-	if (m_pEntities.empty() || m_pEntities.size() < m_ActiveSceneIndex)
+	if (m_pEntities.empty() || m_pEntities.size() <= m_ActiveSceneIndex)
 		for (auto i = m_pEntities.size(); i <= m_ActiveSceneIndex + 1; ++i)
 		{
 			m_pEntities.push_back(std::vector<NpcComponent*>());

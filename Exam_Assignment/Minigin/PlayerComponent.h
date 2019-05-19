@@ -25,6 +25,8 @@ namespace dae
 		void SetHealth(int health);
 		void ChangeHealth(int amount);
 
+		PlayerType GetType() const { return m_Type; }
+
 		void Reset();
 	protected:
 		void Initialize() override;
