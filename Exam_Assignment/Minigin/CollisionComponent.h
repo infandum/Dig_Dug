@@ -1,7 +1,11 @@
 #pragma once
 #include "BaseComponent.h"
+
 namespace  dae
 { 
+	class TransformComponent;
+	class SpriteComponent;
+	class TextureComponent;
 	class CollisionComponent : public BaseComponent
 	{
 	public:
@@ -15,7 +19,9 @@ namespace  dae
 		explicit CollisionComponent(int x, int y, const bool& isTrigger = false);
 		virtual ~CollisionComponent() = default;
 
+		void SetSize(const iVector2& size) { m_CustomSize = true; m_Size = size; }
 		iVector2 GetSize() const { return m_Size; }
+
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(float x = 0, float y = 0, float z = 0);
@@ -38,6 +44,7 @@ namespace  dae
 
 	protected:
 		void Initialize() override;
+		void Collision();
 		void Update(float deltaTime) override;
 		//void Render() override;
 
@@ -45,7 +52,11 @@ namespace  dae
 		iVector2 m_offSet = { 0,0 };
 		iVector2 m_Size = { 0,0 };
 		glm::vec3 m_Position {0};
+
 		TransformComponent* m_pTransformComponent = nullptr;
+		SpriteComponent* m_pSpriteComponent = nullptr;
+		TextureComponent* m_pTextureComponent = nullptr;
+
 		bool m_ShowCollisionBox = false;
 		bool m_Collide = true;
 		bool m_PushOut = false;
@@ -55,5 +66,6 @@ namespace  dae
 		CollisionComponent* m_pOtherCollider = nullptr;
 
 		bool m_HasCollision = false;
+		bool m_CustomSize = false;
 	};
 }

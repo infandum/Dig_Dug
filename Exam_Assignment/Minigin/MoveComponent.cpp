@@ -186,21 +186,19 @@ void dae::MoveComponent::SetVelocity(glm::vec3 direction)
 
 dae::Direction dae::MoveComponent::GetDirectionFromVelocity() const
 {
-
+	Direction dir;
 	if (m_Velocity.x < 0.0f)
-		return Direction::LEFT;
+		dir = Direction::LEFT;
+	else if (m_Velocity.x > 0.0f)
+		dir = Direction::RIGHT;
+	else if (m_Velocity.y < 0.0f)
+		dir = Direction::UP;
+	else if (m_Velocity.y > 0.0f)
+		dir = Direction::DOWN;
+	else
+		dir = Direction::NONE;
 
-	if (m_Velocity.x > 0.0f)
-		return Direction::RIGHT;
-
-	if (m_Velocity.y < 0.0f)
-		return Direction::UP;
-
-	if (m_Velocity.y > 0.0f)
-		return Direction::DOWN;
-
-
-	return Direction::NONE;
+	return dir;
 }
 
 void dae::MoveComponent::MoveToTile(unsigned int xIndex, unsigned int yIndex)

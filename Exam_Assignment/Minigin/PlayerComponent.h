@@ -31,7 +31,7 @@ namespace dae
 	protected:
 		void Initialize() override;
 		void AllignAttack();
-		void MoveAttack();
+		void MoveAttack(float deltaTime);
 		void CollisionEvents();
 		void Update(float deltaTime) override;
 		//void Render() override;
@@ -42,6 +42,8 @@ namespace dae
 		std::shared_ptr<GameObject> m_AttackSprite;
 		float m_AttackRange = 32.f + 16;
 		float m_AttackSpeed = 120.f;
+		float m_AttackTimer = 0.0f;
+		float m_AttackTime = 0.25f;
 		bool m_isAttacking = false;
 		bool m_AttackAtMaxRange = false;
 		bool m_IsCharging = false;

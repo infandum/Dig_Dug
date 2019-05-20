@@ -23,7 +23,9 @@ void dae::PhysicsManager::Update(float deltaTime)
 		if(!component->ShowCollisionBox())
 			component->ShowCollisionBox(ShowCollisionBox());
 
-		if (!component->GetGameObject()->GetIsActive())
+		if (!component->GetGameObject()->GetIsActive()
+			||!component->CanCollide()
+			)
 		{
 			isOverlapping = false;
 			continue;
@@ -33,6 +35,7 @@ void dae::PhysicsManager::Update(float deltaTime)
 		{
 			if(component == otherComponent
 				|| !otherComponent->GetGameObject()->GetIsActive()
+				|| !otherComponent->CanCollide()
 				|| component->GetGameObject()->IsChild(otherComponent->GetGameObject()) 
 				|| component->GetGameObject()->GetParent() == otherComponent->GetGameObject() 
 				|| otherComponent->GetGameObject()->IsChild(component->GetGameObject())
@@ -42,7 +45,11 @@ void dae::PhysicsManager::Update(float deltaTime)
 				continue;
 			}
 				
-
+			if(component->IsTrigger() && otherComponent->IsTrigger())
+			{
+				isOverlapping = false;
+				continue;
+			}
 			CollisionBox compBox;
 			compBox.x = static_cast<int>(component->GetPosition().x);
 			compBox.y = static_cast<int>(component->GetPosition().y);
@@ -70,7 +77,7 @@ void dae::PhysicsManager::AddCollision(CollisionComponent* collision)
 {
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
 	if (m_pCollisionComponents.empty() || m_pCollisionComponents.size() <= m_ActiveSceneIndex)
-		for (auto i = m_pCollisionComponents.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		for (auto i = m_pCollisionComponents.size(); i <= m_ActiveSceneIndex; ++i)
 		{
 			m_pCollisionComponents.push_back(std::vector<CollisionComponent*>());
 		}

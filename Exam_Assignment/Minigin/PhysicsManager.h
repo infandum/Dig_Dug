@@ -36,6 +36,7 @@ namespace dae
 
 		std::vector<std::vector<CollisionComponent*>> m_pCollisionComponents{};
 		bool m_ShowCollisionBox = false;
+		bool m_Collision = false;
 		float m_CollisionPadding = 2.0f;	
 	};
 }

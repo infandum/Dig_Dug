@@ -40,6 +40,7 @@ void dae::PlayerComponent::Reset()
 	m_IsReset = true;
 	m_isAttacking = false;
 	m_IsAttackHit = false;
+	m_AttackTimer = 0;
 	GetGameObject()->SetIsActive(true);
 }
 
@@ -60,8 +61,6 @@ void dae::PlayerComponent::Initialize()
 		m_Attack->AddComponent(std::make_shared<CollisionComponent>(true));
 		m_Attack->AddComponent(std::make_shared<TransformComponent>(GetGameObject()->GetTransform()->GetPosition().x, GetGameObject()->GetTransform()->GetPosition().y));
 		m_Attack->AddComponent(std::make_shared<MoveComponent>());
-		m_Attack->AddComponent(std::make_shared<TextureComponent>());
-		m_Attack->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(12));
 		GetGameObject()->AddChild(m_Attack);
 
 
@@ -83,9 +82,9 @@ void dae::PlayerComponent::Initialize()
 		m_Attack->AddComponent(std::make_shared<CollisionComponent>(true));
 		m_Attack->AddComponent(std::make_shared<TransformComponent>(GetGameObject()->GetTransform()->GetPosition().x, GetGameObject()->GetTransform()->GetPosition().y));
 		m_Attack->AddComponent(std::make_shared<MoveComponent>());
-		m_Attack->AddComponent(std::make_shared<TextureComponent>());
-		m_Attack->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(11));
+		m_Attack->GetCollision()->SetSize({ 128, 32 });
 		GetGameObject()->AddChild(m_Attack);
+
 
 		m_AttackSprite->SetName("Fire Sprite");
 		m_AttackSprite->AddComponent(std::make_shared<RenderComponent>());
@@ -96,7 +95,7 @@ void dae::PlayerComponent::Initialize()
 		m_AttackSprite->GetComponent<SpriteComponent>()->SetAnimationToState(29, std::make_shared<WeaponState>());
 		m_AttackSprite->GetComponent<SpriteComponent>()->Pause();
 
-		m_Attack->AddChild(m_AttackSprite);
+		GetGameObject()->AddChild(m_AttackSprite);
 		break;
 	}
 
@@ -104,7 +103,7 @@ void dae::PlayerComponent::Initialize()
 }
 
 
-void dae::PlayerComponent::Update(float)
+void dae::PlayerComponent::Update(float deltaTime)
 {
 	if (!IsDead())
 	{
@@ -112,7 +111,7 @@ void dae::PlayerComponent::Update(float)
 	}
 
 	AllignAttack();
-	MoveAttack();
+	MoveAttack(deltaTime);
 
 	CollisionEvents();
 
@@ -121,7 +120,6 @@ void dae::PlayerComponent::Update(float)
 		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 		m_IsReset = false;
 	}
-	GetGameObject()->GetComponent<RenderComponent>()->EnableRender(false);
 }
 
 
@@ -131,16 +129,15 @@ void dae::PlayerComponent::AllignAttack()
 	auto AttackSpriteMove = m_AttackSprite->GetComponent<MoveComponent>();
 	const auto PlayerMove = GetGameObject()->GetComponent<MoveComponent>();
 
-	if(m_isAttacking)
+	if(m_isAttacking || (m_IsCharging && m_isAttacking))
 		return;
 
 	AttackMove->SetVelocity({ 0,0,0 });
 	AttackSpriteMove->SetCurrentDirection(PlayerMove->GetCurrentDirection());
 
 	m_Attack->GetComponent<CollisionComponent>()->EnableCollision(false);
-	//m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
-
-	//m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
+	m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
+	m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
 
 	if(GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
 		if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_MOVE)
@@ -188,18 +185,26 @@ void dae::PlayerComponent::AllignAttack()
 			default:;
 			case Direction::RIGHT:
 				m_AttackSprite->GetTransform()->SetLocalPosition(32, 0.f);
+				m_Attack->GetTransform()->SetLocalPosition(0, 0.f);
 				break;
 			case Direction::LEFT:
 				m_AttackSprite->GetTransform()->SetLocalPosition(-96, 0.f);
+				m_Attack->GetTransform()->SetLocalPosition(-96, 0.f);
 				break;
 			case Direction::UP:
 				if (m_AttackSprite->GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT || m_AttackSprite->GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
 					m_LastHorDir = m_AttackSprite->GetComponent<MoveComponent>()->GetPreviousDirection();
 
 				if (m_LastHorDir == Direction::LEFT)
+				{
+					m_Attack->GetTransform()->SetLocalPosition(-96, 0.f);
 					m_AttackSprite->GetTransform()->SetLocalPosition(-96, 0.f);
+				}
 				else
+				{
+					m_Attack->GetTransform()->SetLocalPosition(0, 0.f);
 					m_AttackSprite->GetTransform()->SetLocalPosition(32.f, 0.f);
+				}
 
 				break;
 			case Direction::DOWN:
@@ -207,25 +212,22 @@ void dae::PlayerComponent::AllignAttack()
 					m_LastHorDir = m_AttackSprite->GetComponent<MoveComponent>()->GetPreviousDirection();
 
 				if (m_LastHorDir == Direction::LEFT)
+				{
+					m_Attack->GetTransform()->SetLocalPosition(-96, 0.f);
 					m_AttackSprite->GetTransform()->SetLocalPosition(-96, 0.f);
+				}
 				else
+				{
+					m_Attack->GetTransform()->SetLocalPosition(0, 0.f);
 					m_AttackSprite->GetTransform()->SetLocalPosition(32.f, 0.f);
-				break;
-			case Direction::NONE:
-				if (m_AttackSprite->GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT || m_AttackSprite->GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
-					m_LastHorDir = m_AttackSprite->GetComponent<MoveComponent>()->GetPreviousDirection();
-
-				if (m_LastHorDir == Direction::LEFT)
-					m_AttackSprite->GetTransform()->SetLocalPosition(-96, 0.f);
-				else
-					m_AttackSprite->GetTransform()->SetLocalPosition(32.f, 0.f);
+				}
 				break;
 			}
 		break;
 	}
 }
 
-void dae::PlayerComponent::MoveAttack()
+void dae::PlayerComponent::MoveAttack(float deltaTime)
 {
 	auto AttackMove = m_Attack->GetComponent<MoveComponent>();
 	auto AttackSpriteMove = m_AttackSprite->GetComponent<MoveComponent>();
@@ -275,17 +277,31 @@ void dae::PlayerComponent::MoveAttack()
 			break;
 
 		case PlayerType::PLAYER_FYGAR:
-
+			if(m_isAttacking)
+			{
+				m_Attack->GetComponent<CollisionComponent>()->EnableCollision(false);
+				m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
+			}
 			if (m_IsCharging && !m_isAttacking)
 			{
 				m_AttackSprite->GetComponent<SpriteComponent>()->Pause(false);
-				//m_Attack->GetCollision()->SetSize({ 64, 32 });
+				m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(true);
+
 				if(m_AttackSprite->GetComponent<SpriteComponent>()->IsAnimationEnded())
+				{
+					m_Attack->GetComponent<CollisionComponent>()->EnableCollision(true);
+					m_Attack->GetComponent<RenderComponent>()->EnableRender(true);
 					m_AttackSprite->GetComponent<SpriteComponent>()->Pause();
+					
+					m_AttackTimer += deltaTime;
+
+					if(m_AttackTimer > m_AttackTime)
+					{
+						m_IsCharging = false;
+						m_AttackTimer = 0;
+					}					
+				}
 			}
-				
-
-
 			break;
 		}
 }
@@ -341,8 +357,10 @@ void dae::PlayerComponent::CollisionEvents()
 		{
 			if (collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->GetType() != m_Type)
 			{
+				collision->GetCollision()->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
 				m_IsAttackHit = true;
 			}
+			collision->SetHasCollision(false);
 		}
 	}
 	else

@@ -26,11 +26,13 @@ void dae::LevelManager::Reset()
 
 	for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
 	{
+
 		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
 	}
 
 	for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
 	{
+		m_pEntities[m_ActiveSceneIndex][i]->GetGameObject()->SetIsActive(true);
 		m_pEntities[m_ActiveSceneIndex][i]->Reset();
 	}
 
@@ -105,7 +107,7 @@ void dae::LevelManager::AddTile(TileComponent* tile)
 	//std::cout << this->GetGameObject()->GetName() << std::endl;
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
 	if (m_pTileComponents.empty() || m_pTileComponents.size() <= m_ActiveSceneIndex)
-		for (auto i = m_pTileComponents.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		for (auto i = m_pTileComponents.size(); i <= m_ActiveSceneIndex; ++i)
 		{
 			m_pTileComponents.push_back(std::vector<TileComponent*>());
 		}
@@ -141,7 +143,7 @@ void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 {
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
 	if (m_pPlayers.empty() || m_pPlayers.size() <= m_ActiveSceneIndex)
-		for(auto i = m_pPlayers.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		for(auto i = m_pPlayers.size(); i <= m_ActiveSceneIndex; ++i)
 		{
 			m_pPlayers.push_back(std::vector<PlayerComponent*>());
 			m_StartTile.push_back(std::vector<TileComponent*>());
@@ -174,7 +176,7 @@ void dae::LevelManager::AddEntity(NpcComponent* pEntity)
 {
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
 	if (m_pEntities.empty() || m_pEntities.size() <= m_ActiveSceneIndex)
-		for (auto i = m_pEntities.size(); i <= m_ActiveSceneIndex + 1; ++i)
+		for (auto i = m_pEntities.size(); i <= m_ActiveSceneIndex; ++i)
 		{
 			m_pEntities.push_back(std::vector<NpcComponent*>());
 		}

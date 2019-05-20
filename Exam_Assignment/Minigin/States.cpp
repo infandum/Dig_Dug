@@ -13,11 +13,11 @@ void dae::DirectionState::Update(float& , GameObject& )
 
 void dae::DirectionState::Animated(GameObject& gameObject)
 {
-	if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
-		m_LastHorDir = gameObject.GetComponent<MoveComponent>()->GetPreviousDirection();
+	
 
 	SpriteFlip(gameObject);
 	//const auto gameObject.GetTransform();
+	
 	if(m_Clip.Name.empty())
 		return;
 	
@@ -57,6 +57,9 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 				}
 				else
 				{
+					if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
+						m_LastHorDir = gameObject.GetComponent<MoveComponent>()->GetPreviousDirection();
+
 					if (m_LastHorDir == Direction::RIGHT)
 						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 					if (m_LastHorDir == Direction::LEFT)
@@ -82,11 +85,23 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 				}
 				else
 				{
+					if (gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::RIGHT || gameObject.GetComponent<MoveComponent>()->GetPreviousDirection() == Direction::LEFT)
+						m_LastHorDir = gameObject.GetComponent<MoveComponent>()->GetPreviousDirection();
+
 					if (m_LastHorDir == Direction::RIGHT)
 						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 					 if (m_LastHorDir == Direction::LEFT)
 						gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 				}
+			}
+			break;
+		case Direction::NONE:
+			if (!m_Clip.HasUpDown)
+			{
+				if (m_LastHorDir == Direction::RIGHT)
+					gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				if (m_LastHorDir == Direction::LEFT)
+					gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 			}
 			break;
 		default:

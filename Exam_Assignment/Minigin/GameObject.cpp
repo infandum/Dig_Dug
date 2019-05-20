@@ -27,7 +27,12 @@ void dae::GameObject::Initialize()
 
 void dae::GameObject::Update(float deltaTime)
 {
-	if(/*m_IsActive &&*/ m_SceneIndex == ServiceLocator::GetSceneManager()->GetActiveSceneIndex())
+	//if(/*m_IsActive &&*/ m_SceneIndex == ServiceLocator::GetSceneManager()->GetActiveSceneIndex())
+	if (m_Name == "Pooka")
+	{
+		std::cout << m_Name << std::endl;
+	}
+	if(m_IsActive)
 	{
 		for (size_t i = 0; i < m_pChilds.size(); i++)
 		{
@@ -38,12 +43,10 @@ void dae::GameObject::Update(float deltaTime)
 		{
 			component->Update(deltaTime);
 		}
-		if(m_IsActiveLastFrame != m_IsActive)
-			m_IsActiveLastFrame = m_IsActive;
+		m_IsActiveLastFrame = m_IsActive;
 	}
 	else
 	{
-		if (m_IsActiveLastFrame != m_IsActive)
 			m_IsActiveLastFrame = m_IsActive;
 	}
 
@@ -52,6 +55,10 @@ void dae::GameObject::Update(float deltaTime)
 
 void dae::GameObject::Render() const
 {
+	if(m_Name == "Pooka")
+	{
+		std::cout << m_Name << std::endl;
+	}
 	if (m_IsActive && m_IsActiveLastFrame)
 	{
 		for (size_t i = 0; i < m_pChilds.size(); i++)

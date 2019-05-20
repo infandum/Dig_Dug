@@ -43,16 +43,16 @@ void dae::SceneLoader::Initialize()
 	//POOKA
 	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 256}, { 32 , 32 }, 1, 2, false, false }, 11);			//Idle
 	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 13);			//Ghost
+	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 13);//Ghost
 										   
 	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 288}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 15);		//Dead
 										   
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 256}, { 32 , 32 }, 0, 2, false, true }, 17);		//Crushed
+	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 256}, { 32 , 32 }, 0, 2, false, false }, 17);		//Crushed
 																									
 	//Fygar																							
 	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 21);			//Idle
 	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 23);			//Ghost
+	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 23);//Ghost
 	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);			//Attack
 	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);			//Dead
 										   
@@ -83,7 +83,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 			//GenerateTile();
 			AddBackground(01);
 
-			GenerateTile();
+			//GenerateTile();
 
 			font = resource->LoadFont("Lingua.otf", 32);
 			AddText(font, {0,0,0}, "Programming 4 Assignment", 16, 100);

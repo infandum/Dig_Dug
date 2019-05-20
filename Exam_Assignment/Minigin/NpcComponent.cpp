@@ -10,6 +10,8 @@ dae::NpcComponent::NpcComponent(NPCType type) :m_Type(type)
 void dae::NpcComponent::Reset()
 {
 	m_IsDead = false;
+	m_IsHit = false;
+	m_isGhosting = false;
 	GetGameObject()->GetTransform()->SetPosition(GetGameObject()->GetTransform()->GetInitPosition());
 	GetGameObject()->SetIsActive(true);
 	if (m_Type == NPCType::POOKA)
@@ -31,7 +33,6 @@ void dae::NpcComponent::Update(float )
 	{
 		GetGameObject()->SetIsActive(false);
 	}
-		
 
 	if(m_Type == NPCType::POOKA)
 	{

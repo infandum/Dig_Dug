@@ -19,7 +19,7 @@ namespace dae
 	protected:
 		virtual void SpriteFlip(GameObject& gameObject) const = 0;
 		SpriteClip m_Clip;
-		Direction m_LastHorDir = Direction::RIGHT;
+		Direction m_LastHorDir = Direction::NONE;
 	};
 
 	class DirectionState : public BaseState

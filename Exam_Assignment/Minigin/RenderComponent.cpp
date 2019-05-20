@@ -67,7 +67,7 @@ void dae::RenderComponent::Render() const
 			if (m_pCollisionComponent->ShowCollisionBox())
 			{
 				const auto Collision = ServiceLocator::GetResourceManager()->GetTexture(10000);
-				ServiceLocator::GetRenderer()->RenderTexture(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, static_cast<float>(m_pCollisionComponent->GetSize().x), static_cast<float>(m_pCollisionComponent->GetSize().y));
+				ServiceLocator::GetRenderer()->RenderSprite(*Collision, m_pCollisionComponent->GetPosition().x, m_pCollisionComponent->GetPosition().y, 0, 0, static_cast<float>(m_pCollisionComponent->GetSize().x), static_cast<float>(m_pCollisionComponent->GetSize().y));
 			}
 		}
 	}
