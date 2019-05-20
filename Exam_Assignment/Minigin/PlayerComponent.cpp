@@ -10,7 +10,17 @@ dae::PlayerComponent::PlayerComponent(PlayerType type) : m_Type(type)
 
 void dae::PlayerComponent::Attack(bool& isAttacking)
 {
+	if(!m_isAttacking && isAttacking)
+	{
+		m_AttackSprite->GetComponent<SpriteComponent>()->ResetCurrentAnimation();
+
+		if (m_Type == PlayerType::PLAYER_FYGAR)
+			m_IsCharging = true;
+		
+	}
 	m_isAttacking = isAttacking;
+
+	
 	//m_Attack->SetIsFollowParent(!m_isAttacking);
 }
 
@@ -51,7 +61,6 @@ void dae::PlayerComponent::Initialize()
 		m_Attack->AddComponent(std::make_shared<TransformComponent>(GetGameObject()->GetTransform()->GetPosition().x, GetGameObject()->GetTransform()->GetPosition().y));
 		m_Attack->AddComponent(std::make_shared<MoveComponent>());
 		m_Attack->AddComponent(std::make_shared<TextureComponent>());
-		/*attack->AddComponent(std::make_shared<SpriteComponent>());*/
 		m_Attack->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(12));
 		GetGameObject()->AddChild(m_Attack);
 
@@ -63,7 +72,7 @@ void dae::PlayerComponent::Initialize()
 		m_AttackSprite->AddComponent(std::make_shared<TextureComponent>(ServiceLocator::GetResourceManager()->GetTexture(02)));
 		m_AttackSprite->AddComponent(std::make_shared<SpriteComponent>(WeaponState()));
 		m_AttackSprite->GetComponent<SpriteComponent>()->SetAnimationToState(9, std::make_shared<WeaponState>());
-		//m_AttackSprite->GetComponent<TextureComponent>()->
+		m_AttackSprite->GetComponent<SpriteComponent>()->Pause();
 
 		m_Attack->AddChild(m_AttackSprite);
 		break;
@@ -75,7 +84,6 @@ void dae::PlayerComponent::Initialize()
 		m_Attack->AddComponent(std::make_shared<TransformComponent>(GetGameObject()->GetTransform()->GetPosition().x, GetGameObject()->GetTransform()->GetPosition().y));
 		m_Attack->AddComponent(std::make_shared<MoveComponent>());
 		m_Attack->AddComponent(std::make_shared<TextureComponent>());
-		/*attack->AddComponent(std::make_shared<SpriteComponent>());*/
 		m_Attack->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(11));
 		GetGameObject()->AddChild(m_Attack);
 
@@ -86,7 +94,7 @@ void dae::PlayerComponent::Initialize()
 		m_AttackSprite->AddComponent(std::make_shared<TextureComponent>(ServiceLocator::GetResourceManager()->GetTexture(02)));
 		m_AttackSprite->AddComponent(std::make_shared<SpriteComponent>(WeaponState()));
 		m_AttackSprite->GetComponent<SpriteComponent>()->SetAnimationToState(29, std::make_shared<WeaponState>());
-		//m_AttackSprite->GetComponent<TextureComponent>()->
+		m_AttackSprite->GetComponent<SpriteComponent>()->Pause();
 
 		m_Attack->AddChild(m_AttackSprite);
 		break;
@@ -98,18 +106,13 @@ void dae::PlayerComponent::Initialize()
 
 void dae::PlayerComponent::Update(float)
 {
-	if (GetGameObject()->GetComponent<SpriteComponent>()->GetCurrentEvent() == NotifyEvent::EVENT_MOVE && m_isAttacking)
-		GetGameObject()->GetComponent<SpriteComponent>()->onNotify(NotifyEvent::EVENT_ACTION);
-
 	if (!IsDead())
 	{
 		ExecuteCommand();
 	}
 
-	if (!m_isAttacking)
-		AllignAttack();
-	else
-		MoveAttack();
+	AllignAttack();
+	MoveAttack();
 
 	CollisionEvents();
 
@@ -118,7 +121,7 @@ void dae::PlayerComponent::Update(float)
 		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 		m_IsReset = false;
 	}
-	
+	GetGameObject()->GetComponent<RenderComponent>()->EnableRender(false);
 }
 
 
@@ -128,11 +131,14 @@ void dae::PlayerComponent::AllignAttack()
 	auto AttackSpriteMove = m_AttackSprite->GetComponent<MoveComponent>();
 	const auto PlayerMove = GetGameObject()->GetComponent<MoveComponent>();
 
+	if(m_isAttacking)
+		return;
+
 	AttackMove->SetVelocity({ 0,0,0 });
 	AttackSpriteMove->SetCurrentDirection(PlayerMove->GetCurrentDirection());
 
 	m_Attack->GetComponent<CollisionComponent>()->EnableCollision(false);
-	m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
+	//m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
 
 	//m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
 
@@ -145,6 +151,7 @@ void dae::PlayerComponent::AllignAttack()
 	switch (m_Type)
 	{
 	case PlayerType::PLAYER_DIGDUG:
+
 			switch (GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection())
 			{
 			default:;
@@ -223,43 +230,61 @@ void dae::PlayerComponent::MoveAttack()
 	auto AttackMove = m_Attack->GetComponent<MoveComponent>();
 	auto AttackSpriteMove = m_AttackSprite->GetComponent<MoveComponent>();
 	auto PlayerMove = GetGameObject()->GetComponent<MoveComponent>();
-	PlayerMove->SetVelocity({ 0, 0, 0 });
 
-	AttackSpriteMove->SetCurrentDirection(PlayerMove->GetCurrentDirection());
-	auto dist = std::sqrt(std::pow(m_Attack->GetTransform()->GetPosition().x - GetGameObject()->GetTransform()->GetPosition().x, 2) + std::pow(m_Attack->GetTransform()->GetPosition().y - GetGameObject()->GetTransform()->GetPosition().y, 2) + std::pow(m_Attack->GetTransform()->GetPosition().z - GetGameObject()->GetTransform()->GetPosition().z, 2));
-	if (dist >= m_AttackRange + 16.f)
-	{
-		AttackMove->SetVelocity({ 0 ,0 ,0 });
-		AttackSpriteMove->SetVelocity({ 0 ,0 ,0 });
-
-		m_AttackAtMaxRange = true;
-		m_Attack->GetComponent<CollisionComponent>()->EnableCollision(false);
-		m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
-		//if(!m_IsAttackHit)
-		//	m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
-	}
-	else
-	{
-		m_Attack->GetComponent<CollisionComponent>()->EnableCollision(true);
-		m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(true);
-		m_AttackAtMaxRange = false;
-	}
-		
-
-	if (!m_AttackAtMaxRange)
 		switch (m_Type)
 		{
 		default:
 			break;
 
 		case PlayerType::PLAYER_DIGDUG:
-			if (!m_IsAttackHit)
-				AttackMove->SetVelocity({ DirectionAxis(PlayerMove->GetCurrentDirection()) * m_AttackSpeed });
-			else
-				AttackMove->SetVelocity({ 0, 0, 0 });
+			if(m_isAttacking)
+			{
+				PlayerMove->SetVelocity({ 0, 0, 0 });
+				AttackSpriteMove->SetCurrentDirection(PlayerMove->GetCurrentDirection());
+
+				const float dist = std::sqrt(
+					std::pow(m_Attack->GetTransform()->GetPosition().x - GetGameObject()->GetTransform()->GetPosition().x, 2) + 
+					std::pow(m_Attack->GetTransform()->GetPosition().y - GetGameObject()->GetTransform()->GetPosition().y, 2) + 
+					std::pow(m_Attack->GetTransform()->GetPosition().z - GetGameObject()->GetTransform()->GetPosition().z, 2));
+				if (dist >= m_AttackRange + 16.f)
+				{
+					AttackMove->SetVelocity({ 0 ,0 ,0 });
+					AttackSpriteMove->SetVelocity({ 0 ,0 ,0 });
+
+					m_AttackAtMaxRange = true;
+					m_Attack->GetComponent<CollisionComponent>()->EnableCollision(false);
+					//m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
+					//if(!m_IsAttackHit)
+					//	m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
+				}
+				else
+				{
+					m_Attack->GetComponent<CollisionComponent>()->EnableCollision(true);
+					m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(true);
+					m_AttackAtMaxRange = false;
+				}
+
+				if (!m_AttackAtMaxRange)
+				{
+					if (!m_IsAttackHit)
+						AttackMove->SetVelocity({ DirectionAxis(PlayerMove->GetCurrentDirection()) * m_AttackSpeed });
+					else
+						AttackMove->SetVelocity({ 0, 0, 0 });
+				}
+			}			
 			break;
 
 		case PlayerType::PLAYER_FYGAR:
+
+			if (m_IsCharging && !m_isAttacking)
+			{
+				m_AttackSprite->GetComponent<SpriteComponent>()->Pause(false);
+				//m_Attack->GetCollision()->SetSize({ 64, 32 });
+				if(m_AttackSprite->GetComponent<SpriteComponent>()->IsAnimationEnded())
+					m_AttackSprite->GetComponent<SpriteComponent>()->Pause();
+			}
+				
+
 
 			break;
 		}
@@ -311,6 +336,13 @@ void dae::PlayerComponent::CollisionEvents()
 
 			if(!m_isAttacking)
 				collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->SetHit(false);
+		}
+		if (collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>())
+		{
+			if (collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->GetType() != m_Type)
+			{
+				m_IsAttackHit = true;
+			}
 		}
 	}
 	else

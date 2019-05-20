@@ -44,6 +44,7 @@ namespace dae
 		float m_AttackSpeed = 120.f;
 		bool m_isAttacking = false;
 		bool m_AttackAtMaxRange = false;
+		bool m_IsCharging = false;
 		bool m_IsDead = false;
 		bool m_IsAttackHit = false;
 		bool m_IsReset = false;

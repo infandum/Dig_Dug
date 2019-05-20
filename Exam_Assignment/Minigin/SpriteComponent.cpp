@@ -5,6 +5,7 @@
 
 void dae::SpriteComponent::Initialize()
 {
+	m_AnimManager = ServiceLocator::GetAnimationManager();
 	if(!m_State)
 	{
 		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
@@ -28,12 +29,6 @@ void dae::SpriteComponent::Initialize()
 void dae::SpriteComponent::Update(float deltaTime)
 {
 	Swap();
-	/*if (typeid(*m_State) != typeid(DirectionState))
-	{
-		SetActiveAnimationFrame(deltaTime);
-		m_State->Update(deltaTime, *GetGameObject());
-		m_State->Animated(*GetGameObject());
-	}*/
 	SetActiveAnimationFrame(deltaTime);
 	m_State->Update(deltaTime, *GetGameObject());
 	m_State->Animated(*GetGameObject());
@@ -42,13 +37,11 @@ void dae::SpriteComponent::Update(float deltaTime)
 
 void dae::SpriteComponent::Swap()
 {
-	auto anim = ServiceLocator::GetAnimationManager();
-
 	const auto state = m_State->Swap(m_Event, *GetGameObject());
 	
 	if (state != nullptr)
 	{
-		m_ActiveFrame = anim->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
+		m_ActiveFrame = m_AnimManager->GetSpriteClip(GetAnimationIDForState(state)).StartFrame;
 		m_IsAnimationEnd = false;
 		m_FrameTime = 0;
 		m_State = state;
@@ -88,6 +81,13 @@ void dae::SpriteComponent::onNotify(NotifyEvent event)
 		m_Event = event;
 }
 
+void dae::SpriteComponent::ResetCurrentAnimation()
+{
+	m_ActiveFrame = m_AnimManager->GetSpriteClip(GetAnimationIDForState(m_State)).StartFrame;
+	m_IsAnimationEnd = false;
+	m_FrameTime = 0;
+}
+
 void dae::SpriteComponent::Reset()
 {
 	Initialize();
@@ -96,8 +96,10 @@ void dae::SpriteComponent::Reset()
 
 void dae::SpriteComponent::AnimationTime(float deltaTime, const SpriteClip& clip)
 {
-	auto anim = ServiceLocator::GetAnimationManager();
-	auto speed = anim->GetAnimationSpeed()*clip.Speed;
+	if(m_IsPaused)
+		return;
+
+	const auto speed = m_AnimManager->GetAnimationSpeed()*clip.Speed;
 	m_FrameTime += deltaTime;
 	if (m_FrameTime >= double(1.0f / speed))
 	{
@@ -113,30 +115,24 @@ void dae::SpriteComponent::AnimationTime(float deltaTime, const SpriteClip& clip
 void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 {
 
-	auto anim = ServiceLocator::GetAnimationManager();
-	//const auto clip = anim->GetAnimationClips(GetAnimationIDForState(m_State));
-	const auto clip = anim->GetSpriteClip(GetAnimationIDForState(m_State));
+	const auto clip = m_AnimManager->GetSpriteClip(GetAnimationIDForState(m_State));
 
 	if (clip.id != 0 || !m_IsAnimationEnd)
 	{
 		
-			if(!clip.IsLooping/* && m_ActiveFrame == clip.Frames - 1*/)
+			if(!clip.IsLooping)
 			{
 				if (m_ActiveFrame == clip.Frames - 1)
 					m_IsAnimationEnd = true;
 
 				if(m_IsAnimationEnd)
 				{
-					//m_ActiveFrame = clip.StartFrame;
 					m_FrameTime = 0;
 				}
 				else
 				{
 					AnimationTime(deltaTime, clip);
 				}
-				///*m_ActiveFrame = clip.StartFrame;
-				//m_FrameTime = 0;
-				//m_IsAnimationEnd = true;*/
 			}
 			else
 			{

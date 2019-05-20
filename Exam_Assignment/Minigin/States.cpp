@@ -33,7 +33,12 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 		case Direction::LEFT:
 			if (gameObject.GetSprite())
 			{
-				gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				if (!m_Clip.IsSingle)
+					gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				else 
+				{
+					gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				}
 			}
 			break;
 		case Direction::UP:
@@ -45,6 +50,10 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 						gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames * 2))), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 					else
 						gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames * 2)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				}
+				else if(m_Clip.IsSingle)
+				{
+					gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 				}
 				else
 				{
@@ -66,6 +75,10 @@ void dae::DirectionState::Animated(GameObject& gameObject)
 						gameObject.GetSprite()->SetCurrentUV((gameObject.GetTexture()->GetSize().x - gameObject.GetSprite()->GetCurrentUV().w) - ((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames * 3))), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 					else
 						gameObject.GetSprite()->SetCurrentUV((gameObject.GetSprite()->GetCurrentUV().w * gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x + (gameObject.GetSprite()->GetCurrentUV().w * m_Clip.Frames * 3)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
+				}
+				else if (m_Clip.IsSingle)
+				{
+					gameObject.GetSprite()->SetCurrentUV((m_Clip.Size.x * (gameObject.GetSprite()->GetActiveAnimationFrame()) + (m_Clip.UV.x)), m_Clip.UV.y, m_Clip.Size.x, m_Clip.Size.y);
 				}
 				else
 				{

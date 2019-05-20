@@ -43,7 +43,7 @@ void dae::SceneLoader::Initialize()
 	//POOKA
 	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 256}, { 32 , 32 }, 1, 2, false, false }, 11);			//Idle
 	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 1, false, true }, 13);			//Ghost
+	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 13);			//Ghost
 										   
 	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 288}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 15);		//Dead
 										   
@@ -52,7 +52,7 @@ void dae::SceneLoader::Initialize()
 	//Fygar																							
 	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 21);			//Idle
 	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 1, false, true }, 23);			//Ghost
+	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 23);			//Ghost
 	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);			//Attack
 	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);			//Dead
 										   
@@ -205,7 +205,7 @@ void dae::SceneLoader::PostInitScene(SceneList scene) const
 void dae::SceneLoader::ResetScene(SceneList scene)
 {
 	auto level = ServiceLocator::GetLevelManager();
-	
+	level->Reset();
 	level->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 
 	auto physics = ServiceLocator::GetPhysicsManager();
@@ -262,7 +262,7 @@ void dae::SceneLoader::ResetScene(SceneList scene)
 		level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
 
-		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
+		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f*3.f, 32 * 16.f);
 		level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
 		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
@@ -270,6 +270,7 @@ void dae::SceneLoader::ResetScene(SceneList scene)
 		break;
 
 	}
+
 	level->Reset();
 	PostInitScene(scene);
 }

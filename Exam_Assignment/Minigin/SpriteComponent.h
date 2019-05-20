@@ -2,6 +2,7 @@
 #include "BaseComponent.h"
 #include "States.h"
 #include <SDL.h>
+#include "AnimationManager.h"
 
 namespace dae
 {
@@ -12,7 +13,6 @@ namespace dae
 		SpriteComponent(SpriteComponent&& other) noexcept = delete;
 		SpriteComponent& operator=(const SpriteComponent& other) = delete;
 		SpriteComponent& operator=(SpriteComponent&& other) noexcept = delete;
-		//TODO: CHECK IF PLAYER OR NPC ASSIGN CORRECT INIT STATE
 		SpriteComponent() = default;
 
 		template <class T>
@@ -41,12 +41,14 @@ namespace dae
 		void onNotify(NotifyEvent event);
 		NotifyEvent GetCurrentEvent() const { return m_Event; }
 
-		void Reset();
-		void AnimationTime(float deltaTime, const SpriteClip& clip);
+		void ResetCurrentAnimation();
+		void Pause(const bool& pause = true) { m_IsPaused = pause; }
+		bool IsPaused() const { return m_IsPaused;}
 
 		bool IsAnimationEnded() const { return m_IsAnimationEnd; }
 
 		BaseState* GetCurrentState() const { return m_State.get(); }
+
 		template <class T>
 		std::shared_ptr<T> GetState()
 		{
@@ -58,26 +60,30 @@ namespace dae
 			return nullptr;
 		}
 
+		void Reset();
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;
 		//void Render() override;
 
+		void AnimationTime(float deltaTime, const SpriteClip& clip);
 		void SetActiveAnimationFrame(float deltaTime);
 		UINT GetAnimationIDForState(std::shared_ptr<BaseState> state);
 	private:
 		std::shared_ptr<BaseState> m_State = nullptr;
-		std::shared_ptr<BaseState> m_NpcState = nullptr;
 
 		NotifyEvent m_Event = NotifyEvent::EVENT_IDLE;
+
 		SDL_RendererFlip m_FlipDirection = SDL_FLIP_NONE;
 
 		bool m_IsAnimationEnd = false;
-
+		bool m_IsPaused = false;
 		double m_FrameTime = 0;
 		UINT m_ActiveFrame = 0;
 		SDL_Rect m_SpriteUV = { 0 , 0, 32, 32};
 
+		AnimationManager* m_AnimManager;
 		std::map<UINT, std::shared_ptr<BaseState>> m_StateClips;
 	};
 }

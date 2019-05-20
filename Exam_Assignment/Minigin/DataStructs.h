@@ -211,10 +211,11 @@ namespace dae
 		UINT Frames = 1;
 		bool HasUpDown = false;
 		bool IsLooping = false;
+		bool IsSingle = false;
 		float Speed = 1.0f;
 
 		SpriteClip(){}
-		SpriteClip(std::string name, iVector2 uv = {0, 0}, iVector2 size = { 32,32 }, UINT startFrame = 0, UINT frames = 1, bool hasUpDown = false, bool isLooping = false, float speed = 1.0f)
+		SpriteClip(std::string name, iVector2 uv = {0, 0}, iVector2 size = { 32,32 }, UINT startFrame = 0, UINT frames = 1, bool hasUpDown = false, bool isLooping = false, float speed = 1.0f, bool isSingle = false)
 		{
 			Name = name;
 			UV = uv;
@@ -223,6 +224,7 @@ namespace dae
 			Frames = frames;
 			HasUpDown = hasUpDown;
 			IsLooping = isLooping;
+			IsSingle = isSingle;
 			Speed = speed;
 		}
 	};
