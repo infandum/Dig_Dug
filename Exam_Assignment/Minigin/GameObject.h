@@ -28,10 +28,10 @@ namespace dae
 		TransformComponent*  GetTransform() { return GetComponent<TransformComponent>().get(); }
 		TextureComponent* GetTexture() { return GetComponent<TextureComponent>().get(); }
 		CollisionComponent* GetCollision() { return GetComponent<CollisionComponent>().get(); }
-		TileComponent* GetTile() { return GetComponent<TileComponent>().get(); }
+		RenderComponent* GetRenderer() { return GetComponent<RenderComponent>().get(); }
 		SpriteComponent* GetSprite() { return GetComponent<SpriteComponent>().get(); }
 		InputComponent* GetInput() { return GetComponent<InputComponent>().get(); }
-		NpcComponent* GetNPC() { return GetComponent<NpcComponent>().get(); }
+
 
 		void AddComponent(std::shared_ptr<BaseComponent> comp);
 		void RemoveComponent(std::shared_ptr<BaseComponent> pComp);

@@ -6,29 +6,8 @@
 
 void dae::LevelManager::Reset()
 {
-	//SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
-	for (auto x = 0; x < 14; ++x)
-	{
-		for (auto y = 0; y < 17; ++y)
-		{
-			auto tile = GetTile(x, y);
-			
-			tile->SetTileState(TileState::EMPITY);
-			if (y <= 1)
-				tile->SetTileState(TileState::EMPITY);
-			else
-				tile->SetTileState(TileState::FREE);
-			tile->Reset();
-		}
-	}
-
 	
 
-	for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
-	{
-
-		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
-	}
 
 	for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
 	{
@@ -36,7 +15,30 @@ void dae::LevelManager::Reset()
 		m_pEntities[m_ActiveSceneIndex][i]->Reset();
 	}
 
-	
+	for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+	{
+
+		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
+	}
+
+	if(!m_pTileComponents[m_ActiveSceneIndex].empty())
+	{
+		for (auto x = 0; x < 14; ++x)
+		{
+			for (auto y = 0; y < 17; ++y)
+			{
+				auto tile = GetTile(x, y);
+
+				tile->SetTileState(TileState::EMPITY);
+				if (y <= 1)
+					tile->SetTileState(TileState::EMPITY);
+				else
+					tile->SetTileState(TileState::FREE);
+				tile->Reset();
+			}
+		}
+	}
+
 	m_Reset = true;
 }
 
@@ -58,7 +60,7 @@ void dae::LevelManager::Update(float deltaTime)
 	SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 	for(auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
 	{
-			if (m_Reset)
+			if (m_Reset || m_StartTile[m_ActiveSceneIndex][i] == nullptr)
 			{
 				m_StartTile[m_ActiveSceneIndex][i] = GetTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().y);
 					m_StartTile[m_ActiveSceneIndex][i]->SetTileState(TileState::USED);

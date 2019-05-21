@@ -42,8 +42,7 @@ namespace dae
 		bool CheckOccupiedTileMove() const;
 		bool CheckTileSwapping();
 
-		void Reset(float x, float y, Direction dir = Direction::RIGHT);
-		void Reset(glm::vec3  pos, Direction dir = Direction::RIGHT);
+		void Reset(Direction dir = Direction::RIGHT);
 
 
 		float GetMoveSpeed() const { return m_MoveSpeed; }
@@ -66,7 +65,6 @@ namespace dae
 		bool m_IsOmniDirectional = false;
 
 		glm::vec3 m_Velocity = { 0,0,0 };
-		//glm::vec3 m_Position = { 0,0,0 };
 
 		Direction m_CurrentDirection = Direction::RIGHT;
 		Direction m_PreviousDirection = Direction::RIGHT;

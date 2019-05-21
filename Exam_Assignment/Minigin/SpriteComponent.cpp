@@ -10,14 +10,14 @@ void dae::SpriteComponent::Initialize()
 	{
 		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
 			m_State = GetState<IdlePlayerState>();
-		if (GetGameObject()->GetNPC())
+		if (GetGameObject()->GetComponent<NpcComponent>())
 			m_State = GetState<IdleEnemyState>();
 	}
 	else
 	{
 		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
 			m_State = GetState<IdlePlayerState>();
-		if (GetGameObject()->GetNPC())
+		if (GetGameObject()->GetComponent<NpcComponent>())
 			m_State = GetState<IdleEnemyState>();
 		if(typeid(*m_State.get()) == typeid(WeaponState))
 			m_State = GetState<WeaponState>();

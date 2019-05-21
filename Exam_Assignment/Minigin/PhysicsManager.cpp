@@ -4,6 +4,14 @@
 #include "Components.h"
 #include "ServiceLocator.h"
 
+void dae::PhysicsManager::Reset()
+{
+	for(auto& collision : m_pCollisionComponents[m_ActiveSceneIndex])
+	{
+		collision->Reset();
+	}
+}
+
 void dae::PhysicsManager::Initialize()
 {
 }
@@ -55,12 +63,18 @@ void dae::PhysicsManager::Update(float deltaTime)
 			compBox.y = static_cast<int>(component->GetPosition().y);
 			compBox.RadiusX = static_cast<int>(component->GetSize().x - m_CollisionPadding);
 			compBox.RadiusY = static_cast<int>(component->GetSize().y - m_CollisionPadding);
+			compBox.x += compBox.RadiusX / 2;
+			compBox.y += compBox.RadiusY / 2;
 
 			CollisionBox otherCompBox;
 			otherCompBox.x = static_cast<int>(otherComponent->GetPosition().x);
 			otherCompBox.y = static_cast<int>(otherComponent->GetPosition().y);
 			otherCompBox.RadiusX = static_cast<int>(otherComponent->GetSize().x - m_CollisionPadding);
 			otherCompBox.RadiusY = static_cast<int>(otherComponent->GetSize().y - m_CollisionPadding);
+			otherCompBox.x += otherCompBox.RadiusX / 2;
+			otherCompBox.y += otherCompBox.RadiusY / 2;
+
+
 			isOverlapping = CheckBoxesIntersect(compBox, otherCompBox);
 			if(isOverlapping)
 			{

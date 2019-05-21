@@ -15,13 +15,26 @@ void dae::CollisionComponent::SetPosition(float x, float y, float z)
 	m_Position = glm::vec3(x, y, z);
 }
 
+void dae::CollisionComponent::Reset()
+{
+	m_Position = m_pTransformComponent->GetPosition();
+	CollisionPosition();
+	m_HasCollision = false;
+	m_pOtherCollider = nullptr;
+}
+
 void dae::CollisionComponent::Initialize()
 {
 	auto physics_manager = ServiceLocator::GetPhysicsManager();
 	physics_manager->AddCollision(this);
 
+	m_pTransformComponent = GetGameObject()->GetTransform();
+	m_Position = m_pTransformComponent->GetPosition();
+
 	m_pSpriteComponent = GetGameObject()->GetSprite();
 	m_pTextureComponent = GetGameObject()->GetTexture();
+
+	CollisionPosition();
 }
 
 void dae::CollisionComponent::Collision()
@@ -43,19 +56,8 @@ void dae::CollisionComponent::Collision()
 	}
 }
 
-void dae::CollisionComponent::Update(float deltaTime)
+void dae::CollisionComponent::CollisionPosition()
 {
-	UNREFERENCED_PARAMETER(deltaTime);
-	
-
-	if (!m_pTransformComponent && m_pTransformComponent == nullptr && GetGameObject()->GetTransform() != nullptr)
-	{
-		m_pTransformComponent = GetGameObject()->GetTransform();
-		m_Position = m_pTransformComponent->GetPosition();
-		
-	}
-
-	//Set Collision box around the center of the object
 	if (m_pSpriteComponent)
 	{
 		if (m_CustomSize)
@@ -97,6 +99,22 @@ void dae::CollisionComponent::Update(float deltaTime)
 
 	m_Position.x = m_pTransformComponent->GetPosition().x - (m_offSet.x / 2);
 	m_Position.y = m_pTransformComponent->GetPosition().y - (m_offSet.x / 2);
+}
+
+void dae::CollisionComponent::Update(float deltaTime)
+{
+	UNREFERENCED_PARAMETER(deltaTime);
+	
+
+	if (!m_pTransformComponent && m_pTransformComponent == nullptr && GetGameObject()->GetTransform() != nullptr)
+	{
+		m_pTransformComponent = GetGameObject()->GetTransform();
+		m_Position = m_pTransformComponent->GetPosition();
+		
+	}
+
+	//Set Collision box around the center of the object
+	CollisionPosition();
 
 	if (!m_Collide)
 		return;

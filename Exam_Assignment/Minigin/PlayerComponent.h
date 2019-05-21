@@ -38,8 +38,10 @@ namespace dae
 
 	private:
 		PlayerType m_Type{};
-		std::shared_ptr<GameObject> m_Attack;
-		std::shared_ptr<GameObject> m_AttackSprite;
+
+		std::shared_ptr<GameObject> m_Attack{};
+		std::shared_ptr<GameObject> m_AttackSprite{};
+
 		float m_AttackRange = 32.f + 16;
 		float m_AttackSpeed = 120.f;
 		float m_AttackTimer = 0.0f;
@@ -50,6 +52,7 @@ namespace dae
 		bool m_IsDead = false;
 		bool m_IsAttackHit = false;
 		bool m_IsReset = false;
+
 		Direction m_LastHorDir = Direction::RIGHT;
 
 		int m_Health = 3;

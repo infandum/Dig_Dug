@@ -6,6 +6,11 @@
 
 dae::PlayerComponent::PlayerComponent(PlayerType type) : m_Type(type)
 {
+	m_IsDead = false;
+	m_IsReset = true;
+	m_isAttacking = false;
+	m_IsAttackHit = false;
+	m_AttackTimer = 0;
 }
 
 void dae::PlayerComponent::Attack(bool& isAttacking)
@@ -36,12 +41,17 @@ void dae::PlayerComponent::ChangeHealth(int amount)
 
 void dae::PlayerComponent::Reset()
 {
+	GetGameObject()->SetIsActive(true);
+	GetGameObject()->GetTransform()->Reset();
+	GetGameObject()->GetComponent<MoveComponent>()->Reset();
 	m_IsDead = false;
 	m_IsReset = true;
 	m_isAttacking = false;
 	m_IsAttackHit = false;
 	m_AttackTimer = 0;
-	GetGameObject()->SetIsActive(true);
+
+	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	
 }
 
 void dae::PlayerComponent::Initialize()
@@ -105,7 +115,7 @@ void dae::PlayerComponent::Initialize()
 
 void dae::PlayerComponent::Update(float deltaTime)
 {
-	if (!IsDead())
+	if (!m_IsDead)
 	{
 		ExecuteCommand();
 	}
@@ -324,7 +334,7 @@ void dae::PlayerComponent::CollisionEvents()
 				}
 
 			if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
-				if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN && !collision->GetCollision()->GetGameObject()->GetNPC()->IsDead())
+				if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN && !collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->IsDead())
 				{
 					GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_COLLISION);
 					m_IsDead = true;

@@ -6,22 +6,13 @@
 #include "GameObject.h"
 
 extern const float g_TileCenterPadding;
-void dae::MoveComponent::Reset(float x, float y, Direction dir)
-{
-	Reset({ x,y,0 }, dir);
-}
 
-void dae::MoveComponent::Reset(glm::vec3 pos, Direction dir)
+void dae::MoveComponent::Reset(Direction dir)
 {
-	GetGameObject()->GetTransform()->SetPosition(pos.x, pos.y, pos.z);
-
-	int x = static_cast<int>(round(pos.x / 32.0f));
-	int y = static_cast<int>(round(pos.y / 32.0f));
-	GetGameObject()->GetTransform()->SetPositionIndex({ x, y });
-	
 	SetVelocity({ 0,0,0 });
 
-	m_PreviousDirection = m_CurrentDirection = dir;
+	m_CurrentDirection = dir;
+	m_PreviousDirection = dir;
 }
 
 void dae::MoveComponent::Initialize()

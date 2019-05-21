@@ -11,7 +11,6 @@ void dae::TransformComponent::Update(float )
 
 dae::TransformComponent::TransformComponent(float x, float y, float z)
 {
-
 	m_InitPosition = { x, y, z };
 }
 
@@ -19,6 +18,14 @@ void dae::TransformComponent::SetPosition(float x, float y, float z)
 {
 	m_Position = { 0,0,0 };
 	m_Position = glm::vec3(x, y, z);
+}
+
+void dae::TransformComponent::Reset()
+{
+	m_Position = m_InitPosition;
+	int x = static_cast<int>(round(m_Position.x / 32.0f));
+	int y = static_cast<int>(round(m_Position.y / 32.0f));
+	SetPositionIndex({ x, y });
 }
 
 void dae::TransformComponent::Initialize()

@@ -27,8 +27,13 @@ void dae::SceneManager::Initialize()
 
 void dae::SceneManager::Update(const float deltaTime)
 {
-	CurrentSceneIndex = ActiveSceneIndex;
+	
 	m_spScenes[CurrentSceneIndex]->Update(deltaTime);
+	if(CurrentSceneIndex != ActiveSceneIndex)
+	{
+		CurrentSceneIndex = ActiveSceneIndex;
+		ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
+	}
 }
 
 void dae::SceneManager::Render()
@@ -59,7 +64,7 @@ void dae::SceneManager::NextScene()
 	auto i = ActiveSceneIndex;
 	i++;
 	SetActive(i);
-	ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
+	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 }
 
 void dae::SceneManager::PreviousScene()
@@ -68,7 +73,7 @@ void dae::SceneManager::PreviousScene()
 	auto i = ActiveSceneIndex;
 	i--;
 	SetActive(i);
-	ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
+	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 }
 
 void dae::SceneManager::SetActive(const std::string& sceneName)

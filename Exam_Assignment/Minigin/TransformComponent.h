@@ -21,7 +21,7 @@ namespace dae
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(float x = 0, float y = 0, float z = 0);
-		void SetPosition(const glm::vec3& pos = {0, 0, 0}) { SetLocalPosition(pos.x, pos.y, pos.y); }
+		void SetPosition(const glm::vec3& pos = {0, 0, 0}) { SetPosition(pos.x, pos.y, pos.y); }
 
 		const glm::vec3& GetLocalPosition() const { return m_localPosition; }
 		void SetLocalPosition(float x = 0, float y = 0, float z = 0) { m_localPosition = { x,y,z }; }
@@ -32,6 +32,8 @@ namespace dae
 
 		const iVector2& GetPositionIndex() const { return m_CurrentTileIndex; }
 		void SetPositionIndex(iVector2 index) {/* std::cout << "SET TILE: " << m_CurrentTileIndex.x << " , " << m_CurrentTileIndex.y << "\n";*/ m_CurrentTileIndex = index; }
+
+		void Reset();
 		
 	protected:
 		void Initialize() override;

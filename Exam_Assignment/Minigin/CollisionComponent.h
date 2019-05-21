@@ -25,6 +25,7 @@ namespace  dae
 
 		const glm::vec3& GetPosition() const { return m_Position; }
 		void SetPosition(float x = 0, float y = 0, float z = 0);
+		void SetPosition(const glm::vec3& pos = { 0, 0, 0 }) { SetPosition(pos.x, pos.y, pos.y); }
 
 		bool ShowCollisionBox(bool show) { return m_ShowCollisionBox = show; }
 		bool ShowCollisionBox() const { return m_ShowCollisionBox; }
@@ -45,6 +46,7 @@ namespace  dae
 	protected:
 		void Initialize() override;
 		void Collision();
+		void CollisionPosition();
 		void Update(float deltaTime) override;
 		//void Render() override;
 

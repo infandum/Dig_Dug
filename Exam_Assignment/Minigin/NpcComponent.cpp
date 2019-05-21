@@ -12,8 +12,11 @@ void dae::NpcComponent::Reset()
 	m_IsDead = false;
 	m_IsHit = false;
 	m_isGhosting = false;
-	GetGameObject()->GetTransform()->SetPosition(GetGameObject()->GetTransform()->GetInitPosition());
+
 	GetGameObject()->SetIsActive(true);
+	GetGameObject()->GetTransform()->Reset();
+	GetGameObject()->GetComponent<MoveComponent>()->Reset();
+
 	if (m_Type == NPCType::POOKA)
 		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 }

@@ -104,19 +104,12 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		AddBackground(01);
 
 		GenerateTile();
-		//GenerateTile();
 
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
-
-		//AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12);
-
 
 		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
 
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
-
-		/*tiles->CreateTunnel(12, 12, Direction::UP, 2);
-		tiles->CreateTunnel(12, 12, Direction::LEFT, 2);*/
 
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
@@ -127,9 +120,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		AddMenu();
 
 		AddBackground(01);
-		//GetGameObject()->GetComponent<LevelManager>()->Reset();
+
 		GenerateTile();
-		//GenerateTile();
 
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
 
@@ -205,72 +197,68 @@ void dae::SceneLoader::PostInitScene(SceneList scene) const
 void dae::SceneLoader::ResetScene(SceneList scene)
 {
 	auto level = ServiceLocator::GetLevelManager();
-	level->Reset();
 	level->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 
 	auto physics = ServiceLocator::GetPhysicsManager();
 	physics->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 	
-	
-	switch (scene)
-	{
-	default:
-		break;
-	case SceneList::MAIN_MENU:
-		break;
-	case SceneList::LEVEL_SINGLE:
-		
-		
-		/*AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
+	//
+	//switch (scene)
+	//{
+	//default:
+	//	break;
+	//case SceneList::MAIN_MENU:
+	//	break;
+	//case SceneList::LEVEL_SINGLE:
+	//	
+	//	
+	//	
+	//	//level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
+	//	//level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	//
+	//	//level->GetNPC(0)->GetGameObject()->SetIsActive(true);
+	//	//level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
+	//	//level->GetNPC(1)->GetGameObject()->SetIsActive(true);
+	//	//level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
+	//	////level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12);*/
-		
-		level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
-		level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-		
-		level->GetNPC(0)->GetGameObject()->SetIsActive(true);
-		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
-		level->GetNPC(1)->GetGameObject()->SetIsActive(true);
-		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
-		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	
+	//	break;
 
-		
-		break;
+	//case SceneList::LEVEL_COOP:
 
-	case SceneList::LEVEL_COOP:
+	//	level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
+	//	level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
-		level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
-		level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-		level->GetPlayer(1)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 12);
-		level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	level->GetPlayer(1)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 12);
+	//	level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
 
-		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
-		level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
-		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
+	//	level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
+	//	//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
-		break;
+	//	break;
 
-	case SceneList::LEVEL_VS:
+	//case SceneList::LEVEL_VS:
 
-		level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
-		level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
+	//	level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
-		level->GetPlayer(1)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 12);
-		level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	level->GetPlayer(1)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 12);
+	//	level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
 
-		level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f*3.f, 32 * 16.f);
-		level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-		level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
-		//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f*3.f, 32 * 16.f);
+	//	level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	//	level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
+	//	//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
-		break;
+	//	break;
 
-	}
-
+	//}
+	physics->Reset();
 	level->Reset();
 	PostInitScene(scene);
 }
