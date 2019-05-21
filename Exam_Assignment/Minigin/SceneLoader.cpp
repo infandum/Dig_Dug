@@ -103,7 +103,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		AddBackground(01);
 
-		AddGUI( 0.f, 32.f * 9);
+		AddGUI( 0.f, 32.f * 17);
 
 		GenerateTile();
 
@@ -226,10 +226,10 @@ void dae::SceneLoader::AddGUI(float x, float y) const
 	go->AddComponent(std::make_shared<TransformComponent>(x, y));
 	go->AddComponent(std::make_shared<RenderComponent>());
 	go->AddComponent(std::make_shared<TextureComponent>());
-	go->AddComponent(std::make_shared<GuiComponent>());
+	go->AddComponent(std::make_shared<HealthDisplayComponent>());
 
 	auto level = ServiceLocator::GetLevelManager();
-	level->AddObserver(go->GetComponent<GuiComponent>());
+	level->AddObserver(go->GetComponent<HealthDisplayComponent>());
 	m_Scene->Add(go);
 }
 

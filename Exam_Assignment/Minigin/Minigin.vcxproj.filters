@@ -1,37 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{044f382c-81e1-4419-b979-c847cd441123}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Base">
-      <UniqueIdentifier>{911d5caf-4290-40e2-b920-eb5edb982d2d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers">
-      <UniqueIdentifier>{dcdd3fb0-84e8-4f2a-9b0f-b6e858f2e3ab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Content">
-      <UniqueIdentifier>{64e0e1c2-d75d-4c8e-a31d-36cbdf3db70e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers\Input">
-      <UniqueIdentifier>{4c81c308-e0e5-4eb1-8b27-9079bedc8971}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers\Game">
-      <UniqueIdentifier>{555d38c8-52f0-40dc-8502-b58cfaa51240}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Managers\Engine">
-      <UniqueIdentifier>{6158519a-934e-40e5-8935-8a04f8fe3ca2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SceneGraph">
-      <UniqueIdentifier>{b5fb3a28-b1b5-4795-876d-e6eea6efd7c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="SceneGraph\Scene">
-      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{307788f5-b3a4-4e48-82d6-1031c8b48891}</UniqueIdentifier>
     </Filter>
@@ -41,118 +10,152 @@
     <Filter Include="Game\Scene">
       <UniqueIdentifier>{e173b1ae-002d-479c-9b22-9aebe9d1c3f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{3b1d5eaa-c5fb-4640-88e0-04f59270a13d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\SceneGraph">
+      <UniqueIdentifier>{b5fb3a28-b1b5-4795-876d-e6eea6efd7c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\SceneGraph\Scene">
+      <UniqueIdentifier>{2a788480-d0d2-4d27-b083-b413f68dfb99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Engine\Managers">
+      <UniqueIdentifier>{dcdd3fb0-84e8-4f2a-9b0f-b6e858f2e3ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Managers\Input">
+      <UniqueIdentifier>{4c81c308-e0e5-4eb1-8b27-9079bedc8971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Managers\Game">
+      <UniqueIdentifier>{555d38c8-52f0-40dc-8502-b58cfaa51240}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Managers\Engine">
+      <UniqueIdentifier>{6158519a-934e-40e5-8935-8a04f8fe3ca2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Base">
+      <UniqueIdentifier>{911d5caf-4290-40e2-b920-eb5edb982d2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Components">
+      <UniqueIdentifier>{044f382c-81e1-4419-b979-c847cd441123}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Content">
+      <UniqueIdentifier>{64e0e1c2-d75d-4c8e-a31d-36cbdf3db70e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="FPSComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Log.h">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
     <ClInclude Include="MiniginPCH.h">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
-      <Filter>Content</Filter>
+      <Filter>Engine\Content</Filter>
     </ClInclude>
     <ClInclude Include="Texture2D.h">
-      <Filter>Content</Filter>
+      <Filter>Engine\Content</Filter>
     </ClInclude>
     <ClInclude Include="Transform.h">
-      <Filter>Content</Filter>
+      <Filter>Engine\Content</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
     <ClInclude Include="Singleton.h">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>SceneGraph</Filter>
+      <Filter>Engine\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="TextObject.h">
-      <Filter>SceneGraph</Filter>
+      <Filter>Engine\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="TextComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="TextureComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>SceneGraph\Scene</Filter>
+      <Filter>Engine\SceneGraph\Scene</Filter>
     </ClInclude>
     <ClInclude Include="SceneObject.h">
-      <Filter>SceneGraph</Filter>
+      <Filter>Engine\SceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="DataStructs.h">
-      <Filter>Content</Filter>
+      <Filter>Engine\Content</Filter>
     </ClInclude>
     <ClInclude Include="SceneLoader.h">
-      <Filter>SceneGraph\Scene</Filter>
+      <Filter>Engine\SceneGraph\Scene</Filter>
     </ClInclude>
     <ClInclude Include="InputComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>SceneGraph\Scene</Filter>
+      <Filter>Engine\SceneGraph\Scene</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Managers\Input</Filter>
+      <Filter>Engine\Managers\Input</Filter>
     </ClInclude>
     <ClInclude Include="CollisionComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="ServiceLocator.h">
-      <Filter>Managers</Filter>
+      <Filter>Engine\Managers</Filter>
     </ClInclude>
     <ClInclude Include="LevelManager.h">
-      <Filter>Managers\Game</Filter>
+      <Filter>Engine\Managers\Game</Filter>
     </ClInclude>
     <ClInclude Include="Renderer.h">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClInclude>
     <ClInclude Include="ResourceManager.h">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Observer.h">
-      <Filter>Managers</Filter>
+      <Filter>Engine\Managers</Filter>
     </ClInclude>
     <ClInclude Include="SpriteComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="States.h">
-      <Filter>Managers\Input</Filter>
+      <Filter>Engine\Managers\Input</Filter>
     </ClInclude>
     <ClInclude Include="Commands.h">
-      <Filter>Managers\Input</Filter>
+      <Filter>Engine\Managers\Input</Filter>
     </ClInclude>
     <ClInclude Include="AnimationManager.h">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Subject.h">
-      <Filter>Managers</Filter>
+      <Filter>Engine\Managers</Filter>
     </ClInclude>
     <ClInclude Include="RenderComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="MoveComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClInclude>
     <ClInclude Include="PhysicsManager.h">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Minigin.h">
       <Filter>Game</Filter>
@@ -169,92 +172,94 @@
     <ClInclude Include="DemoScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="GuiComponent.h" />
+    <ClInclude Include="HealthDisplayComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="MiniginPCH.cpp">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClCompile>
     <ClCompile Include="Log.cpp">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClCompile>
     <ClCompile Include="Font.cpp">
-      <Filter>Content</Filter>
+      <Filter>Engine\Content</Filter>
     </ClCompile>
     <ClCompile Include="Texture2D.cpp">
-      <Filter>Content</Filter>
+      <Filter>Engine\Content</Filter>
     </ClCompile>
     <ClCompile Include="Transform.cpp">
-      <Filter>Content</Filter>
+      <Filter>Engine\Content</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>SceneGraph</Filter>
+      <Filter>Engine\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="TextObject.cpp">
-      <Filter>SceneGraph</Filter>
+      <Filter>Engine\SceneGraph</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="TextComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="TextureComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>SceneGraph\Scene</Filter>
+      <Filter>Engine\SceneGraph\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp">
-      <Filter>Base</Filter>
+      <Filter>Engine\Base</Filter>
     </ClCompile>
     <ClCompile Include="SceneLoader.cpp">
-      <Filter>SceneGraph\Scene</Filter>
+      <Filter>Engine\SceneGraph\Scene</Filter>
     </ClCompile>
     <ClCompile Include="InputComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="SceneManager.cpp">
-      <Filter>SceneGraph\Scene</Filter>
+      <Filter>Engine\SceneGraph\Scene</Filter>
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
-      <Filter>Managers\Input</Filter>
+      <Filter>Engine\Managers\Input</Filter>
     </ClCompile>
     <ClCompile Include="CollisionComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="ServiceLocator.cpp">
-      <Filter>Managers</Filter>
+      <Filter>Engine\Managers</Filter>
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
-      <Filter>Managers\Game</Filter>
+      <Filter>Engine\Managers\Game</Filter>
     </ClCompile>
     <ClCompile Include="Renderer.cpp">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClCompile>
     <ClCompile Include="ResourceManager.cpp">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClCompile>
     <ClCompile Include="SpriteComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="States.cpp">
-      <Filter>Managers\Input</Filter>
+      <Filter>Engine\Managers\Input</Filter>
     </ClCompile>
     <ClCompile Include="AnimationManager.cpp">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="MoveComponent.cpp">
-      <Filter>Components</Filter>
+      <Filter>Engine\Components</Filter>
     </ClCompile>
     <ClCompile Include="PhysicsManager.cpp">
-      <Filter>Managers\Engine</Filter>
+      <Filter>Engine\Managers\Engine</Filter>
     </ClCompile>
     <ClCompile Include="Minigin.cpp">
       <Filter>Game</Filter>
@@ -271,11 +276,13 @@
     <ClCompile Include="DemoScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GuiComponent.cpp" />
+    <ClCompile Include="HealthDisplayComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc">
-      <Filter>Resource Files</Filter>
+      <Filter>Engine\Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
 </Project>

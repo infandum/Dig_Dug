@@ -23,6 +23,7 @@ namespace dae
 
 		bool IsDead() const { return m_IsDead; }
 		void SetHealth(int health);
+		int GetHealth() const { return m_Health; }
 		void ChangeHealth(int amount);
 
 		PlayerType GetType() const { return m_Type; }

@@ -17,4 +17,4 @@
 #include "PlayerComponent.h"
 #include "NpcComponent.h"
 #include "TileComponent.h"
-#include "GuiComponent.h"
+#include "HealthDisplayComponent.h"
