@@ -19,6 +19,7 @@ void dae::LevelManager::Reset()
 	{
 
 		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
+		Notify(*m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject(), NotifyEvent::EVENT_LIFE_CHECK);
 	}
 
 	if(!m_pTileComponents[m_ActiveSceneIndex].empty())

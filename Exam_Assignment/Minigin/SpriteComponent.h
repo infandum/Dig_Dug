@@ -62,6 +62,8 @@ namespace dae
 
 		void Reset();
 
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

@@ -40,6 +40,10 @@ void dae::TextComponent::SetText(const std::string& text)
 	m_NeedsUpdate = true;
 }
 
+void dae::TextComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
+
 void dae::TextComponent::Initialize()
 {
 }

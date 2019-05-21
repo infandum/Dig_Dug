@@ -29,7 +29,7 @@ namespace dae
 		void InitScene(SceneList scene);
 		void PostInitScene(SceneList scene) const;
 
-		void ResetScene(SceneList scene);
+		void ResetScene(SceneList scene) const;
 
 		void Initialize();
 		void Update(float deltaTime);
@@ -38,6 +38,7 @@ namespace dae
 
 	private:
 		void AddMenu() const;
+		void AddGUI(float x = 0.f, float y = 0.f) const;
 		void AddPlayer(PlayerType type, float x = 0.f, float y = 0.f) const;
 		void AddNpc(NPCType type, float x = 0.f, float y = 0.f) const;
 		void GenerateTile() const;

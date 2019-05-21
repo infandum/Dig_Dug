@@ -54,6 +54,10 @@ void dae::PlayerComponent::Reset()
 	
 }
 
+void dae::PlayerComponent::onNotify(GameObject & , NotifyEvent & )
+{
+}
+
 void dae::PlayerComponent::Initialize()
 {
 	

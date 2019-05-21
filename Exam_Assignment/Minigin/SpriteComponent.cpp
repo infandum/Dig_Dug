@@ -144,6 +144,10 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 	}
 }
 
+void dae::SpriteComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
+
 UINT dae::SpriteComponent::GetAnimationIDForState(std::shared_ptr<BaseState> state)
 {
 	for (const std::pair<UINT, std::shared_ptr<BaseState>> entry : m_StateClips)

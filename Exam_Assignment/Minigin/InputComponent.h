@@ -17,6 +17,9 @@ namespace dae
 		virtual ~InputComponent() = default;
 
 		void ExecuteCommand() const;
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

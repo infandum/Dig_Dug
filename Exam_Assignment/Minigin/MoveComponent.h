@@ -46,6 +46,9 @@ namespace dae
 
 
 		float GetMoveSpeed() const { return m_MoveSpeed; }
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

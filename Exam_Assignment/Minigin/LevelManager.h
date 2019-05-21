@@ -1,4 +1,5 @@
 #pragma once
+#include "Subject.h"
 
 
 namespace dae {
@@ -9,7 +10,7 @@ namespace dae {
 	class InputComponent;
 	class NpcComponent;
 	class vec3;
-	class LevelManager final
+	class LevelManager final : public Subject
 	{
 	public:
 		LevelManager(const LevelManager& other) = delete;

@@ -21,6 +21,8 @@ namespace dae
 		std::shared_ptr<Texture2D>& GetTexture() { return m_spTexture; }
 		iVector2 GetSize() const { return m_Size; }
 
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

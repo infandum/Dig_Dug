@@ -21,6 +21,10 @@ void dae::NpcComponent::Reset()
 		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 }
 
+void dae::NpcComponent::onNotify(GameObject & , NotifyEvent & )
+{
+}
+
 void dae::NpcComponent::Initialize()
 {
 	auto tiles = ServiceLocator::GetLevelManager();

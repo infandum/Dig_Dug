@@ -1,10 +1,17 @@
 #pragma once
 #include "Components.h"
+#include "TileComponent.h"
+
 
 namespace dae
 {
 	class RenderComponent : public BaseComponent
 	{
+		/*class TextureComponent;
+		class TransformComponent;
+		class CollisionComponent;
+		class TileComponent;
+		class SpriteComponent;*/
 		friend class GameObject;
 	public:
 		RenderComponent(const RenderComponent& other) = delete;
@@ -15,6 +22,8 @@ namespace dae
 		virtual ~RenderComponent() = default;
 
 		void EnableRender(const bool& enable = true) { m_Render = enable; }
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
 
 	protected:
 		void Initialize() override;

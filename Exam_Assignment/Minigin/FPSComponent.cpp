@@ -3,6 +3,10 @@
 #include "GameObject.h"
 #include <iomanip>
 
+void dae::FPSComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
+
 void dae::FPSComponent::Initialize()
 {
 }

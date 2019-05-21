@@ -28,6 +28,11 @@ void dae::TransformComponent::Reset()
 	SetPositionIndex({ x, y });
 }
 
+void dae::TransformComponent::onNotify(GameObject& , NotifyEvent& )
+{
+
+}
+
 void dae::TransformComponent::Initialize()
 {
 	if (GetGameObject()->GetParent())

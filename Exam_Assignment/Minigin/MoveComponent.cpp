@@ -15,6 +15,11 @@ void dae::MoveComponent::Reset(Direction dir)
 	m_PreviousDirection = dir;
 }
 
+void dae::MoveComponent::onNotify(GameObject& , NotifyEvent& )
+{
+
+}
+
 void dae::MoveComponent::Initialize()
 {
 	m_pTransform = GetGameObject()->GetTransform();

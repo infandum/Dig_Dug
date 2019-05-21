@@ -19,6 +19,8 @@ namespace dae
 
 		static unsigned int GetTotalFrames() { return m_Frames; }
 
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

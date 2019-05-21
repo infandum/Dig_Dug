@@ -34,6 +34,8 @@ namespace dae
 		void SetPositionIndex(iVector2 index) {/* std::cout << "SET TILE: " << m_CurrentTileIndex.x << " , " << m_CurrentTileIndex.y << "\n";*/ m_CurrentTileIndex = index; }
 
 		void Reset();
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
 		
 	protected:
 		void Initialize() override;

@@ -26,6 +26,9 @@ namespace dae
 		bool GetIsConnectedBorder(Direction dir) { return m_IsBorderConnected[static_cast<int>(dir)]; }
 
 		void Reset() { for(auto& border : m_IsBorderConnected) { border = false; }}
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 		
 	protected:
 		void Initialize() override;

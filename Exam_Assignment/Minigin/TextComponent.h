@@ -24,6 +24,8 @@ namespace dae{
 
 		void SetText(const std::string& text);
 
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 	protected:
 		void Initialize() override;
 		void Update(float deltaTime) override;

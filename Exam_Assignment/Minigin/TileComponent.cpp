@@ -16,6 +16,10 @@ dae::TileComponent::TileComponent(TileState state, int xIndex, int yIndex) : m_T
 }
 
 
+void dae::TileComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
+
 void dae::TileComponent::Initialize()
 {
 	auto level = ServiceLocator::GetLevelManager();

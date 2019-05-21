@@ -9,7 +9,7 @@ namespace dae
 	{
 
 	public:
-		void addObserver(std::shared_ptr<Observer>pObserver)
+		void AddObserver(std::shared_ptr<Observer>pObserver)
 		{
 			for (auto& observer : m_pObservers)
 			{
@@ -23,7 +23,7 @@ namespace dae
 
 		}
 
-		void removeObserver(std::shared_ptr<Observer> pObserver)
+		void RemoveObserver(std::shared_ptr<Observer> pObserver)
 		{
 			const auto observer = std::find(m_pObservers.begin(), m_pObservers.end(), pObserver);
 			if (observer == m_pObservers.end())
@@ -35,7 +35,7 @@ namespace dae
 		}
 
 	protected:
-		void notify(GameObject& gameObject, NotifyEvent event)
+		void Notify(GameObject& gameObject, NotifyEvent event)
 		{
 			for (auto& m_observer : m_pObservers)
 			{

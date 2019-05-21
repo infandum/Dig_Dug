@@ -13,6 +13,10 @@ void dae::TextureComponent::SetTexture(std::shared_ptr<Texture2D> texture)
 	SDL_QueryTexture(m_spTexture->GetSDLTexture(), nullptr, nullptr, &m_Size.x, &m_Size.y);
 }
 
+void dae::TextureComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
+
 void dae::TextureComponent::Initialize()
 {
 }

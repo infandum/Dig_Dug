@@ -13,6 +13,10 @@ void dae::InputComponent::ExecuteCommand() const
 		command->Execute();
 }
 
+void dae::InputComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
+
 void dae::InputComponent::Initialize()
 {
 }

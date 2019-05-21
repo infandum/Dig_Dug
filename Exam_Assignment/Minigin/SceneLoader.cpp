@@ -99,9 +99,11 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level single");
 
 		AddMenu();
-
+		font = resource->LoadFont("emulogic.ttf", 16);
 
 		AddBackground(01);
+
+		AddGUI( 0.f, 32.f * 9);
 
 		GenerateTile();
 
@@ -117,8 +119,9 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	case SceneList::LEVEL_COOP:
 		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Coop");
 
+		font = resource->LoadFont("emulogic.ttf", 12);
 		AddMenu();
-
+		
 		AddBackground(01);
 
 		GenerateTile();
@@ -194,70 +197,14 @@ void dae::SceneLoader::PostInitScene(SceneList scene) const
 
 }
 
-void dae::SceneLoader::ResetScene(SceneList scene)
+void dae::SceneLoader::ResetScene(SceneList scene) const
 {
 	auto level = ServiceLocator::GetLevelManager();
 	level->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 
 	auto physics = ServiceLocator::GetPhysicsManager();
 	physics->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
-	
-	//
-	//switch (scene)
-	//{
-	//default:
-	//	break;
-	//case SceneList::MAIN_MENU:
-	//	break;
-	//case SceneList::LEVEL_SINGLE:
-	//	
-	//	
-	//	
-	//	//level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
-	//	//level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-	//	//
-	//	//level->GetNPC(0)->GetGameObject()->SetIsActive(true);
-	//	//level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
-	//	//level->GetNPC(1)->GetGameObject()->SetIsActive(true);
-	//	//level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
-	//	////level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 
-	//	
-	//	break;
-
-	//case SceneList::LEVEL_COOP:
-
-	//	level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
-	//	level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-	//	level->GetPlayer(1)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 12);
-	//	level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-
-	//	level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f, 32 * 8.f);
-	//	level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-	//	level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
-	//	//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-	//	break;
-
-	//case SceneList::LEVEL_VS:
-
-	//	level->GetPlayer(0)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 3);
-	//	level->GetPlayer(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-	//	level->GetPlayer(1)->GetGameObject()->GetComponent<MoveComponent>()->Reset(0, 32.f * 12);
-	//	level->GetPlayer(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-
-	//	level->GetNPC(0)->GetGameObject()->GetTransform()->SetPosition(32.f*3.f, 32 * 16.f);
-	//	level->GetNPC(0)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-	//	level->GetNPC(1)->GetGameObject()->GetTransform()->SetPosition(32.f * 4.f, 32 * 6.f);
-	//	//level->GetNPC(1)->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-	//	break;
-
-	//}
 	physics->Reset();
 	level->Reset();
 	PostInitScene(scene);
@@ -270,6 +217,20 @@ void dae::SceneLoader::AddMenu() const
 	menu->AddComponent(std::make_shared<InputComponent>());
 	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonSelect, SDLK_ESCAPE, menu.get());
 	m_Scene->Add(menu);
+}
+
+void dae::SceneLoader::AddGUI(float x, float y) const
+{
+	std::shared_ptr<GameObject> go;
+	go = std::make_shared<GameObject>();
+	go->AddComponent(std::make_shared<TransformComponent>(x, y));
+	go->AddComponent(std::make_shared<RenderComponent>());
+	go->AddComponent(std::make_shared<TextureComponent>());
+	go->AddComponent(std::make_shared<GuiComponent>());
+
+	auto level = ServiceLocator::GetLevelManager();
+	level->AddObserver(go->GetComponent<GuiComponent>());
+	m_Scene->Add(go);
 }
 
 void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const

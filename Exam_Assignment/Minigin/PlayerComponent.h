@@ -28,6 +28,9 @@ namespace dae
 		PlayerType GetType() const { return m_Type; }
 
 		void Reset();
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+
 	protected:
 		void Initialize() override;
 		void AllignAttack();

@@ -169,6 +169,7 @@
     <ClInclude Include="DemoScene.h">
       <Filter>Game\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="GuiComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -270,6 +271,7 @@
     <ClCompile Include="DemoScene.cpp">
       <Filter>Game\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="GuiComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Minigin.rc">

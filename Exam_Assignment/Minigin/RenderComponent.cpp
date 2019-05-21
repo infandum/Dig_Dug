@@ -1,7 +1,11 @@
 #include "MiniginPCH.h"
-#include "RenderComponent.h"
+#include "Components.h"
 #include "ServiceLocator.h"
 #include "GameObject.h"
+
+void dae::RenderComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
 
 void dae::RenderComponent::Initialize()
 {

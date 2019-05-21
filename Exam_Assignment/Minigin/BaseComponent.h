@@ -1,9 +1,11 @@
 #pragma once
+#include "Observer.h"
+#include "Subject.h"
 
 namespace dae
 {
 	class GameObject;
-	class BaseComponent
+	class BaseComponent : public Subject, public Observer
 	{
 		friend class GameObject;
 	public:
@@ -16,6 +18,8 @@ namespace dae
 		virtual ~BaseComponent() = default;
 
 		GameObject* GetGameObject() const { return m_pGameObject; }
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override = 0;
 
 	protected:
 		//TODO: GO OVERALL COMPONENT AND DECOUPLE AND CLEAN UP

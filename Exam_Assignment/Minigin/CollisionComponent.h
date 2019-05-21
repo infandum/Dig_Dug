@@ -41,7 +41,10 @@ namespace  dae
 		void EnableTrigger(const bool& enable = true) { m_Trigger = enable; }
 		bool IsTrigger() const { return m_Trigger; }
 		void EnablePushOut(const bool& enable) { m_PushOut = enable; }
+
 		void Reset();
+
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
 
 	protected:
 		void Initialize() override;

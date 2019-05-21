@@ -23,6 +23,10 @@ void dae::CollisionComponent::Reset()
 	m_pOtherCollider = nullptr;
 }
 
+void dae::CollisionComponent::onNotify(GameObject& , NotifyEvent& )
+{
+}
+
 void dae::CollisionComponent::Initialize()
 {
 	auto physics_manager = ServiceLocator::GetPhysicsManager();
