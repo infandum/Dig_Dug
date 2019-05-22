@@ -31,7 +31,7 @@ void dae::PhysicsManager::Update(float deltaTime)
 		if(!component->ShowCollisionBox())
 			component->ShowCollisionBox(ShowCollisionBox());
 
-		if (!component->GetGameObject()->GetIsActive()
+		if (!component->GetGameObject()->IsEnabled()
 			||!component->CanCollide()
 			)
 		{
@@ -42,7 +42,7 @@ void dae::PhysicsManager::Update(float deltaTime)
 		for (auto& otherComponent : m_pCollisionComponents[m_ActiveSceneIndex])
 		{
 			if(component == otherComponent
-				|| !otherComponent->GetGameObject()->GetIsActive()
+				|| !otherComponent->GetGameObject()->IsEnabled()
 				|| !otherComponent->CanCollide()
 				|| component->GetGameObject()->IsChild(otherComponent->GetGameObject()) 
 				|| component->GetGameObject()->GetParent() == otherComponent->GetGameObject() 

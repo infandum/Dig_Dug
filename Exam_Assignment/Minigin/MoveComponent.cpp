@@ -5,8 +5,6 @@
 #include "LevelManager.h"
 #include "GameObject.h"
 
-extern const float g_TileCenterPadding;
-
 void dae::MoveComponent::Reset(Direction dir)
 {
 	SetVelocity({ 0,0,0 });
@@ -161,10 +159,10 @@ bool dae::MoveComponent::IsCentered() const
 	bool XisCenter = false;
 	bool YisCenter = false;
 
-	if (m_pTransform->GetPosition().x >= m_pTransform->GetPositionIndex().x * 32 - g_TileCenterPadding && m_pTransform->GetPosition().x <= m_pTransform->GetPositionIndex().x * 32 + g_TileCenterPadding)
+	if (m_pTransform->GetPosition().x >= m_pTransform->GetPositionIndex().x * 32 - m_MovePadding && m_pTransform->GetPosition().x <= m_pTransform->GetPositionIndex().x * 32 + m_MovePadding)
 		XisCenter = true;
 
-	if (m_pTransform->GetPosition().y >= m_pTransform->GetPositionIndex().y * 32 - g_TileCenterPadding && m_pTransform->GetPosition().y <= m_pTransform->GetPositionIndex().y * 32 + g_TileCenterPadding)
+	if (m_pTransform->GetPosition().y >= m_pTransform->GetPositionIndex().y * 32 - m_MovePadding && m_pTransform->GetPosition().y <= m_pTransform->GetPositionIndex().y * 32 + m_MovePadding)
 		YisCenter = true;
 
 	return XisCenter && YisCenter;

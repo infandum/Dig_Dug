@@ -26,6 +26,13 @@ namespace dae
 		POOKA,
 		FYGAR
 	};
+
+	enum NPCBasePoints : UINT
+	{
+		POINTS_POOKA = 200,
+		POINTS_FYGAR = 400,
+	};
+
 	//2D VECTORS
 	class fVector2
 	{
@@ -104,6 +111,8 @@ namespace dae
 
 	enum class NotifyEvent
 	{
+		EVENT_INIT,
+		EVENT_RESET,
 		EVENT_SPAWN,
 		EVENT_DESPAWN,
 		EVENT_IDLE,
@@ -114,6 +123,7 @@ namespace dae
 		EVENT_COLLISION,
 		EVENT_CRUSHED,
 		EVENT_LIFE_CHECK,
+		EVENT_VALUE_CHECK,
 		EVENT_GAME_OVER
 	};
 
@@ -126,6 +136,35 @@ namespace dae
 		NONE = 4
 
 		
+	};
+
+
+	enum class TileState
+	{
+		FREE,
+		USED,
+		BLOCKED,
+		OCCUPIED,
+		EMPITY,
+		TILESTATE_MAX_COUNT
+	};
+
+	enum class ControllerButton
+	{
+		ButtonA = 0x1000,
+		ButtonB = 0x2000,
+		ButtonX = 0x4000,
+		ButtonY = 0x8000,
+		ButtonUp = 0x0001,
+		ButtonDown = 0x0002,
+		ButtonLeft = 0x0004,
+		ButtonRight = 0x0008,
+		ButtonStart = 0x0010,
+		ButtonSelect = 0x0020,
+		ButtonLeftThumb = 0x0040,
+		ButtonRightThumb = 0x0080,
+		ButtonLeftTrigger = 0x0100,
+		ButtonRightTrigger = 0x0200
 	};
 
 	inline glm::vec3 DirectionAxis(Direction dir)
@@ -164,33 +203,6 @@ namespace dae
 		return Direction::NONE;
 	}
 
-	enum class TileState
-	{
-		FREE,
-		USED,
-		BLOCKED,
-		OCCUPIED,
-		EMPITY,
-		TILESTATE_MAX_COUNT
-	};
-
-	enum class ControllerButton
-	{
-		ButtonA = 0x1000,
-		ButtonB = 0x2000,
-		ButtonX = 0x4000,
-		ButtonY = 0x8000,
-		ButtonUp = 0x0001,
-		ButtonDown = 0x0002,
-		ButtonLeft = 0x0004,
-		ButtonRight = 0x0008,
-		ButtonStart = 0x0010,
-		ButtonSelect = 0x0020,
-		ButtonLeftThumb = 0x0040,
-		ButtonRightThumb = 0x0080,
-		ButtonLeftTrigger = 0x0100,
-		ButtonRightTrigger = 0x0200
-	};
 
 	struct AnimationClip
 	{

@@ -20,11 +20,18 @@ namespace dae
 		void SetAttackSpeed(float speed) { m_AttackSpeed = speed; }
 		bool IsAttacking() const { return m_isAttacking; }
 
-
+		bool IsGameOver() const { if (m_Health <= 0)return true; return false; }
 		bool IsDead() const { return m_IsDead; }
 		void SetHealth(int health);
 		int GetHealth() const { return m_Health; }
 		void ChangeHealth(int amount);
+
+		int GetPoints() const{ return m_Points; }
+		void AddPoints(const int& points)
+		{
+			m_Points += points;
+			Notify(*GetGameObject(), NotifyEvent::EVENT_VALUE_CHECK);
+		}
 
 		PlayerType GetType() const { return m_Type; }
 
@@ -34,11 +41,14 @@ namespace dae
 
 	protected:
 		void Initialize() override;
+		void RespawnTime(float deltaTime);
+		void Update(float deltaTime) override;
+
 		void AllignAttack();
 		void MoveAttack(float deltaTime);
 		void CollisionEvents();
-		void Update(float deltaTime) override;
-		//void Render() override;
+		void Dead();
+		void Respawn();
 
 	private:
 		PlayerType m_Type{};
@@ -49,17 +59,23 @@ namespace dae
 		float m_AttackRange = 32.f + 16;
 		float m_AttackSpeed = 120.f;
 		float m_AttackTimer = 0.0f;
-		float m_AttackTime = 0.25f;
+		float m_AttackMaxTime = 0.25f;
+
+		float m_RespawnTimer = 0.0f;
+		float m_RespawnMaxTime = 1.0f;
+
 		bool m_isAttacking = false;
 		bool m_AttackAtMaxRange = false;
 		bool m_IsCharging = false;
-		bool m_IsDead = false;
 		bool m_IsAttackHit = false;
+
+		bool m_IsDead = false;
 		bool m_IsReset = false;
 
 		Direction m_LastHorDir = Direction::RIGHT;
 
 		int m_Health = 3;
+		int m_Points = 0;
 	};
 
 }

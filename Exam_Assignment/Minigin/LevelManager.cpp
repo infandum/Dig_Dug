@@ -11,7 +11,7 @@ void dae::LevelManager::Reset()
 
 	for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
 	{
-		m_pEntities[m_ActiveSceneIndex][i]->GetGameObject()->SetIsActive(true);
+		m_pEntities[m_ActiveSceneIndex][i]->GetGameObject()->Enable(true);
 		m_pEntities[m_ActiveSceneIndex][i]->Reset();
 	}
 
@@ -19,7 +19,6 @@ void dae::LevelManager::Reset()
 	{
 
 		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
-		Notify(*m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject(), NotifyEvent::EVENT_LIFE_CHECK);
 	}
 
 	if(!m_pTileComponents[m_ActiveSceneIndex].empty())
@@ -61,10 +60,10 @@ void dae::LevelManager::Update(float deltaTime)
 	SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 	for(auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
 	{
-			if (m_Reset || m_StartTile[m_ActiveSceneIndex][i] == nullptr)
+			if (m_Reset || m_pPlayers[m_ActiveSceneIndex][i]->IsDead())
 			{
 				m_StartTile[m_ActiveSceneIndex][i] = GetTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().y);
-					m_StartTile[m_ActiveSceneIndex][i]->SetTileState(TileState::USED);
+				m_StartTile[m_ActiveSceneIndex][i]->SetTileState(TileState::USED);
 
 				if (i >= m_pPlayers[m_ActiveSceneIndex].size() - 1 && m_StartTile[m_ActiveSceneIndex][i]->GetTileState() == TileState::USED)
 					m_Reset = false;
@@ -88,7 +87,16 @@ void dae::LevelManager::Update(float deltaTime)
 						m_StartTile[m_ActiveSceneIndex][i] = nextTile;
 					}
 				}
-			}	
+			}
+
+			m_GameOvers[m_ActiveSceneIndex][i] = m_pPlayers[m_ActiveSceneIndex][i]->IsGameOver();
+
+			if(m_GameOvers[m_ActiveSceneIndex][i])
+				if (std::adjacent_find(m_GameOvers[m_ActiveSceneIndex].begin(), m_GameOvers[m_ActiveSceneIndex].end(), std::not_equal_to<>()) == m_GameOvers[m_ActiveSceneIndex].end())
+				{
+					std::cout << "GAME OVER!" << std::endl;
+					ServiceLocator::GetSceneManager()->SetActive("Main menu");
+				}
 	}
 
 	for(auto& entity : m_pEntities[m_ActiveSceneIndex])
@@ -150,6 +158,7 @@ void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 		{
 			m_pPlayers.push_back(std::vector<PlayerComponent*>());
 			m_StartTile.push_back(std::vector<TileComponent*>());
+			m_GameOvers.push_back(std::vector<bool>());
 		}
 
 	for (auto& player : m_pPlayers[m_ActiveSceneIndex])
@@ -162,6 +171,7 @@ void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 	}
 	m_pPlayers[m_ActiveSceneIndex].push_back(pPlayer);
 	m_StartTile[m_ActiveSceneIndex].push_back(nullptr);
+	m_GameOvers[m_ActiveSceneIndex].push_back(false);
 }
 
 void dae::LevelManager::RemovePlayer(PlayerComponent* pPlayer)

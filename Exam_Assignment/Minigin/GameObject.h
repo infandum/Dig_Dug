@@ -62,8 +62,8 @@ namespace dae
 		void SetParent(GameObject* parent) { m_pParent = parent; }
 
 		//TODO: ACTIVE LAST FRAME FIX? MAYBE JUST REMOVE THE ACTIVE PART
-		bool GetIsActive() const { return m_IsActive; }
-		void SetIsActive(bool isActive) { m_IsActive = isActive; }
+		bool IsEnabled() const { return m_IsActive; }
+		void Enable(bool isActive) { m_IsActive = isActive; }
 		void SetIsFollowParent(bool isFollow);
 		bool GetIsFollowingParent() const { return m_IsFollowing; }
 

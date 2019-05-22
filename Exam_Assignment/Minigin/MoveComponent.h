@@ -46,6 +46,8 @@ namespace dae
 
 
 		float GetMoveSpeed() const { return m_MoveSpeed; }
+		void SetMoveCenteringPaddiding(const float& padding) { m_MovePadding = padding; }
+		float GetMoveCenteringPadding() const { return m_MovePadding; }
 
 		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
 
@@ -60,6 +62,7 @@ namespace dae
 
 	private:
 		float m_MoveSpeed = 90.f;
+		float m_MovePadding = 1.0f;
 		TransformComponent* m_pTransform;
 		LevelManager* m_pLevelManager;
 		bool m_IsStatic = false;

@@ -3,29 +3,34 @@
 
 namespace  dae
 {
+	class ResourceManager;
 	class HealthDisplayComponent : public BaseComponent
-{
-public:
+	{		
+	public:
 
-	HealthDisplayComponent(const HealthDisplayComponent& other) = delete;
-	HealthDisplayComponent(HealthDisplayComponent&& other) noexcept = delete;
-	HealthDisplayComponent& operator=(const HealthDisplayComponent& other) = delete;
-	HealthDisplayComponent& operator=(HealthDisplayComponent&& other) noexcept = delete;
-	HealthDisplayComponent() = default;
-	virtual ~HealthDisplayComponent() = default;
+		HealthDisplayComponent(const HealthDisplayComponent& other) = delete;
+		HealthDisplayComponent(HealthDisplayComponent&& other) noexcept = delete;
+		HealthDisplayComponent& operator=(const HealthDisplayComponent& other) = delete;
+		HealthDisplayComponent& operator=(HealthDisplayComponent&& other) noexcept = delete;
+		HealthDisplayComponent() = default;
+		virtual ~HealthDisplayComponent() = default;
 
 
-	void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
+		void AddDisplay();
 
-protected:
-	void Initialize() override;
-	void Update(float deltaTime) override;
+	protected:
+		void Initialize() override;
+		void Update(float deltaTime) override;
 
-	TextComponent* m_pTextComponent = nullptr;
+		
 
 	private:
-		int m_Health = 0;
-};
+		TextComponent* m_pTextComponent;
+		int m_Health;
+
+		ResourceManager* m_Resource = nullptr;
+	};
 }
 
 

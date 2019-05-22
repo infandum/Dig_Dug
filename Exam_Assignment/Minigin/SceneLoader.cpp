@@ -30,35 +30,35 @@ void dae::SceneLoader::Initialize()
 	animations->SetAnimationSpeed(10.0f);
 
 	//DIG DUG
-	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 0}, { 32 , 32 }, 1, 2, true, false }, 1);				//Idle
-	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 0}, { 32 , 32 }, 1, 2, true, true }, 2);					//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Dig", {0, 32}, { 32 , 32 }, 1, 2, true, true }, 3);					//Dig
-	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 64}, { 32 , 32 }, 0, 1, true, false }, 4);				//Attack
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);				//Dead
-	animations->LoadSpriteClip(SpriteClip{ "Pump", {0, 160}, { 32 , 32 }, 0, 2, true, true }, 6);				//Pump
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {0, 384}, { 64 , 64 }, 0, 2, true, true }, 7);			//Crushed
+	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 0}, { 32 , 32 }, 1, 2, true, false }, 1);					//Idle
+	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 0}, { 32 , 32 }, 1, 2, true, true }, 2);						//Walk
+	animations->LoadSpriteClip(SpriteClip{ "Dig", {0, 32}, { 32 , 32 }, 1, 2, true, true }, 3);						//Dig
+	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 64}, { 32 , 32 }, 0, 1, true, false }, 4);					//Attack
+	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);					//Dead
+	animations->LoadSpriteClip(SpriteClip{ "Pump", {0, 160}, { 32 , 32 }, 0, 2, true, true }, 6);					//Pump
+	animations->LoadSpriteClip(SpriteClip{ "Crushed", {0, 384}, { 64 , 64 }, 0, 2, true, true }, 7);				//Crushed
 
-	animations->LoadSpriteClip(SpriteClip{ "Spear", {0, 96}, { 64 , 64 }, 0, 1, true, false }, 9);				//Spear
+	animations->LoadSpriteClip(SpriteClip{ "Spear", {0, 96}, { 64 , 64 }, 0, 1, true, false }, 9);					//Spear
 
 	//POOKA
-	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 256}, { 32 , 32 }, 1, 2, false, false }, 11);			//Idle
-	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 13);//Ghost
+	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 256}, { 32 , 32 }, 1, 2, false, false }, 11);				//Idle
+	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);					//Walk
+	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 13);	//Ghost
 										   
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 288}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 15);		//Dead
+	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 288}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 15);			//Dead
 										   
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 256}, { 32 , 32 }, 0, 2, false, false }, 17);		//Crushed
+	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 256}, { 32 , 32 }, 0, 2, false, false }, 17);			//Crushed
 																									
 	//Fygar																							
-	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 21);			//Idle
-	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);				//Walk
-	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 23);//Ghost
-	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);			//Attack
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);			//Dead
+	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 21);				//Idle
+	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);					//Walk
+	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 23);	//Ghost
+	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);				//Attack
+	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);				//Dead
 										   
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 352}, { 64 , 64 }, 0, 1, false, false }, 27);		//Crushed
+	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 352}, { 64 , 64 }, 0, 1, false, false }, 27);			//Crushed
 										   
-	animations->LoadSpriteClip(SpriteClip{ "Fire", {0, 416}, { 96 , 32 }, 0, 3, false, false }, 29);			//Fire
+	animations->LoadSpriteClip(SpriteClip{ "Fire", {0, 416}, { 96 , 32 }, 0, 3, false, false }, 29);				//Fire
 
 }
 
@@ -80,10 +80,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 			m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Main menu");
 
 			AddMenu();
-			//GenerateTile();
-			AddBackground(01);
 
-			//GenerateTile();
+			AddBackground(01);
 
 			font = resource->LoadFont("Lingua.otf", 32);
 			AddText(font, {0,0,0}, "Programming 4 Assignment", 16, 100);
@@ -103,13 +101,13 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		AddBackground(01);
 
-		AddGUI( 0.f, 32.f * 17);
-
 		GenerateTile();
 
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
 
-		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
+		AddNpc(NPCType::POOKA, 32.f, 32 * 9.f);
+
+		AddNpc(NPCType::FYGAR, 32.f * 10.f, 32 * 5.f);
 
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
 
@@ -128,15 +126,12 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
 
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12);
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);
 
 
 		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
 
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
-
-		/*tiles->CreateTunnel(12, 12, Direction::UP, 2);
-		tiles->CreateTunnel(12, 12, Direction::LEFT, 2);*/
 
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
@@ -147,21 +142,17 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		AddMenu();
 
 		AddBackground(01);
-		//GetGameObject()->GetComponent<LevelManager>()->Reset();
+
 		GenerateTile();
-		//GenerateTile();
 
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
 
-		AddPlayer(PlayerType::PLAYER_FYGAR, 0.f, 32.f * 12);
+		AddPlayer(PlayerType::PLAYER_FYGAR, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);
 
 
 		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
 
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
-
-		/*tiles->CreateTunnel(12, 12, Direction::UP, 2);
-		tiles->CreateTunnel(12, 12, Direction::LEFT, 2);*/
 
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
@@ -219,21 +210,7 @@ void dae::SceneLoader::AddMenu() const
 	m_Scene->Add(menu);
 }
 
-void dae::SceneLoader::AddGUI(float x, float y) const
-{
-	std::shared_ptr<GameObject> go;
-	go = std::make_shared<GameObject>();
-	go->AddComponent(std::make_shared<TransformComponent>(x, y));
-	go->AddComponent(std::make_shared<RenderComponent>());
-	go->AddComponent(std::make_shared<TextureComponent>());
-	go->AddComponent(std::make_shared<HealthDisplayComponent>());
-
-	auto level = ServiceLocator::GetLevelManager();
-	level->AddObserver(go->GetComponent<HealthDisplayComponent>());
-	m_Scene->Add(go);
-}
-
-void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
+void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, float guiHPX, float guiHPY, float guiPointsX, float guiPointsY) const
 {
 	auto level = ServiceLocator::GetLevelManager();
 	auto input = ServiceLocator::GetInputManager();
@@ -241,7 +218,7 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
 	
 	player->AddComponent(std::make_shared<RenderComponent>());
 	player->AddComponent(std::make_shared<CollisionComponent>());
-	player->AddComponent(std::make_shared<TransformComponent>(x, y));
+	player->AddComponent(std::make_shared<TransformComponent>(playerX, playerY));
 	player->AddComponent(std::make_shared<TextureComponent>());
 	player->AddComponent(std::make_shared<SpriteComponent>(IdlePlayerState()));
 	player->AddComponent(std::make_shared<MoveComponent>());
@@ -276,7 +253,13 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
 		break;
 	}
 
+
+	
+
+	
+
 	level->AddPlayer(player->GetComponent<PlayerComponent>().get());
+
 	m_Scene->Add(player);
 	
 	if(level->GetPlayerCount() == 1)
@@ -296,6 +279,26 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float x, float y) const
 		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_LSHIFT, player.get());
 	}
 	
+	std::shared_ptr<GameObject> gui;
+	gui = std::make_shared<GameObject>();
+	gui->SetName("GUI>>HP: " + player->GetName());
+	gui->AddComponent(std::make_shared<TransformComponent>(guiHPX, guiHPY));
+	gui->AddComponent(std::make_shared<RenderComponent>());
+	gui->AddComponent(std::make_shared<TextureComponent>());
+	gui->AddComponent(std::make_shared<HealthDisplayComponent>());
+
+	player->GetComponent<PlayerComponent>()->AddObserver(gui->GetComponent<HealthDisplayComponent>());
+	m_Scene->Add(gui);
+
+	gui = std::make_shared<GameObject>();
+	gui->SetName("GUI>>POINTS: " + player->GetName());
+	gui->AddComponent(std::make_shared<TransformComponent>(guiPointsX, guiPointsY));
+	gui->AddComponent(std::make_shared<RenderComponent>());
+	gui->AddComponent(std::make_shared<TextureComponent>());
+	gui->AddComponent(std::make_shared<PointDisplayComponent>());
+
+	player->GetComponent<PlayerComponent>()->AddObserver(gui->GetComponent<PointDisplayComponent>());
+	m_Scene->Add(gui);
 
 }
 
@@ -326,10 +329,18 @@ void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
 		NPC->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(11, std::make_shared<IdleEnemyState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(12, std::make_shared<MoveEnemyState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(13, std::make_shared<GhostEnemyState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(15, std::make_shared<DeadEnemyState>());
 		break;
 	case NPCType::FYGAR:
 		NPC->SetName("Fygar");
+		NPC->AddComponent(std::make_shared<SpriteComponent>(IdleEnemyState()));
+		NPC->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(21, std::make_shared<IdleEnemyState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(22, std::make_shared<MoveEnemyState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(23, std::make_shared<GhostEnemyState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(24, std::make_shared<AttackEnemyState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(25, std::make_shared<DeadEnemyState>());
 		break;
 	}
 

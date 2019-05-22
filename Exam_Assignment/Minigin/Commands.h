@@ -4,8 +4,6 @@
 #include "ServiceLocator.h"
 #include "MoveComponent.h"
 
-extern  const float g_MoveSpeed;
-
 //TODO: RETHINK COMMANDS ASSIGNEMENT
 
 namespace dae
@@ -87,7 +85,7 @@ namespace dae
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
-				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, -g_MoveSpeed, 0 });
+				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, -m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0 });
 			}
 
 			if (m_Input->IsKeyUp())
@@ -114,7 +112,7 @@ namespace dae
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
-				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, g_MoveSpeed, 0 });
+				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0 });
 			}
 
 			if (m_Input->IsKeyUp())
@@ -141,7 +139,7 @@ namespace dae
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
-				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ -g_MoveSpeed, 0, 0 });
+				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ -m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0, 0 });
 			}
 
 			if (m_Input->IsKeyUp())
@@ -169,7 +167,7 @@ namespace dae
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
-				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ g_MoveSpeed, 0, 0 });
+				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0, 0 });
 			}
 				
 			if (m_Input->IsKeyUp())
@@ -203,10 +201,10 @@ namespace dae
 					gameObject.GetChild(0).get()->SetIsFollowParent(true);*/
 
 			//if (m_pOwner->GetChildCount() > 0)
-			//	if (m_pOwner->GetChild(0).get()->GetIsActive())
-			//		m_pOwner->GetChild(0).get()->SetIsActive(false);
+			//	if (m_pOwner->GetChild(0).get()->IsEnabled())
+			//		m_pOwner->GetChild(0).get()->Enable(false);
 			//	else
-			//		m_pOwner->GetChild(0).get()->SetIsActive(true);
+			//		m_pOwner->GetChild(0).get()->Enable(true);
 		}
 
 		if (m_Input->IsKeyUp())

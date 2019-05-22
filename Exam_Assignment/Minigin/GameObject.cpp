@@ -111,7 +111,7 @@ void dae::GameObject::AddChild(std::shared_ptr<GameObject> pChild, bool isActive
 	pChild->GetComponent<TransformComponent>()->SetLocalPosition(pChild->GetComponent<TransformComponent>()->GetPosition().x - GetComponent<TransformComponent>()->GetPosition().x
 																, pChild->GetComponent<TransformComponent>()->GetPosition().y - GetComponent<TransformComponent>()->GetPosition().y
 																, pChild->GetComponent<TransformComponent>()->GetPosition().z - GetComponent<TransformComponent>()->GetPosition().z);
-	pChild->SetIsActive(isActive);
+	pChild->Enable(isActive);
 	pChild->SetIsFollowParent(isAttached);
 	m_pChilds.push_back(pChild);
 	//m_pChilds[m_pChilds.size() - 1]->SetParent(this);
@@ -120,7 +120,7 @@ void dae::GameObject::AddChild(std::shared_ptr<GameObject> pChild, bool isActive
 	////																					, pChild->GetComponent<TransformComponent>()->GetPosition().z - GetComponent<TransformComponent>()->GetPosition().z);
 
 
-	//m_pChilds[m_pChilds.size() - 1]->SetIsActive(isActive);
+	//m_pChilds[m_pChilds.size() - 1]->Enable(isActive);
 	//m_pChilds[m_pChilds.size() - 1]->SetIsFollowParent(isAttached);
 
 }

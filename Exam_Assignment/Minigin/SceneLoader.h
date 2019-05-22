@@ -38,8 +38,7 @@ namespace dae
 
 	private:
 		void AddMenu() const;
-		void AddGUI(float x = 0.f, float y = 0.f) const;
-		void AddPlayer(PlayerType type, float x = 0.f, float y = 0.f) const;
+		void AddPlayer(PlayerType type, float playerX = 0.f, float playerY = 0.f, float guiHPX = 0.f, float guiHPY = 32.f * 17.f, float guiPointsX = 0.f, float guiPointsY = 16.f) const;
 		void AddNpc(NPCType type, float x = 0.f, float y = 0.f) const;
 		void GenerateTile() const;
 		void AddBackground(UINT textureID) const;

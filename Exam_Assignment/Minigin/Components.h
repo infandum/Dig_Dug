@@ -18,3 +18,4 @@
 #include "NpcComponent.h"
 #include "TileComponent.h"
 #include "HealthDisplayComponent.h"
+#include "PointDisplayComponent.h"

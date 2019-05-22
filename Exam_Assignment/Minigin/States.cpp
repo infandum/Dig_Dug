@@ -224,7 +224,6 @@ std::shared_ptr<dae::BaseState> dae::IdlePlayerState::Swap(NotifyEvent event, Ga
 	case NotifyEvent::EVENT_COLLISION:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<DeadPlayerState>();
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return nullptr;
 	default: ;
 	}
@@ -322,7 +321,6 @@ std::shared_ptr<dae::BaseState> dae::ActionPlayerState::Swap(NotifyEvent event, 
 std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	UNREFERENCED_PARAMETER(gameObject);
-	gameObject.GetComponent<MoveComponent>()->SetIsStatic(true);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
@@ -335,7 +333,6 @@ std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, Ga
 		gameObject.GetComponent<SpriteComponent>()->onNotify(NotifyEvent::EVENT_IDLE);
 		return nullptr;
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return gameObject.GetComponent<SpriteComponent>()->GetState<IdlePlayerState>();
 	default:;
 	}
@@ -378,7 +375,6 @@ std::shared_ptr<dae::BaseState> dae::IdleEnemyState::Swap(NotifyEvent event, Gam
 	case NotifyEvent::EVENT_COLLISION:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<DeadEnemyState>();
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return nullptr;
 	default:;
 	}
@@ -404,7 +400,6 @@ std::shared_ptr<dae::BaseState> dae::MoveEnemyState::Swap(NotifyEvent event, Gam
 	case NotifyEvent::EVENT_COLLISION:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<DeadEnemyState>();
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return nullptr;
 	default:;
 	}
@@ -430,7 +425,6 @@ std::shared_ptr<dae::BaseState> dae::AttackEnemyState::Swap(NotifyEvent event, G
 	case NotifyEvent::EVENT_COLLISION:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<DeadEnemyState>();
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return nullptr;
 	default:;
 	}
@@ -456,7 +450,6 @@ std::shared_ptr<dae::BaseState> dae::ActionEnemyState::Swap(NotifyEvent event, G
 	case NotifyEvent::EVENT_COLLISION:
 		return std::make_shared<DeadEnemyState>();
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return nullptr;
 	default:;
 	}
@@ -482,7 +475,6 @@ std::shared_ptr<dae::BaseState> dae::GhostEnemyState::Swap(NotifyEvent event, Ga
 	case NotifyEvent::EVENT_COLLISION:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<DeadEnemyState>();
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return nullptr;
 	default:;
 	}
@@ -498,7 +490,6 @@ std::shared_ptr<dae::BaseState> dae::DeadEnemyState::Swap(NotifyEvent event, Gam
 	case NotifyEvent::EVENT_COLLISION:
 		return nullptr;
 	case NotifyEvent::EVENT_SPAWN:
-		gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
 		return gameObject.GetComponent<SpriteComponent>()->GetState<IdleEnemyState>();
 	default:;
 	}

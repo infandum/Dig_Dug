@@ -1,8 +1,10 @@
 #pragma once
 #include "BaseComponent.h"
+#include "PlayerComponent.h"
 
 namespace dae
 {
+	
 	class NpcComponent : public BaseComponent
 	{
 	public:
@@ -17,6 +19,7 @@ namespace dae
 		bool IsGhosting() const { return m_isGhosting; }
 
 		void SetHit(const bool& isHit) { m_IsHit = isHit; }
+		void Hit(PlayerComponent* player);
 		bool IsHit() const { return m_IsHit; }
 
 		bool IsDead() const { return m_IsDead;}
@@ -37,5 +40,7 @@ namespace dae
 		bool m_isGhosting = false;
 		bool m_IsHit = false;
 		bool m_IsDead = false;
+
+		UINT m_Points = 0;
 	};
 }

@@ -34,7 +34,7 @@ namespace dae {
 		void DigConnection(TileComponent* start, TileComponent* end, Direction dir);
 		void CreateTunnel(int xIndex, int yIndex, Direction dir, int distance = {0});
 
-		size_t GetPlayerCount() const { return m_pPlayers[m_ActiveSceneIndex].size(); }
+		size_t GetPlayerCount() const { if (m_pPlayers.empty()) return 0; return  m_pPlayers[m_ActiveSceneIndex].size(); }
 		std::vector<PlayerComponent*> GetPlayers() const { return m_pPlayers[m_ActiveSceneIndex]; }
 		PlayerComponent* GetPlayer(int index) { if (index < m_pPlayers[m_ActiveSceneIndex].size()) { return m_pPlayers[m_ActiveSceneIndex][index]; } else return nullptr; }
 
@@ -53,6 +53,8 @@ namespace dae {
 		std::vector<std::vector<TileComponent*>> m_pTileComponents{};
 		std::vector<std::vector<PlayerComponent*>> m_pPlayers{};
 		std::vector<std::vector<NpcComponent*>> m_pEntities {};
+		std::vector<std::vector<bool>> m_GameOvers;
+
 		bool m_Reset = true;
 		std::vector<std::vector<TileComponent*>> m_StartTile {};
 

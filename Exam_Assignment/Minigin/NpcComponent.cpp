@@ -5,6 +5,53 @@
 
 dae::NpcComponent::NpcComponent(NPCType type) :m_Type(type)
 {
+	switch (type)
+	{
+	case NPCType::POOKA:
+		m_Points = NPCBasePoints::POINTS_POOKA;
+		break;
+	case NPCType::FYGAR:
+		m_Points = NPCBasePoints::POINTS_FYGAR;
+		break;
+	default:
+		m_Points = 0;
+		break;
+	}
+}
+
+void dae::NpcComponent::Hit(PlayerComponent* player)
+{
+	if(m_IsHit)
+		if (GetGameObject()->GetSprite()->IsAnimationEnded() && typeid(*GetGameObject()->GetSprite()->GetCurrentState()) == typeid(DeadEnemyState))
+		{
+			Dead();
+			int points = 0;
+			switch (m_Type)
+			{
+			case NPCType::POOKA:
+
+				points = m_Points + (100 * (((GetGameObject()->GetTransform()->GetPositionIndex().y - 2) / 4)));
+
+				break;
+			case NPCType::FYGAR:
+
+				points = m_Points + (200 * (((GetGameObject()->GetTransform()->GetPositionIndex().y - 2) / 4)));
+
+				if (player->GetGameObject()->GetTransform()->GetPositionIndex().y == GetGameObject()->GetTransform()->GetPositionIndex().y)
+					points *= 2;
+
+				break;
+			default:
+
+				points = 0;
+
+				break;
+			}
+			
+			player->AddPoints(points);
+		}
+
+	m_IsHit = true;
 }
 
 void dae::NpcComponent::Reset()
@@ -13,12 +60,24 @@ void dae::NpcComponent::Reset()
 	m_IsHit = false;
 	m_isGhosting = false;
 
-	GetGameObject()->SetIsActive(true);
+	GetGameObject()->Enable(true);
 	GetGameObject()->GetTransform()->Reset();
 	GetGameObject()->GetComponent<MoveComponent>()->Reset();
 
-	if (m_Type == NPCType::POOKA)
+	switch (m_Type)
+	{
+	case NPCType::POOKA:
 		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+
+		break;
+	case NPCType::FYGAR:
+		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+
+		break;
+	default:
+
+		break;
+	}
 }
 
 void dae::NpcComponent::onNotify(GameObject & , NotifyEvent & )
@@ -30,33 +89,48 @@ void dae::NpcComponent::Initialize()
 	auto tiles = ServiceLocator::GetLevelManager();
 	tiles->AddEntity(this);
 
-	if (m_Type == NPCType::POOKA)
-		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+	switch (m_Type)
+	{
+	case NPCType::POOKA:
+		if (!m_IsHit)
+			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+
+		break;
+	case NPCType::FYGAR:
+		if (!m_IsHit)
+			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+
+		break;
+	default:
+
+		break;
+	}
 }
 
 void dae::NpcComponent::Update(float )
 {
 	if(m_IsDead)
 	{
-		GetGameObject()->SetIsActive(false);
+		GetGameObject()->Enable(false);
 	}
 
-	if(m_Type == NPCType::POOKA)
+	
+
+	switch (m_Type)
 	{
+	case NPCType::POOKA:
 		if (!m_IsHit)
 			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
-		else
-			if (GetGameObject()->GetSprite()->IsAnimationEnded() && typeid(* GetGameObject()->GetSprite()->GetCurrentState()) == typeid(DeadEnemyState))
-				Dead();
+		
+		break;
+	case NPCType::FYGAR:
+		if (!m_IsHit)
+			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+		
+		break;
+	default:
 
-		//GetGameObject()->GetComponent<MoveComponent>()->SetIsOmniDirectional(true);
-		//GetGameObject()->GetTransform()->SetVelocity({ g_MoveSpeed , -g_MoveSpeed, 0 });
-		//GetGameObject()->GetComponent<MoveComponent>()->MoveToTile(0, 10);
-		//GetGameObject()->GetTransform()->SetVelocity({ 0, -g_MoveSpeed, 0 });
-		//
-
-		if(GetGameObject()->GetSprite()->GetCurrentEvent() == NotifyEvent::EVENT_COLLISION)
-			return;
+		break;
 	}
 	
 }

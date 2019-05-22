@@ -14,8 +14,6 @@
 #include "ServiceLocator.h"
 #include "DemoScene.h"
 
-extern const float g_MoveSpeed = 90.f;
-extern const float g_TileCenterPadding = 1.0f;
 
 void dae::Minigin::Initialize()
 {

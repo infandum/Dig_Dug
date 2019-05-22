@@ -175,6 +175,9 @@
     <ClInclude Include="HealthDisplayComponent.h">
       <Filter>Game\Components</Filter>
     </ClInclude>
+    <ClInclude Include="PointDisplayComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -277,6 +280,9 @@
       <Filter>Game\Scene</Filter>
     </ClCompile>
     <ClCompile Include="HealthDisplayComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PointDisplayComponent.cpp">
       <Filter>Game\Components</Filter>
     </ClCompile>
   </ItemGroup>

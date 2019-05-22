@@ -81,7 +81,10 @@ void dae::SceneManager::SetActive(const std::string& sceneName)
 	for(auto i = 0; i < m_spScenes.size(); i++)
 	{
 		if (m_spScenes[i]->GetName() == sceneName)
+		{
 			SetActive(i);
+			return;
+		}	
 	}
 
 	
