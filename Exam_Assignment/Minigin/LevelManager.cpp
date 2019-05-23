@@ -70,6 +70,7 @@ void dae::LevelManager::Update(float deltaTime)
 
 			}
 
+		
 			if (IsSwitchingTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y))
 			{
 				int x = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
@@ -80,11 +81,16 @@ void dae::LevelManager::Update(float deltaTime)
 					const auto dir = m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
 					if (dir != Direction::NONE)
 					{
-						DigConnection(m_StartTile[m_ActiveSceneIndex][i], nextTile, dir);
 						m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
-						if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
-							GetTile(x, y)->SetTileState(TileState::USED);
-						m_StartTile[m_ActiveSceneIndex][i] = nextTile;
+
+						if (m_pPlayers[m_ActiveSceneIndex][i]->GetType() == PlayerType::PLAYER_DIGDUG)
+						{
+							DigConnection(m_StartTile[m_ActiveSceneIndex][i], nextTile, dir);
+							if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
+								GetTile(x, y)->SetTileState(TileState::USED);
+							m_StartTile[m_ActiveSceneIndex][i] = nextTile;
+						}
+						
 					}
 				}
 			}
@@ -137,6 +143,7 @@ void dae::LevelManager::AddTile(TileComponent* tile)
 
 dae::TileComponent* dae::LevelManager::GetTile(int x, int y)
 {
+	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
 	if (m_pTileComponents[m_ActiveSceneIndex].empty())
 		return new TileComponent(TileState::OCCUPIED, 0, 0);
 
@@ -203,6 +210,7 @@ void dae::LevelManager::AddEntity(NpcComponent* pEntity)
 		}
 	}
 	m_pEntities[m_ActiveSceneIndex].push_back(pEntity);
+	GetTile(pEntity->GetGameObject()->GetTransform()->GetPositionIndex().x, pEntity->GetGameObject()->GetTransform()->GetPositionIndex().y)->SetTileState(TileState::USED);
 }
 
 void dae::LevelManager::RemoveEntity(NpcComponent* pEntity)

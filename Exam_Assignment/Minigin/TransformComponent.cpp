@@ -7,6 +7,10 @@ void dae::TransformComponent::Update(float )
 	if (GetGameObject()->GetParent())
 		if (GetGameObject()->GetIsFollowingParent())
 			m_Position = GetGameObject()->GetParent()->GetTransform()->GetPosition() + GetGameObject()->GetTransform()->GetLocalPosition();
+
+	int x = static_cast<int>(round(m_Position.x / 32.0f));
+	int y = static_cast<int>(round(m_Position.y / 32.0f));
+	SetPositionIndex({ x, y });
 }
 
 dae::TransformComponent::TransformComponent(float x, float y, float z)

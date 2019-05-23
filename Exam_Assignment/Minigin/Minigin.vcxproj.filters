@@ -44,6 +44,9 @@
     <Filter Include="Engine\Content">
       <UniqueIdentifier>{64e0e1c2-d75d-4c8e-a31d-36cbdf3db70e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\States">
+      <UniqueIdentifier>{af07b57b-cf9a-4d84-8c6f-24d08845e3cc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseComponent.h">
@@ -178,6 +181,12 @@
     <ClInclude Include="PointDisplayComponent.h">
       <Filter>Game\Components</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerStates.h">
+      <Filter>Game\States</Filter>
+    </ClInclude>
+    <ClInclude Include="NpcStates.h">
+      <Filter>Game\States</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -284,6 +293,12 @@
     </ClCompile>
     <ClCompile Include="PointDisplayComponent.cpp">
       <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStates.cpp">
+      <Filter>Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="NpcStates.cpp">
+      <Filter>Game\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

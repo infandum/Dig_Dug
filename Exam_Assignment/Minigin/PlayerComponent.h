@@ -3,6 +3,7 @@
 
 namespace dae
 {
+	class LevelManager;
 	class PlayerComponent final : public InputComponent
 	{
 	public:
@@ -41,6 +42,7 @@ namespace dae
 
 	protected:
 		void Initialize() override;
+		void PlayerUpdate();
 		void RespawnTime(float deltaTime);
 		void Update(float deltaTime) override;
 
@@ -76,6 +78,8 @@ namespace dae
 
 		int m_Health = 3;
 		int m_Points = 0;
+
+		LevelManager* m_pLevelManager = nullptr;
 	};
 
 }

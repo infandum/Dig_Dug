@@ -3,6 +3,7 @@
 #include "ServiceLocator.h"
 #include "InputManager.h"
 #include "Commands.h"
+#include "PlayerStates.h"
 
 dae::PlayerComponent::PlayerComponent(PlayerType type) : m_Type(type)
 {
@@ -11,32 +12,6 @@ dae::PlayerComponent::PlayerComponent(PlayerType type) : m_Type(type)
 	m_isAttacking = false;
 	m_IsAttackHit = false;
 	m_AttackTimer = 0;
-}
-
-void dae::PlayerComponent::Attack(bool& isAttacking)
-{
-	if(!m_isAttacking && isAttacking)
-	{
-		m_AttackSprite->GetComponent<SpriteComponent>()->ResetCurrentAnimation();
-
-		if (m_Type == PlayerType::PLAYER_FYGAR)
-			m_IsCharging = true;
-		
-	}
-	m_isAttacking = isAttacking;
-
-	
-	//m_Attack->SetIsFollowParent(!m_isAttacking);
-}
-
-void dae::PlayerComponent::SetHealth(int health)
-{
-	m_Health = health;
-}
-
-void dae::PlayerComponent::ChangeHealth(int amount)
-{
-	m_Health += amount;
 }
 
 void dae::PlayerComponent::Reset()
@@ -58,7 +33,8 @@ void dae::PlayerComponent::onNotify(GameObject & , NotifyEvent & )
 
 void dae::PlayerComponent::Initialize()
 {
-	
+	m_pLevelManager = ServiceLocator::GetLevelManager();
+
 	m_AttackSprite = std::make_shared<GameObject>();
 	m_Attack = std::make_shared<GameObject>();
 	switch (m_Type)
@@ -104,7 +80,7 @@ void dae::PlayerComponent::Initialize()
 		m_AttackSprite->AddComponent(std::make_shared<MoveComponent>());
 		m_AttackSprite->AddComponent(std::make_shared<TextureComponent>(ServiceLocator::GetResourceManager()->GetTexture(02)));
 		m_AttackSprite->AddComponent(std::make_shared<SpriteComponent>(WeaponState()));
-		m_AttackSprite->GetComponent<SpriteComponent>()->SetAnimationToState(29, std::make_shared<WeaponState>());
+		m_AttackSprite->GetComponent<SpriteComponent>()->SetAnimationToState(31, std::make_shared<WeaponState>());
 		m_AttackSprite->GetComponent<SpriteComponent>()->Pause();
 
 		GetGameObject()->AddChild(m_AttackSprite);
@@ -113,21 +89,27 @@ void dae::PlayerComponent::Initialize()
 }
 
 
-void dae::PlayerComponent::RespawnTime(float deltaTime)
+void dae::PlayerComponent::PlayerUpdate()
 {
-	if(GetGameObject()->GetSprite()->IsAnimationEnded())
+	const auto index = GetGameObject()->GetTransform()->GetPositionIndex();
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
+	switch (m_Type)
 	{
-		if (m_RespawnTimer >= m_RespawnMaxTime)
+	case PlayerType::PLAYER_DIGDUG:
+
+		break;
+	case PlayerType::PLAYER_FYGAR:
+		
+		if (tile->GetTileState() == TileState::FREE)
 		{
-			Respawn();
-			if(IsGameOver())
-				GetGameObject()->Enable(false);
+			m_isAttacking = false;
+			m_IsCharging = false;
+			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_MOVE);
 		}
 			
+		break;
+	default: ;
 	}
-
-		
-	m_RespawnTimer += deltaTime;
 }
 
 void dae::PlayerComponent::Update(float deltaTime)
@@ -153,9 +135,50 @@ void dae::PlayerComponent::Update(float deltaTime)
 	AllignAttack();
 	MoveAttack(deltaTime);
 
+	PlayerUpdate();
+
 	CollisionEvents();
 }
 
+void dae::PlayerComponent::RespawnTime(float deltaTime)
+{
+	if (GetGameObject()->GetSprite()->IsAnimationEnded())
+	{
+		if (m_RespawnTimer >= m_RespawnMaxTime)
+		{
+			Respawn();
+			if (IsGameOver())
+				GetGameObject()->Enable(false);
+		}
+
+	}
+
+
+	m_RespawnTimer += deltaTime;
+}
+
+void dae::PlayerComponent::Attack(bool& isAttacking)
+{
+	if (!m_isAttacking && isAttacking)
+	{
+		m_AttackSprite->GetComponent<SpriteComponent>()->ResetCurrentAnimation();
+
+		if (m_Type == PlayerType::PLAYER_FYGAR)
+			m_IsCharging = true;
+
+	}
+	m_isAttacking = isAttacking;
+}
+
+void dae::PlayerComponent::SetHealth(int health)
+{
+	m_Health = health;
+}
+
+void dae::PlayerComponent::ChangeHealth(int amount)
+{
+	m_Health += amount;
+}
 
 void dae::PlayerComponent::AllignAttack() 
 {
@@ -172,10 +195,6 @@ void dae::PlayerComponent::AllignAttack()
 	m_Attack->GetComponent<CollisionComponent>()->EnableCollision(false);
 	m_Attack->GetComponent<RenderComponent>()->EnableRender(false);
 	m_AttackSprite->GetComponent<RenderComponent>()->EnableRender(false);
-
-	if(GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
-		if (GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_MOVE)
-			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 
 	m_Attack->GetTransform()->SetLocalPosition(0, 0);
 
@@ -372,7 +391,7 @@ void dae::PlayerComponent::CollisionEvents()
 		//ATTACK ENEMY NPC
 		if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
 		{
-			if (!collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->IsDead())
+			if (!collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->IsDead() && !collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->IsGhosting())
 				if (collision->GetCollision()->GetGameObject()->GetSprite() && !collision->GetGameObject()->GetComponent<MoveComponent>()->GetIsStatic())
 					if (collision->GetCollision()->GetGameObject()->GetSprite()->GetCurrentEvent() != NotifyEvent::EVENT_SPAWN)
 					{

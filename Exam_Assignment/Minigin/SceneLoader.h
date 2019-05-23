@@ -23,16 +23,13 @@ namespace dae
 	{
 		friend SceneManager;
 	public:
-
-		/*void AddLevelManager() const;
-		void AddPhysicsManager(bool showCollision = false) const;*/
 		void InitScene(SceneList scene);
-		void PostInitScene(SceneList scene) const;
 
-		void ResetScene(SceneList scene) const;
+		static void PostInitScene(SceneList scene);
 
-		void Initialize();
-		void Update(float deltaTime);
+		static void ResetScene(SceneList scene);
+
+		static void Initialize();
 
 		std::shared_ptr<Scene> m_Scene = nullptr;
 

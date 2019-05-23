@@ -10,6 +10,10 @@
 #include "Commands.h"
 #include "ServiceLocator.h"
 
+
+#include "NpcStates.h"
+#include "PlayerStates.h"
+
 //TODO: FILE READING LEVEL LOADING
 void dae::SceneLoader::Initialize()
 {
@@ -45,27 +49,30 @@ void dae::SceneLoader::Initialize()
 	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 256}, { 32 , 32 }, 0, 2, false, true }, 12);					//Walk
 	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 256}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 13);	//Ghost
 										   
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 288}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 15);			//Dead
-										   
+	animations->LoadSpriteClip(SpriteClip{ "Inflate", {0, 288}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 15);		//Inflate
+	animations->LoadSpriteClip(SpriteClip{ "Deflate", {0, 288}, { 64 , 64 }, 0, 4, false, false, -0.5f }, 16);		//Deflate
 	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 256}, { 32 , 32 }, 0, 2, false, false }, 17);			//Crushed
-																									
+	animations->LoadSpriteClip(SpriteClip{ "DEAD", {0, 288}, { 64 , 64 }, 3, 4, false, false, 0.5f }, 18);			//DEAD
+	animations->LoadSpriteClip(SpriteClip{ "Chase", {0, 256}, { 32 , 32 }, 0, 2, false, true }, 19);				//Chase
+
 	//Fygar																							
 	animations->LoadSpriteClip(SpriteClip{ "Idle", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 21);				//Idle
 	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);					//Walk
 	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 23);	//Ghost
-	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);				//Attack
-	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);				//Dead
-										   
+	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);				//Charging
+	animations->LoadSpriteClip(SpriteClip{ "Inflate", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);				//Inflate
+	animations->LoadSpriteClip(SpriteClip{ "Deflate", {0, 448}, { 64 , 64 }, 3, 4, false, false, -0.5f }, 26);		//Deflate									   
 	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 352}, { 64 , 64 }, 0, 1, false, false }, 27);			//Crushed
-										   
-	animations->LoadSpriteClip(SpriteClip{ "Fire", {0, 416}, { 96 , 32 }, 0, 3, false, false }, 29);				//Fire
+	animations->LoadSpriteClip(SpriteClip{ "DEAD", {0, 448}, { 64 , 64 }, 3, 4, false, false, 0.5f }, 28);			//DEAD				
+	animations->LoadSpriteClip(SpriteClip{ "Chase", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 29);				//Chase
+	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 30);				//Attack
+	animations->LoadSpriteClip(SpriteClip{ "Fire", {0, 416}, { 96 , 32 }, 0, 3, false, false }, 31);				//Fire
 
+	//Rock																							
+	animations->LoadSpriteClip(SpriteClip{ "Idle", {288, 352}, { 32 , 32 }, 0, 1, false, false, 1.f, true }, 41);	//Idle
+	animations->LoadSpriteClip(SpriteClip{ "Lose", {256, 352}, { 32 , 32 }, 1, 3, false, true, 0.5f, true }, 42);	//Lose
+	animations->LoadSpriteClip(SpriteClip{ "Fall", {288, 352}, { 32 , 32 }, 0, 1, false, false, 1.f, true }, 43);	//Falling
 }
-
-void dae::SceneLoader::Update(float )
-{
-}
-
 
 void dae::SceneLoader::InitScene(dae::SceneList scene)
 {
@@ -105,7 +112,9 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
 
-		AddNpc(NPCType::POOKA, 32.f, 32 * 9.f);
+		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
+
+		AddNpc(NPCType::POOKA, 32.f * 10, 32 * 12.f);
 
 		AddNpc(NPCType::FYGAR, 32.f * 10.f, 32 * 5.f);
 
@@ -161,7 +170,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	}
 }
 
-void dae::SceneLoader::PostInitScene(SceneList scene) const
+void dae::SceneLoader::PostInitScene(SceneList scene)
 {
 	auto level = ServiceLocator::GetLevelManager();
 
@@ -172,11 +181,12 @@ void dae::SceneLoader::PostInitScene(SceneList scene) const
 	case SceneList::MAIN_MENU:
 		break;
 	case SceneList::LEVEL_SINGLE:
-		
+		level->CreateTunnel(1, 7, Direction::DOWN, 3);
 		level->CreateTunnel(12, 12, Direction::UP, 2);
 		level->CreateTunnel(12, 12, Direction::LEFT, 2);
 		break;
 	case SceneList::LEVEL_COOP:
+		level->CreateTunnel(1, 7, Direction::DOWN, 3);
 		level->CreateTunnel(12, 12, Direction::UP, 2);
 		level->CreateTunnel(12, 12, Direction::LEFT, 2);
 		break;
@@ -188,7 +198,7 @@ void dae::SceneLoader::PostInitScene(SceneList scene) const
 
 }
 
-void dae::SceneLoader::ResetScene(SceneList scene) const
+void dae::SceneLoader::ResetScene(SceneList scene)
 {
 	auto level = ServiceLocator::GetLevelManager();
 	level->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
@@ -247,19 +257,11 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, 
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(23, std::make_shared<DigPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(24, std::make_shared<AttackPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(25, std::make_shared<DeadPlayerState>());
-		//player->GetComponent<SpriteComponent>()->SetAnimationToState(26, std::make_shared<ActionPlayerState>());
-
 		
 		break;
 	}
 
-
-	
-
-	
-
 	level->AddPlayer(player->GetComponent<PlayerComponent>().get());
-
 	m_Scene->Add(player);
 	
 	if(level->GetPlayerCount() == 1)
@@ -278,7 +280,8 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, 
 		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_d, player.get());
 		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_LSHIFT, player.get());
 	}
-	
+
+	//HEALTH GUI
 	std::shared_ptr<GameObject> gui;
 	gui = std::make_shared<GameObject>();
 	gui->SetName("GUI>>HP: " + player->GetName());
@@ -290,6 +293,7 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, 
 	player->GetComponent<PlayerComponent>()->AddObserver(gui->GetComponent<HealthDisplayComponent>());
 	m_Scene->Add(gui);
 
+	//POINTS GUI
 	gui = std::make_shared<GameObject>();
 	gui->SetName("GUI>>POINTS: " + player->GetName());
 	gui->AddComponent(std::make_shared<TransformComponent>(guiPointsX, guiPointsY));
@@ -311,7 +315,7 @@ void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
 	NPC->AddComponent(std::make_shared<MoveComponent>());
 	NPC->AddComponent(std::make_shared<NpcComponent>(type));
 	NPC->AddComponent(std::make_shared<TextureComponent>());
-	
+	NPC->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
 
 	switch (type)
 	{
@@ -319,28 +323,42 @@ void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
 
 	case NPCType::ROCK:
 		NPC->SetName("Rock");
-		NPC->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(12));
 		NPC->GetComponent<MoveComponent>()->SetIsStatic(true);
+		NPC->AddComponent(std::make_shared<SpriteComponent>(RockIdleState()));
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(41, std::make_shared<RockIdleState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(42, std::make_shared<RockLoseState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(43, std::make_shared<RockFallingState>());
+	
 		break;
 	case NPCType::POOKA:
 		NPC->SetName("Pooka");
 
-		NPC->AddComponent(std::make_shared<SpriteComponent>(IdleEnemyState()));
-		NPC->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(11, std::make_shared<IdleEnemyState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(12, std::make_shared<MoveEnemyState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(13, std::make_shared<GhostEnemyState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(15, std::make_shared<DeadEnemyState>());
+		NPC->AddComponent(std::make_shared<SpriteComponent>(PookaIdleState()));
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(11, std::make_shared<PookaIdleState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(12, std::make_shared<PookaMoveState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(13, std::make_shared<PookaGhostState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(15, std::make_shared<PookaInflateState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(16, std::make_shared<PookaDeflateState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(17, std::make_shared<PookaCrushState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(18, std::make_shared<PookaDeadState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(19, std::make_shared<PookaChaseState>());
 		break;
 	case NPCType::FYGAR:
 		NPC->SetName("Fygar");
-		NPC->AddComponent(std::make_shared<SpriteComponent>(IdleEnemyState()));
-		NPC->GetComponent<TextureComponent>()->SetTexture(ServiceLocator::GetResourceManager()->GetTexture(02));
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(21, std::make_shared<IdleEnemyState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(22, std::make_shared<MoveEnemyState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(23, std::make_shared<GhostEnemyState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(24, std::make_shared<AttackEnemyState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(25, std::make_shared<DeadEnemyState>());
+		NPC->AddComponent(std::make_shared<SpriteComponent>(FygarIdleState()));
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(21, std::make_shared<FygarIdleState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(22, std::make_shared<FygarMoveState>());
+		
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(23, std::make_shared<FygarGhostState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(24, std::make_shared<FygarChargingState>());
+		
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(25, std::make_shared<FygarInflateState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(26, std::make_shared<FygarDeflateState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(27, std::make_shared<FygarCrushState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(28, std::make_shared<FygarDeadState>());
+
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(29, std::make_shared<FygarChaseState>());
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(30, std::make_shared<FygarAttackState>());
 		break;
 	}
 

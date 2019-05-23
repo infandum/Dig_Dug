@@ -13,10 +13,10 @@ namespace dae
 		SpriteComponent(SpriteComponent&& other) noexcept = delete;
 		SpriteComponent& operator=(const SpriteComponent& other) = delete;
 		SpriteComponent& operator=(SpriteComponent&& other) noexcept = delete;
-		SpriteComponent() = default;
+		//SpriteComponent() = default;
 
 		template <class T>
-		explicit SpriteComponent(T state)
+		SpriteComponent(T state)
 		{
 			m_State = std::make_shared<T>(state);
 		}
@@ -32,6 +32,7 @@ namespace dae
 		SDL_RendererFlip GetFlipSprite() const { return m_FlipDirection; }
 
 		UINT GetActiveAnimationFrame() const { return m_ActiveFrame; }
+		void SetActiveAnimationFrame(const UINT& frame)  { m_ActiveFrame = frame; }
 
 		void SetCurrentUV(int x, int y, int w = 32, int h = 32) { m_SpriteUV.x = x; m_SpriteUV.y = y; m_SpriteUV.w = w; m_SpriteUV.h = h; }
 		SDL_Rect GetCurrentUV() const { return m_SpriteUV; }
@@ -60,6 +61,17 @@ namespace dae
 			return nullptr;
 		}
 
+		template <class T>
+		std::shared_ptr<BaseState> GetState(std::shared_ptr<T> state)
+		{
+			for (auto& states : m_StateClips)
+				if (states.second && typeid(*states.second.get()) == typeid(*state.get()))
+				{
+					return std::static_pointer_cast<T>(states.second);
+				}
+			return nullptr;
+		}
+
 		void Reset();
 
 		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
@@ -70,7 +82,7 @@ namespace dae
 		//void Render() override;
 
 		void AnimationTime(float deltaTime, const SpriteClip& clip);
-		void SetActiveAnimationFrame(float deltaTime);
+		void AnimationFrame(float deltaTime);
 		UINT GetAnimationIDForState(std::shared_ptr<BaseState> state);
 	private:
 		std::shared_ptr<BaseState> m_State = nullptr;
@@ -85,7 +97,7 @@ namespace dae
 		UINT m_ActiveFrame = 0;
 		SDL_Rect m_SpriteUV = { 0 , 0, 32, 32};
 
-		AnimationManager* m_AnimManager;
+		AnimationManager* m_AnimManager = nullptr;
 		std::map<UINT, std::shared_ptr<BaseState>> m_StateClips;
 	};
 }

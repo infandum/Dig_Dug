@@ -168,6 +168,16 @@ bool dae::MoveComponent::IsCentered() const
 	return XisCenter && YisCenter;
 }
 
+void dae::MoveComponent::SetMovementInput(float x, float y, float z)
+{
+	SetMovementInput({x, y, z});
+}
+
+void dae::MoveComponent::SetMovementInput(glm::vec3 direction)
+{
+	m_Velocity = direction * m_MoveSpeed;
+}
+
 void dae::MoveComponent::SetVelocity(glm::vec3 direction)
 {
 	m_Velocity = direction;
@@ -219,16 +229,9 @@ void dae::MoveComponent::MoveToTile(unsigned int xIndex, unsigned int yIndex)
 bool dae::MoveComponent::CheckTileSwapping()
 {
 	const iVector2 nextTileIndex = { m_pTransform->GetPositionIndex().x + static_cast<int>(DirectionAxis(m_CurrentDirection).x), m_pTransform->GetPositionIndex().y + static_cast<int>(DirectionAxis(m_CurrentDirection).y) };
-
-	m_pLevelManager = ServiceLocator::GetLevelManager();
 	const auto currTile = m_pLevelManager->GetTile(m_pTransform->GetPositionIndex().x, m_pTransform->GetPositionIndex().y);
 	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
-	/*if(GetGameObject()->GetInput())
-	{
-		std::cout << "CURRENT TILE: X =" << m_pTransform->GetPositionIndex().x << " , Y = " << m_pTransform->GetPositionIndex().y << "\n";
-		std::cout << "NEXT TILE: X = " << m_pTransform->GetPositionIndex().x + GetNextTileDirectionFromVelocity().x << " , Y = " << m_pTransform->GetPositionIndex().y + GetNextTileDirectionFromVelocity().y << "\n";
-	}*/
-	
+
 	if (nextTile != nullptr)
 	{
 		if (nextTile->GetTileState() == TileState::FREE)

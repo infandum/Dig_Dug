@@ -19,6 +19,8 @@ namespace dae
 		MoveComponent() = default;
 		virtual ~MoveComponent() = default;
 
+		void SetMovementInput(float x, float y, float z = 0);
+		void SetMovementInput(glm::vec3 direction);
 
 		glm::vec3 GetVelocity() const { return m_Velocity; }
 		void SetVelocity(glm::vec3 direction);
@@ -63,8 +65,10 @@ namespace dae
 	private:
 		float m_MoveSpeed = 90.f;
 		float m_MovePadding = 1.0f;
+
 		TransformComponent* m_pTransform;
 		LevelManager* m_pLevelManager;
+
 		bool m_IsStatic = false;
 		bool m_IsMoving = false;
 		bool isSwappingTile = false;

@@ -2,34 +2,20 @@
 #include "Components.h"
 #include "GameObject.h"
 #include "ServiceLocator.h"
+#include "PlayerStates.h"
 
 void dae::SpriteComponent::Initialize()
 {
 	m_AnimManager = ServiceLocator::GetAnimationManager();
-	if(!m_State)
-	{
-		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
-			m_State = GetState<IdlePlayerState>();
-		if (GetGameObject()->GetComponent<NpcComponent>())
-			m_State = GetState<IdleEnemyState>();
-	}
-	else
-	{
-		if (GetGameObject()->GetInput() || GetGameObject()->GetComponent<PlayerComponent>())
-			m_State = GetState<IdlePlayerState>();
-		if (GetGameObject()->GetComponent<NpcComponent>())
-			m_State = GetState<IdleEnemyState>();
-		if(typeid(*m_State.get()) == typeid(WeaponState))
-			m_State = GetState<WeaponState>();
-	}
-		
+	m_State = GetState(m_State);
+	
 	m_Event = NotifyEvent::EVENT_IDLE;
 }
 
 void dae::SpriteComponent::Update(float deltaTime)
 {
 	Swap();
-	SetActiveAnimationFrame(deltaTime);
+	AnimationFrame(deltaTime);
 	m_State->Update(deltaTime, *GetGameObject());
 	m_State->Animated(*GetGameObject());
 }
@@ -60,15 +46,9 @@ void dae::SpriteComponent::SetAnimationToState(UINT clipID, std::shared_ptr<Base
 	}
 	for (std::pair<UINT, std::shared_ptr<BaseState>> entry : m_StateClips)
 	{
-		if (entry.first == clipID)
+		if (entry.first == clipID && entry.second == state)
 		{
-			std::cout << "SpriteComponent::SetAnimationToState() > id is already used! " << clipID << '\n';
-			return;
-		}
-
-		if (entry.second == state)
-		{
-			std::cout << "SpriteComponent::SetAnimationToState() > State is already added to the manager (ID %i)! " << clipID << '\n';
+			std::cout << "SpriteComponent::SetAnimationToState() > id is already used! " << clipID << " and state "<< typeid(*state).name() << " Already linked " <<'\n';
 			return;
 		}
 	}
@@ -112,7 +92,7 @@ void dae::SpriteComponent::AnimationTime(float deltaTime, const SpriteClip& clip
 	m_FrameTime = std::fmod(m_FrameTime, 1.0f / static_cast<double>(speed));
 }
 
-void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
+void dae::SpriteComponent::AnimationFrame(float deltaTime)
 {
 
 	const auto clip = m_AnimManager->GetSpriteClip(GetAnimationIDForState(m_State));
@@ -122,8 +102,24 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 		
 			if(!clip.IsLooping)
 			{
-				if (m_ActiveFrame == clip.Frames - 1)
-					m_IsAnimationEnd = true;
+				if(clip.Speed >= 0.f)
+				{	
+					if (m_ActiveFrame == clip.Frames - 1)
+					{
+						//m_ActiveFrame = clip.StartFrame;
+						m_IsAnimationEnd = true;
+					}
+						
+				}
+				else
+				{
+					if (m_ActiveFrame == 0)
+					{
+						//m_ActiveFrame = clip.StartFrame;
+						m_IsAnimationEnd = true;
+					}
+						
+				}
 
 				if(m_IsAnimationEnd)
 				{
@@ -138,9 +134,13 @@ void dae::SpriteComponent::SetActiveAnimationFrame(float deltaTime)
 			{
 				AnimationTime(deltaTime, clip);
 			}
-
-			
-		
+	}
+	else
+	{
+		if(!clip.IsLooping)
+		{
+			m_ActiveFrame = clip.StartFrame;
+		}
 	}
 }
 
