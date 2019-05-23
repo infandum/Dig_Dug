@@ -58,7 +58,11 @@ namespace dae
 	public:
 		virtual ~PookaCrushState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
-		//void Update(float& deltaTime, GameObject& gameObject) override;
+		void Update(float& deltaTime, GameObject& gameObject) override;
+	private:
+		bool m_IsCrushed = false;
+		float m_DelayTimer = 0.f;
+		float m_DelayMaxTime = 0.5f;
 	};
 
 	class PookaDeadState : public DirectionState
@@ -140,7 +144,11 @@ namespace dae
 	public:
 		virtual ~FygarCrushState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
-		//void Update(float& deltaTime, GameObject& gameObject) override;
+		void Update(float& deltaTime, GameObject& gameObject) override;
+	private:
+		bool m_IsCrushed = false;
+		float m_DelayTimer = 0.f;
+		float m_DelayMaxTime = 0.5f;
 	};
 
 	class FygarDeadState : public DirectionState
@@ -166,13 +174,25 @@ namespace dae
 	public:
 		virtual ~RockFallingState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
-		//void Update(float& deltaTime, GameObject& gameObject) override;
+		void Update(float& deltaTime, GameObject& gameObject) override;		
 	};
 
 	class RockLoseState : public DirectionState
 	{
 	public:
 		virtual ~RockLoseState() = default;
+		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
+		void Update(float& deltaTime, GameObject& gameObject) override;
+	private:
+		bool m_IsFree = false;
+		float m_DelayTimer = 0.f;
+		float m_DelayMaxTime = 0.25f;
+	};
+
+	class RockDeadState : public DirectionState
+	{
+	public:
+		virtual ~RockDeadState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
 		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};

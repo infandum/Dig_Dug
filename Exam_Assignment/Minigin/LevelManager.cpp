@@ -6,38 +6,44 @@
 
 void dae::LevelManager::Reset()
 {
-	
+	if (m_pTileComponents.empty())
+		return;
 
-
-	for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
-	{
-		m_pEntities[m_ActiveSceneIndex][i]->GetGameObject()->Enable(true);
-		m_pEntities[m_ActiveSceneIndex][i]->Reset();
-	}
-
-	for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
-	{
-
-		m_pPlayers[m_ActiveSceneIndex][i]->Reset();
-	}
-
-	if(!m_pTileComponents[m_ActiveSceneIndex].empty())
-	{
-		for (auto x = 0; x < 14; ++x)
-		{
-			for (auto y = 0; y < 17; ++y)
+	if (!m_pEntities.empty())
+		if(!m_pEntities[m_ActiveSceneIndex].empty())
+			for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
 			{
-				auto tile = GetTile(x, y);
-
-				tile->SetTileState(TileState::EMPITY);
-				if (y <= 1)
-					tile->SetTileState(TileState::EMPITY);
-				else
-					tile->SetTileState(TileState::FREE);
-				tile->Reset();
+				m_pEntities[m_ActiveSceneIndex][i]->GetGameObject()->Enable(true);
+				m_pEntities[m_ActiveSceneIndex][i]->Reset();
 			}
-		}
-	}
+
+	if (!m_pPlayers.empty())
+		if (!m_pPlayers[m_ActiveSceneIndex].empty())
+			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			{
+
+				m_pPlayers[m_ActiveSceneIndex][i]->Reset();
+			}
+
+	if (!m_pTileComponents.empty())
+		if (!m_pTileComponents[m_ActiveSceneIndex].empty())
+			if(!m_pTileComponents[m_ActiveSceneIndex].empty())
+			{
+				for (auto x = 0; x < 14; ++x)
+				{
+					for (auto y = 0; y < 17; ++y)
+					{
+						auto tile = GetTile(x, y);
+						tile->Reset();
+						tile->SetTileState(TileState::EMPITY);
+						if (y <= 1)
+							tile->SetTileState(TileState::EMPITY);
+						else
+							tile->SetTileState(TileState::FREE);
+						
+					}
+				}
+			}
 
 	m_Reset = true;
 }
@@ -58,65 +64,68 @@ void dae::LevelManager::Update(float deltaTime)
 
 	//TODO: CLEAN THIS UP SO IT DOENS GET DONE EVERY UPDATE;
 	SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
-	for(auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
-	{
-			if (m_Reset || m_pPlayers[m_ActiveSceneIndex][i]->IsDead())
-			{
-				m_StartTile[m_ActiveSceneIndex][i] = GetTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().y);
-				m_StartTile[m_ActiveSceneIndex][i]->SetTileState(TileState::USED);
-
-				if (i >= m_pPlayers[m_ActiveSceneIndex].size() - 1 && m_StartTile[m_ActiveSceneIndex][i]->GetTileState() == TileState::USED)
-					m_Reset = false;
-
-			}
-
-		
-			if (IsSwitchingTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y))
-			{
-				int x = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
-				int y = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
-				const auto nextTile = GetTile(x, y);
-				if (nextTile != nullptr && nextTile != m_StartTile[m_ActiveSceneIndex][i])
+	if (!m_pPlayers.empty())
+		for(auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+		{
+				if (m_Reset || m_pPlayers[m_ActiveSceneIndex][i]->IsDead())
 				{
-					const auto dir = m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
-					if (dir != Direction::NONE)
-					{
-						m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+					m_StartTile[m_ActiveSceneIndex][i] = GetTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().y);
+					m_StartTile[m_ActiveSceneIndex][i]->SetTileState(TileState::USED);
+					m_StartTile[m_ActiveSceneIndex][i]->SetOccupied(true);
 
-						if (m_pPlayers[m_ActiveSceneIndex][i]->GetType() == PlayerType::PLAYER_DIGDUG)
+					if (i >= m_pPlayers[m_ActiveSceneIndex].size() - 1 && m_StartTile[m_ActiveSceneIndex][i]->GetTileState() == TileState::USED)
+						m_Reset = false;
+
+				}
+
+			
+				if (IsSwitchingTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y))
+				{
+					int x = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
+					int y = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
+					const auto nextTile = GetTile(x, y);
+					if (nextTile != nullptr && nextTile != m_StartTile[m_ActiveSceneIndex][i])
+					{
+						const auto dir = m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
+						if (dir != Direction::NONE)
 						{
-							DigConnection(m_StartTile[m_ActiveSceneIndex][i], nextTile, dir);
-							if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
-								GetTile(x, y)->SetTileState(TileState::USED);
-							m_StartTile[m_ActiveSceneIndex][i] = nextTile;
+							m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+
+							if (m_pPlayers[m_ActiveSceneIndex][i]->GetType() == PlayerType::PLAYER_DIGDUG)
+							{
+								DigConnection(m_StartTile[m_ActiveSceneIndex][i], nextTile, dir);
+								if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
+									GetTile(x, y)->SetTileState(TileState::USED, m_pPlayers[m_ActiveSceneIndex][i]);
+								m_StartTile[m_ActiveSceneIndex][i] = nextTile;
+							}
+							
 						}
-						
 					}
 				}
-			}
 
-			m_GameOvers[m_ActiveSceneIndex][i] = m_pPlayers[m_ActiveSceneIndex][i]->IsGameOver();
+				m_GameOvers[m_ActiveSceneIndex][i] = m_pPlayers[m_ActiveSceneIndex][i]->IsGameOver();
 
-			if(m_GameOvers[m_ActiveSceneIndex][i])
-				if (std::adjacent_find(m_GameOvers[m_ActiveSceneIndex].begin(), m_GameOvers[m_ActiveSceneIndex].end(), std::not_equal_to<>()) == m_GameOvers[m_ActiveSceneIndex].end())
-				{
-					std::cout << "GAME OVER!" << std::endl;
-					ServiceLocator::GetSceneManager()->SetActive("Main menu");
-				}
-	}
+				if(m_GameOvers[m_ActiveSceneIndex][i])
+					if (std::adjacent_find(m_GameOvers[m_ActiveSceneIndex].begin(), m_GameOvers[m_ActiveSceneIndex].end(), std::not_equal_to<>()) == m_GameOvers[m_ActiveSceneIndex].end())
+					{
+						std::cout << "GAME OVER!" << std::endl;
+						ServiceLocator::GetSceneManager()->SetActive("Main menu");
+					}
+		}
 
-	for(auto& entity : m_pEntities[m_ActiveSceneIndex])
-	{
-		if (entity != nullptr  && entity->GetGameObject()->GetTransform() != nullptr)
+	if(!m_pEntities.empty())
+		for(auto& entity : m_pEntities[m_ActiveSceneIndex])
 		{
-			if (IsSwitchingTile(entity->GetGameObject()->GetTransform()->GetPosition().x, entity->GetGameObject()->GetTransform()->GetPosition().y))
+			if (entity != nullptr  && entity->GetGameObject()->GetTransform() != nullptr)
 			{
-				int x = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
-				int y = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
-				entity->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+				if (IsSwitchingTile(entity->GetGameObject()->GetTransform()->GetPosition().x, entity->GetGameObject()->GetTransform()->GetPosition().y))
+				{
+					int x = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
+					int y = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
+					entity->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+				}
 			}
 		}
-	}
 }
 
 void dae::LevelManager::AddTile(TileComponent* tile)
@@ -226,7 +235,8 @@ void dae::LevelManager::RemoveEntity(NpcComponent* pEntity)
 
 void dae::LevelManager::DigConnection(TileComponent* start, TileComponent* end, Direction dir)
 {
-
+	start->SetOccupied(false);
+	end->SetOccupied(true);
 	switch (dir)
 	{
 	case Direction::UP:

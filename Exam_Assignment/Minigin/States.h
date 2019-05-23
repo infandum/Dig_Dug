@@ -33,7 +33,7 @@ namespace dae
 
 	protected:
 		void SpriteFlip(GameObject& gameObject) const override;
-		LevelManager* m_level = ServiceLocator::GetLevelManager();
+		LevelManager* m_pLevelManager = ServiceLocator::GetLevelManager();
 	};
 
 	

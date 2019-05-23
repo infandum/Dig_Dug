@@ -28,27 +28,15 @@ void dae::NpcComponent::Reset()
 	m_isGhosting = false;
 	m_IsReset = true;
 	m_player = nullptr;
+	m_Hits = 0;
 
-	GetGameObject()->Enable(true);
+	auto a = GetGameObject();
+	a->Enable(true);
 	GetGameObject()->GetRenderer()->EnableRender(true);
 	GetGameObject()->GetCollision()->EnableCollision(true);
 	GetGameObject()->GetTransform()->Reset();
 	GetGameObject()->GetComponent<MoveComponent>()->Reset();
-
-	switch (m_Type)
-	{
-	case NPCType::POOKA:
-		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-		break;
-	case NPCType::FYGAR:
-		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
-
-		break;
-	default:
-
-		break;
-	}
+	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 }
 
 void dae::NpcComponent::onNotify(GameObject& , NotifyEvent& )
@@ -59,6 +47,16 @@ void dae::NpcComponent::Initialize()
 {
 	m_pLevelManager = ServiceLocator::GetLevelManager();
 	m_pLevelManager->AddEntity(this);
+
+	m_CrushedPoints[0] = 0;
+	m_CrushedPoints[1] = 1000;
+	m_CrushedPoints[2] = 2500;
+	m_CrushedPoints[3] = 4000;
+	m_CrushedPoints[4] = 6000;
+	m_CrushedPoints[5] = 8000;
+	m_CrushedPoints[6] = 10000;
+	m_CrushedPoints[7] = 12000;
+	m_CrushedPoints[8] = 15000;
 
 	switch (m_Type)
 	{
@@ -80,14 +78,10 @@ void dae::NpcComponent::Update(float )
 {
 	if (m_IsReset)
 	{
+		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 		m_IsReset = false;
 		return;
 	}	
-
-	auto trans = GetGameObject()->GetTransform();
-	iVector2 nextTileIndex;
-	//TileComponent* currTile;
-	TileComponent* nextTile;
 
 	const auto index = GetGameObject()->GetTransform()->GetPositionIndex();
 	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
@@ -100,7 +94,7 @@ void dae::NpcComponent::Update(float )
 	{
 	case NPCType::POOKA:
 
-		if (!m_IsHit)
+		if (!m_IsHit && !m_IsCrushed)
 		{
 			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_MOVE);
 			GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 1, 0, 0 });
@@ -113,7 +107,7 @@ void dae::NpcComponent::Update(float )
 
 		break;
 	case NPCType::FYGAR:
-		if (!m_IsHit)
+		if (!m_IsHit && !m_IsCrushed)
 		{
 			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_MOVE);
 			GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 1, 0, 0 });
@@ -126,15 +120,7 @@ void dae::NpcComponent::Update(float )
 		
 		break;
 	case NPCType::ROCK:
-		GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 0, 1, 0 });
-
-		nextTileIndex = { trans->GetPositionIndex().x , trans->GetPositionIndex().y + 1};
-		nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
-
-		if(nextTile->GetTileState() == TileState::USED)
-			GetGameObject()->GetComponent<MoveComponent>()->SetIsStatic(false);
-		else
-			GetGameObject()->GetComponent<MoveComponent>()->SetIsStatic(true);
+		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 
 		break;
 	default:
@@ -144,6 +130,11 @@ void dae::NpcComponent::Update(float )
 	
 }
 
+void dae::NpcComponent::EnableCrushing(const bool& enable)
+{
+	m_IsCrushed = enable;
+	GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 0, 1, 0 });
+}
 
 void dae::NpcComponent::Hit(PlayerComponent* player)
 {
@@ -153,16 +144,8 @@ void dae::NpcComponent::Hit(PlayerComponent* player)
 	m_IsHit = true;
 }
 
-void dae::NpcComponent::Dead()
+int dae::NpcComponent::PointCalculation() const
 {
-	m_IsDead = true;
-
-	if(m_player == nullptr)
-	{
-		std::cout << "NpcComponent>>Dead:: No Player to give points too?\n";
-		return;
-	}
-
 	int points;
 	switch (m_Type)
 	{
@@ -179,13 +162,33 @@ void dae::NpcComponent::Dead()
 			points *= 2;
 
 		break;
-	default:
 
+	case NPCType::ROCK:
+
+		points = m_CrushedPoints.at(m_Hits);
+
+		break;
+	default:
+		
 		points = 0;
 
 		break;
 	}
 
+	return points;
+}
+
+void dae::NpcComponent::Dead()
+{
+	m_IsDead = true;
+
+	if(m_player == nullptr)
+	{
+		std::cout << "NpcComponent>>Dead:: No Player to give points too?\n";
+		return;
+	}
+
+	const auto points = PointCalculation();
 	m_player->AddPoints(points);
 	
 }

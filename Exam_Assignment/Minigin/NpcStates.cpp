@@ -4,10 +4,12 @@
 #include "Components.h"
 #include "ServiceLocator.h"
 
+//POOKA STATES
+//************
 std::shared_ptr<dae::BaseState> dae::PookaIdleState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -33,6 +35,8 @@ std::shared_ptr<dae::BaseState> dae::PookaIdleState::Swap(NotifyEvent event, Gam
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	case NotifyEvent::EVENT_SPAWN:
 		return nullptr;
+	case NotifyEvent::EVENT_ACTION:
+		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	default:;
 	}
 	return nullptr;
@@ -41,7 +45,7 @@ std::shared_ptr<dae::BaseState> dae::PookaIdleState::Swap(NotifyEvent event, Gam
 std::shared_ptr<dae::BaseState> dae::PookaMoveState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -67,6 +71,8 @@ std::shared_ptr<dae::BaseState> dae::PookaMoveState::Swap(NotifyEvent event, Gam
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	case NotifyEvent::EVENT_SPAWN:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
+	case NotifyEvent::EVENT_ACTION:
+		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	default:;
 	}
 	return nullptr;
@@ -75,7 +81,7 @@ std::shared_ptr<dae::BaseState> dae::PookaMoveState::Swap(NotifyEvent event, Gam
 std::shared_ptr<dae::BaseState> dae::PookaChaseState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -101,6 +107,8 @@ std::shared_ptr<dae::BaseState> dae::PookaChaseState::Swap(NotifyEvent event, Ga
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	case NotifyEvent::EVENT_SPAWN:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
+	case NotifyEvent::EVENT_ACTION:
+		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	default:;
 	}
 	return nullptr;
@@ -109,7 +117,7 @@ std::shared_ptr<dae::BaseState> dae::PookaChaseState::Swap(NotifyEvent event, Ga
 std::shared_ptr<dae::BaseState> dae::PookaGhostState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -161,6 +169,8 @@ std::shared_ptr<dae::BaseState> dae::PookaInflateState::Swap(NotifyEvent event, 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	case NotifyEvent::EVENT_SPAWN:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
+	case NotifyEvent::EVENT_ACTION:
+		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	default:;
 	}
 	return nullptr;
@@ -188,6 +198,8 @@ std::shared_ptr<dae::BaseState> dae::PookaDeflateState::Swap(NotifyEvent event, 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	case NotifyEvent::EVENT_SPAWN:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
+	case NotifyEvent::EVENT_ACTION:
+		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaCrushState>();
 	default:;
 	}
 	return nullptr;
@@ -198,18 +210,35 @@ std::shared_ptr<dae::BaseState> dae::PookaCrushState::Swap(NotifyEvent event, Ga
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	gameObject.GetCollision()->EnableCollision(false);
+
+	const auto trans = gameObject.GetTransform();
+	const iVector2 nextTileIndex = { trans->GetPositionIndex().x , trans->GetPositionIndex().y + 1 };
+	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
+
 	switch (event)
 	{
-	case NotifyEvent::EVENT_COLLISION:
-		if (npc->IsCrushed())
-			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaDeadState>();
-
-		return nullptr;
 	case NotifyEvent::EVENT_SPAWN:
+		m_IsCrushed = false;
+		m_DelayTimer = 0.f;
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
+	case NotifyEvent::EVENT_ACTION:
+		if (nextTile->GetTileState() != TileState::USED && gameObject.GetComponent<MoveComponent>()->IsCentered())
+		{
+			gameObject.GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
+			m_IsCrushed = true;
+			if (m_DelayTimer >= m_DelayMaxTime)
+				return gameObject.GetComponent<SpriteComponent>()->GetState<PookaDeadState>();
+		}
+		return nullptr;
 	default:;
 	}
 	return nullptr;
+}
+
+void dae::PookaCrushState::Update(float& deltaTime, GameObject& )
+{
+	if (m_IsCrushed)
+		m_DelayTimer += deltaTime;
 }
 
 std::shared_ptr<dae::BaseState> dae::PookaDeadState::Swap(NotifyEvent event, GameObject& gameObject)
@@ -225,11 +254,12 @@ std::shared_ptr<dae::BaseState> dae::PookaDeadState::Swap(NotifyEvent event, Gam
 }
 
 
-
+//FYGAR STATES
+//************
 std::shared_ptr<dae::BaseState> dae::FygarIdleState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -267,7 +297,7 @@ std::shared_ptr<dae::BaseState> dae::FygarIdleState::Swap(NotifyEvent event, Gam
 std::shared_ptr<dae::BaseState> dae::FygarMoveState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -305,7 +335,7 @@ std::shared_ptr<dae::BaseState> dae::FygarMoveState::Swap(NotifyEvent event, Gam
 std::shared_ptr<dae::BaseState> dae::FygarChaseState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -343,7 +373,7 @@ std::shared_ptr<dae::BaseState> dae::FygarChaseState::Swap(NotifyEvent event, Ga
 std::shared_ptr<dae::BaseState> dae::FygarGhostState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -373,7 +403,7 @@ std::shared_ptr<dae::BaseState> dae::FygarGhostState::Swap(NotifyEvent event, Ga
 std::shared_ptr<dae::BaseState> dae::FygarChargingState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -405,7 +435,7 @@ std::shared_ptr<dae::BaseState> dae::FygarChargingState::Swap(NotifyEvent event,
 std::shared_ptr<dae::BaseState> dae::FygarAttackState::Swap(NotifyEvent event, GameObject& gameObject)
 {
 	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_level->GetTile(index.x, index.y);
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
@@ -494,18 +524,36 @@ std::shared_ptr<dae::BaseState> dae::FygarCrushState::Swap(NotifyEvent event, Ga
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	gameObject.GetCollision()->EnableCollision(false);
+
+	const auto trans = gameObject.GetTransform();
+	const iVector2 nextTileIndex = { trans->GetPositionIndex().x , trans->GetPositionIndex().y + 1 };
+	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
+
 	switch (event)
 	{
-	case NotifyEvent::EVENT_COLLISION:
-		if (npc->IsCrushed())
-			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarDeadState>();
-
-		return nullptr;
 	case NotifyEvent::EVENT_SPAWN:
-		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
+		m_IsCrushed = false;
+		m_DelayTimer = 0.f;
+		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
+	case NotifyEvent::EVENT_ACTION:
+		if (nextTile->GetTileState() != TileState::USED && gameObject.GetComponent<MoveComponent>()->IsCentered())
+		{
+			gameObject.GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
+			m_IsCrushed = true;
+			if (m_DelayTimer >= m_DelayMaxTime)
+				return gameObject.GetComponent<SpriteComponent>()->GetState<FygarDeadState>();
+		}
+		return nullptr;
 	default:;
 	}
 	return nullptr;
+}
+
+void dae::FygarCrushState::Update(float& deltaTime, GameObject& )
+{
+	if (m_IsCrushed)
+		m_DelayTimer += deltaTime;
+
 }
 
 std::shared_ptr<dae::BaseState> dae::FygarDeadState::Swap(NotifyEvent event, GameObject& gameObject)
@@ -520,17 +568,128 @@ std::shared_ptr<dae::BaseState> dae::FygarDeadState::Swap(NotifyEvent event, Gam
 	return nullptr;
 }
 
-std::shared_ptr<dae::BaseState> dae::RockIdleState::Swap(NotifyEvent , GameObject& )
+std::shared_ptr<dae::BaseState> dae::RockIdleState::Swap(NotifyEvent , GameObject& gameObject)
 {
+	gameObject.GetComponent<MoveComponent>()->SetMovementInput({ 0, 1, 0 });
+	const auto trans = gameObject.GetTransform();
+	const iVector2 nextTileIndex = { trans->GetPositionIndex().x , trans->GetPositionIndex().y + 1 };
+	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
+
+	if (nextTile->GetTileState() == TileState::USED)
+	{
+		gameObject.GetComponent<NpcComponent>()->Hit(nextTile->GetTileOwner());
+		return gameObject.GetComponent<SpriteComponent>()->GetState<RockLoseState>();
+	}
+		
+
 	return nullptr;
 }
 
-std::shared_ptr<dae::BaseState> dae::RockFallingState::Swap(NotifyEvent , GameObject& )
+std::shared_ptr<dae::BaseState> dae::RockFallingState::Swap(NotifyEvent event, GameObject& gameObject)
 {
+	if (event == NotifyEvent::EVENT_SPAWN)
+	{
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(true);
+		return gameObject.GetComponent<SpriteComponent>()->GetState<RockIdleState>();
+	}
+
+	const auto trans = gameObject.GetTransform();
+	const iVector2 nextTileIndex = { trans->GetPositionIndex().x , trans->GetPositionIndex().y + 1 };
+	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
+	
+
+	if (nextTile->GetTileState() != TileState::USED && gameObject.GetComponent<MoveComponent>()->IsCentered())
+	{
+		gameObject.GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
+		gameObject.GetComponent<NpcComponent>()->Dead();
+		return gameObject.GetComponent<SpriteComponent>()->GetState<RockDeadState>();
+	}
+
 	return nullptr;
 }
 
-std::shared_ptr<dae::BaseState> dae::RockLoseState::Swap(NotifyEvent , GameObject& )
+void dae::RockFallingState::Update(float& , GameObject& gameObject)
 {
+	const auto collision = gameObject.GetComponent<CollisionComponent>();
+	if (collision->GetHasCollision())
+	{
+		if (collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>())
+		{
+			//HIT NPC
+			if (!collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->IsCrushed())
+			{
+					collision->GetGameObject()->GetComponent<NpcComponent>()->HasHit();
+					collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->Hit(collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->HitByPlayer());
+					collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->EnableCrushing();
+					collision->GetCollision()->GetGameObject()->GetComponent<SpriteComponent>()->onNotify(NotifyEvent::EVENT_ACTION);
+			}
+			//collision->SetHasCollision(false);
+		}
+	}
+}
+
+std::shared_ptr<dae::BaseState> dae::RockLoseState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	if (event == NotifyEvent::EVENT_SPAWN)
+	{
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(true);
+		return gameObject.GetComponent<SpriteComponent>()->GetState<RockIdleState>();
+	}
+
+	const auto trans = gameObject.GetTransform();
+	const iVector2 nextTileIndex = { trans->GetPositionIndex().x , trans->GetPositionIndex().y + 1 };
+	const auto nextTile = m_pLevelManager->GetTile(nextTileIndex.x, nextTileIndex.y);
+	const auto currtile = m_pLevelManager->GetTile(trans->GetPositionIndex().x, trans->GetPositionIndex().y);
+
+	if (nextTile->GetTileState() == TileState::USED && !nextTile->IsOccupied())
+	{
+		if(m_IsFree)
+		{
+			if (m_DelayTimer >= m_DelayMaxTime)
+			{
+				m_IsFree = false;
+				m_DelayTimer = 0.f;
+				gameObject.GetComponent<MoveComponent>()->SetIsStatic(false);
+				
+				const auto dig = currtile->HasBeenUsed();
+
+				currtile->SetTileState(dig ? TileState::USED : TileState::FREE);
+
+				if(dig)
+					m_pLevelManager->DigConnection(currtile, nextTile, Direction::DOWN);
+
+				return gameObject.GetComponent<SpriteComponent>()->GetState<RockFallingState>();
+			}			
+		}
+		else
+		{
+			m_IsFree = true;
+		}
+		
+	}
+
+	return nullptr;
+}
+
+void dae::RockLoseState::Update(float& deltaTime, GameObject& )
+{
+	if(m_IsFree)
+	{
+		m_DelayTimer += deltaTime;
+	}
+}
+
+std::shared_ptr<dae::BaseState> dae::RockDeadState::Swap(NotifyEvent event, GameObject& gameObject)
+{
+	if(gameObject.GetComponent<SpriteComponent>()->IsAnimationEnded())
+		gameObject.Enable(false);
+	
+	if (event == NotifyEvent::EVENT_SPAWN)
+	{
+		gameObject.Enable(true);
+		gameObject.GetComponent<MoveComponent>()->SetIsStatic(true);
+		return gameObject.GetComponent<SpriteComponent>()->GetState<RockIdleState>();
+	}
+
 	return nullptr;
 }

@@ -6,10 +6,11 @@
 
 void dae::PhysicsManager::Reset()
 {
-	for(auto& collision : m_pCollisionComponents[m_ActiveSceneIndex])
-	{
-		collision->Reset();
-	}
+	if (!m_pCollisionComponents.empty())
+		for(auto& collision : m_pCollisionComponents[m_ActiveSceneIndex])
+		{
+			collision->Reset();
+		}
 }
 
 void dae::PhysicsManager::Initialize()
@@ -25,66 +26,67 @@ void dae::PhysicsManager::Update(float deltaTime)
 	//TODO: LEAVE COLLISION
 	UNREFERENCED_PARAMETER(deltaTime);
 	auto isOverlapping = false;
-	for (auto& component : m_pCollisionComponents[m_ActiveSceneIndex])
-	{
-		//Render Collision Debug Box 
-		if(!component->ShowCollisionBox())
-			component->ShowCollisionBox(ShowCollisionBox());
-
-		if (!component->GetGameObject()->IsEnabled()
-			||!component->CanCollide()
-			)
+	if(!m_pCollisionComponents.empty())
+		for (auto& component : m_pCollisionComponents[m_ActiveSceneIndex])
 		{
-			isOverlapping = false;
-			continue;
-		}
+			//Render Collision Debug Box 
+			if(!component->ShowCollisionBox())
+				component->ShowCollisionBox(ShowCollisionBox());
 
-		for (auto& otherComponent : m_pCollisionComponents[m_ActiveSceneIndex])
-		{
-			if(component == otherComponent
-				|| !otherComponent->GetGameObject()->IsEnabled()
-				|| !otherComponent->CanCollide()
-				|| component->GetGameObject()->IsChild(otherComponent->GetGameObject()) 
-				|| component->GetGameObject()->GetParent() == otherComponent->GetGameObject() 
-				|| otherComponent->GetGameObject()->IsChild(component->GetGameObject())
-				|| otherComponent->GetGameObject()->GetParent() == component->GetGameObject())
-			{
-				isOverlapping = false; 
-				continue;
-			}
-				
-			if(component->IsTrigger() && otherComponent->IsTrigger())
+			if (!component->GetGameObject()->IsEnabled()
+				||!component->CanCollide()
+				)
 			{
 				isOverlapping = false;
 				continue;
 			}
-			CollisionBox compBox;
-			compBox.x = static_cast<int>(component->GetPosition().x);
-			compBox.y = static_cast<int>(component->GetPosition().y);
-			compBox.RadiusX = static_cast<int>(component->GetSize().x - m_CollisionPadding);
-			compBox.RadiusY = static_cast<int>(component->GetSize().y - m_CollisionPadding);
-			compBox.x += compBox.RadiusX / 2;
-			compBox.y += compBox.RadiusY / 2;
 
-			CollisionBox otherCompBox;
-			otherCompBox.x = static_cast<int>(otherComponent->GetPosition().x);
-			otherCompBox.y = static_cast<int>(otherComponent->GetPosition().y);
-			otherCompBox.RadiusX = static_cast<int>(otherComponent->GetSize().x - m_CollisionPadding);
-			otherCompBox.RadiusY = static_cast<int>(otherComponent->GetSize().y - m_CollisionPadding);
-			otherCompBox.x += otherCompBox.RadiusX / 2;
-			otherCompBox.y += otherCompBox.RadiusY / 2;
-
-
-			isOverlapping = CheckBoxesIntersect(compBox, otherCompBox);
-			if(isOverlapping)
+			for (auto& otherComponent : m_pCollisionComponents[m_ActiveSceneIndex])
 			{
-				component->SetHasCollision(isOverlapping);
-				otherComponent->SetHasCollision(isOverlapping);
-				component->SetCollision(otherComponent);
-				otherComponent->SetCollision(component);
+				if(component == otherComponent
+					|| !otherComponent->GetGameObject()->IsEnabled()
+					|| !otherComponent->CanCollide()
+					|| component->GetGameObject()->IsChild(otherComponent->GetGameObject()) 
+					|| component->GetGameObject()->GetParent() == otherComponent->GetGameObject() 
+					|| otherComponent->GetGameObject()->IsChild(component->GetGameObject())
+					|| otherComponent->GetGameObject()->GetParent() == component->GetGameObject())
+				{
+					isOverlapping = false; 
+					continue;
+				}
+					
+				if(component->IsTrigger() && otherComponent->IsTrigger())
+				{
+					isOverlapping = false;
+					continue;
+				}
+				CollisionBox compBox;
+				compBox.x = static_cast<int>(component->GetPosition().x);
+				compBox.y = static_cast<int>(component->GetPosition().y);
+				compBox.RadiusX = static_cast<int>(component->GetSize().x - m_CollisionPadding);
+				compBox.RadiusY = static_cast<int>(component->GetSize().y - m_CollisionPadding);
+				compBox.x += compBox.RadiusX / 2;
+				compBox.y += compBox.RadiusY / 2;
+
+				CollisionBox otherCompBox;
+				otherCompBox.x = static_cast<int>(otherComponent->GetPosition().x);
+				otherCompBox.y = static_cast<int>(otherComponent->GetPosition().y);
+				otherCompBox.RadiusX = static_cast<int>(otherComponent->GetSize().x - m_CollisionPadding);
+				otherCompBox.RadiusY = static_cast<int>(otherComponent->GetSize().y - m_CollisionPadding);
+				otherCompBox.x += otherCompBox.RadiusX / 2;
+				otherCompBox.y += otherCompBox.RadiusY / 2;
+
+
+				isOverlapping = CheckBoxesIntersect(compBox, otherCompBox);
+				if(isOverlapping)
+				{
+					component->SetHasCollision(isOverlapping);
+					otherComponent->SetHasCollision(isOverlapping);
+					component->SetCollision(otherComponent);
+					otherComponent->SetCollision(component);
+				}
 			}
 		}
-	}
 }
 
 void dae::PhysicsManager::AddCollision(CollisionComponent* collision)

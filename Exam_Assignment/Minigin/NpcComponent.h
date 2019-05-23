@@ -21,11 +21,16 @@ namespace dae
 		void EnableChasing(const bool& enable = true) { m_IsChasing = enable; }
 		bool IsChasing() const { return m_IsChasing; }
 
+		void EnableCrushing(const bool& enable = true);
 		bool IsCrushed() const { return m_IsCrushed; }
 
 		void SetHit(const bool& isHit) { m_IsHit = isHit; }
 		void Hit(PlayerComponent* player);
 		bool IsHit() const { return m_IsHit; }
+		PlayerComponent* HitByPlayer() const { return m_player; }
+		void HasHit() { m_Hits++; if (m_Hits >= static_cast<UINT>(m_CrushedPoints.size())) m_Hits = static_cast<UINT>(m_CrushedPoints.size()) - 1;}
+		
+		int PointCalculation() const;
 
 		void Dead();
 		bool IsDead() const { return m_IsDead;}
@@ -40,8 +45,6 @@ namespace dae
 		void Initialize() override;
 		void Update(float deltaTime) override;
 		//void Render() override;
-
-		
 
 	private:
 		NPCType m_Type{};
@@ -62,5 +65,8 @@ namespace dae
 		LevelManager* m_pLevelManager;
 
 		PlayerComponent* m_player = nullptr;
+		
+		std::map<UINT, UINT> m_CrushedPoints;
+		UINT m_Hits = 0;
 	};
 }

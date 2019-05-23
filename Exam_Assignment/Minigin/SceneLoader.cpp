@@ -72,6 +72,7 @@ void dae::SceneLoader::Initialize()
 	animations->LoadSpriteClip(SpriteClip{ "Idle", {288, 352}, { 32 , 32 }, 0, 1, false, false, 1.f, true }, 41);	//Idle
 	animations->LoadSpriteClip(SpriteClip{ "Lose", {256, 352}, { 32 , 32 }, 1, 3, false, true, 0.5f, true }, 42);	//Lose
 	animations->LoadSpriteClip(SpriteClip{ "Fall", {288, 352}, { 32 , 32 }, 0, 1, false, false, 1.f, true }, 43);	//Falling
+	animations->LoadSpriteClip(SpriteClip{ "Dead", {352, 352}, { 32 , 32 }, 0, 4, false, false, 1.f, true }, 44);	//Dead
 }
 
 void dae::SceneLoader::InitScene(dae::SceneList scene)
@@ -90,6 +91,8 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 			AddBackground(01);
 
+			GenerateTile();
+
 			font = resource->LoadFont("Lingua.otf", 32);
 			AddText(font, {0,0,0}, "Programming 4 Assignment", 16, 100);
 
@@ -107,19 +110,21 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		font = resource->LoadFont("emulogic.ttf", 16);
 
 		AddBackground(01);
-
+		
 		GenerateTile();
-
+		
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
-
+		
 		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
-
+		
 		AddNpc(NPCType::POOKA, 32.f * 10, 32 * 12.f);
-
+		
 		AddNpc(NPCType::FYGAR, 32.f * 10.f, 32 * 5.f);
-
+		
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
-
+		
+		AddNpc(NPCType::ROCK, 32.f, 32.f * 1);
+		
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
 		break;
@@ -132,14 +137,13 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		AddBackground(01);
 
 		GenerateTile();
-
+		
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
-
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);
-
-
+		
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);	
+		
 		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
-
+		
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
 
 		font = resource->LoadFont("emulogic.ttf", 12);
@@ -153,14 +157,13 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		AddBackground(01);
 
 		GenerateTile();
-
+		
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
-
-		AddPlayer(PlayerType::PLAYER_FYGAR, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);
-
-
+		
+		AddPlayer(PlayerType::PLAYER_FYGAR, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);	
+		
 		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
-
+		
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
 
 		font = resource->LoadFont("emulogic.ttf", 12);
@@ -328,7 +331,8 @@ void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(41, std::make_shared<RockIdleState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(42, std::make_shared<RockLoseState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(43, std::make_shared<RockFallingState>());
-	
+		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(44, std::make_shared<RockDeadState>());
+
 		break;
 	case NPCType::POOKA:
 		NPC->SetName("Pooka");

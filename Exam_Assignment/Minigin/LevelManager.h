@@ -50,6 +50,7 @@ namespace dae {
 		bool IsSwitchingTile(float posX, float posY) const;
 
 		size_t m_ActiveSceneIndex = 0;
+
 		std::vector<std::vector<TileComponent*>> m_pTileComponents{};
 		std::vector<std::vector<PlayerComponent*>> m_pPlayers{};
 		std::vector<std::vector<NpcComponent*>> m_pEntities {};

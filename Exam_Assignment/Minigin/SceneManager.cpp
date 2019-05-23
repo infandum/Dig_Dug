@@ -43,15 +43,6 @@ void dae::SceneManager::Render()
 
 std::shared_ptr<dae::Scene> dae::SceneManager::CreateScene(const std::string& name)
 {
-	for (int i = 0; i < m_spScenes.size(); i++)
-	{
-		if (m_spScenes[i]->GetName() == name)
-		{
-			m_spScenes[i].reset(new Scene(name));
-			return m_spScenes[i];
-		}		
-	}
-
 	const auto scene = std::make_shared<Scene>(name);
 	ActiveSceneIndex = static_cast<int>(m_spScenes.size());
 	m_spScenes.push_back(scene);

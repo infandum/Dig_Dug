@@ -76,6 +76,13 @@ void dae::TileComponent::SetTileState(TileState state)
 	m_NeedsUpdate = true;
 }
 
+void dae::TileComponent::SetTileState(TileState state, PlayerComponent* owner)
+{
+	m_TileOwner = owner;
+	m_Used = true;
+	SetTileState(state);
+}
+
 void dae::TileComponent::SetBorder(Direction dir, bool isCrossed)
 {
 	switch (dir)
