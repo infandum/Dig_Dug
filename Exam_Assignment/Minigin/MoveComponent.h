@@ -25,10 +25,12 @@ namespace dae
 		glm::vec3 GetVelocity() const { return m_Velocity; }
 		void SetVelocity(glm::vec3 direction);
 
+		void MoveToTile(iVector2 vec2);
 		void MoveToTile(unsigned int xIndex = 0, unsigned int yIndex = 0);
 
 		Direction GetDirectionFromVelocity() const;
 
+		void FlipDirection();
 		void SetCurrentDirection(const Direction& dir) { m_PreviousDirection = m_CurrentDirection;  m_CurrentDirection = dir; }
 		Direction GetCurrentDirection() const { return m_CurrentDirection; }
 		Direction GetPreviousDirection() const { return m_PreviousDirection; }

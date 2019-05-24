@@ -186,24 +186,32 @@ namespace dae
 		return {};
 	}
 
-	inline Direction VelocityDirection(glm::vec3 velocity)
+	inline Direction AxisDirection(glm::vec3 velocity)
 	{
+		Direction dir;
 		if (velocity.x < 0.0f)
-			return Direction::LEFT;
+			dir = Direction::LEFT;
+		else if (velocity.x > 0.0f)
+			dir = Direction::RIGHT;
+		else if (velocity.y < 0.0f)
+			dir = Direction::UP;
+		else if (velocity.y > 0.0f)
+			dir = Direction::DOWN;
+		else
+			dir = Direction::NONE;
 
-		if (velocity.x > 0.0f)
-			return Direction::RIGHT;
-
-		if (velocity.y < 0.0f)
-			return Direction::UP;
-
-		if (velocity.y > 0.0f)
-			return Direction::DOWN;
-
-		return Direction::NONE;
+		return dir;
 	}
 
+	inline float RandomFloatBetween(float min = 0.f, float max = 1.f)
+	{
+		return  min + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (max - min)));
+	}
 
+	inline int RandomIntBetween(int min = 0.f, int max = 1.f)
+	{
+		return min + static_cast<int>(rand() / (static_cast<int>(RAND_MAX / (max - min))));
+	}
 	struct AnimationClip
 	{
 		UINT id = 0;

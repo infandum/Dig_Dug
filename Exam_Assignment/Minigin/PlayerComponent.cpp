@@ -134,9 +134,13 @@ void dae::PlayerComponent::Update(float deltaTime)
 		
 	}
 
-	AllignAttack();
-	MoveAttack(deltaTime);
+	if(!m_IsDead)
+	{
+		AllignAttack();
+		MoveAttack(deltaTime);
 
+		
+	}
 	PlayerUpdate();
 
 	CollisionEvents();

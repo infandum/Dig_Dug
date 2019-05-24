@@ -8,15 +8,13 @@
 //************
 std::shared_ptr<dae::BaseState> dae::PookaIdleState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	npc->EnableInflated(false);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaGhostState>();
 
 		return nullptr;
@@ -24,7 +22,7 @@ std::shared_ptr<dae::BaseState> dae::PookaIdleState::Swap(NotifyEvent event, Gam
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return nullptr;
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaGhostState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaMoveState>();
@@ -45,14 +43,12 @@ std::shared_ptr<dae::BaseState> dae::PookaIdleState::Swap(NotifyEvent event, Gam
 
 std::shared_ptr<dae::BaseState> dae::PookaMoveState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaGhostState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
@@ -60,7 +56,7 @@ std::shared_ptr<dae::BaseState> dae::PookaMoveState::Swap(NotifyEvent event, Gam
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaGhostState>();
 
 		return	nullptr;
@@ -81,14 +77,12 @@ std::shared_ptr<dae::BaseState> dae::PookaMoveState::Swap(NotifyEvent event, Gam
 
 std::shared_ptr<dae::BaseState> dae::PookaChaseState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaGhostState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
@@ -96,7 +90,7 @@ std::shared_ptr<dae::BaseState> dae::PookaChaseState::Swap(NotifyEvent event, Ga
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaGhostState>();
 
 		return nullptr;
@@ -117,14 +111,12 @@ std::shared_ptr<dae::BaseState> dae::PookaChaseState::Swap(NotifyEvent event, Ga
 
 std::shared_ptr<dae::BaseState> dae::PookaGhostState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return nullptr;
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
@@ -132,7 +124,7 @@ std::shared_ptr<dae::BaseState> dae::PookaGhostState::Swap(NotifyEvent event, Ga
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<PookaIdleState>();
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return nullptr;
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<PookaMoveState>();
@@ -271,7 +263,7 @@ std::shared_ptr<dae::BaseState> dae::FygarIdleState::Swap(NotifyEvent event, Gam
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
 
 		return nullptr;
@@ -279,7 +271,7 @@ std::shared_ptr<dae::BaseState> dae::FygarIdleState::Swap(NotifyEvent event, Gam
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return nullptr;
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarMoveState>();
@@ -310,7 +302,7 @@ std::shared_ptr<dae::BaseState> dae::FygarMoveState::Swap(NotifyEvent event, Gam
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
@@ -318,7 +310,7 @@ std::shared_ptr<dae::BaseState> dae::FygarMoveState::Swap(NotifyEvent event, Gam
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
 
 		return nullptr;
@@ -347,7 +339,7 @@ std::shared_ptr<dae::BaseState> dae::FygarChaseState::Swap(NotifyEvent event, Ga
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
@@ -355,7 +347,7 @@ std::shared_ptr<dae::BaseState> dae::FygarChaseState::Swap(NotifyEvent event, Ga
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarMoveState>();
@@ -377,14 +369,12 @@ std::shared_ptr<dae::BaseState> dae::FygarChaseState::Swap(NotifyEvent event, Ga
 
 std::shared_ptr<dae::BaseState> dae::FygarGhostState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	const auto index = gameObject.GetTransform()->GetPositionIndex();
-	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 	const auto move = gameObject.GetComponent<MoveComponent>();
 	const auto npc = gameObject.GetComponent<NpcComponent>();
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return nullptr;
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
@@ -392,7 +382,7 @@ std::shared_ptr<dae::BaseState> dae::FygarGhostState::Swap(NotifyEvent event, Ga
 		if (move->CheckTileSwapping() && move->IsCentered())
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
 
-		if (gameObject.GetComponent<NpcComponent>()->IsGhosting() || tile->GetTileState() == TileState::FREE)
+		if (gameObject.GetComponent<NpcComponent>()->IsGhosting())
 			return nullptr;
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarMoveState>();
@@ -414,9 +404,6 @@ std::shared_ptr<dae::BaseState> dae::FygarChargingState::Swap(NotifyEvent event,
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
-			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
-
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
 	case NotifyEvent::EVENT_MOVE:
 		if (move->CheckTileSwapping() && move->IsCentered())
@@ -432,6 +419,8 @@ std::shared_ptr<dae::BaseState> dae::FygarChargingState::Swap(NotifyEvent event,
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarCrushState>();
 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarAttackState>();
+	case NotifyEvent::EVENT_COLLISION:
+		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarInflateState>();
 	case NotifyEvent::EVENT_SPAWN:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
 	default:;
@@ -448,9 +437,6 @@ std::shared_ptr<dae::BaseState> dae::FygarAttackState::Swap(NotifyEvent event, G
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
-		if (tile->GetTileState() == TileState::FREE)
-			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarGhostState>();
-
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
 	case NotifyEvent::EVENT_MOVE:
 		if (move->CheckTileSwapping() && move->IsCentered())
@@ -465,6 +451,8 @@ std::shared_ptr<dae::BaseState> dae::FygarAttackState::Swap(NotifyEvent event, G
 			return gameObject.GetComponent<SpriteComponent>()->GetState<FygarCrushState>();
 
 		return nullptr;
+	case NotifyEvent::EVENT_COLLISION:
+		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarInflateState>();
 	case NotifyEvent::EVENT_SPAWN:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<FygarIdleState>();
 	default:;

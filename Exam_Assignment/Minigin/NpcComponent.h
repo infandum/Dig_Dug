@@ -1,9 +1,11 @@
 #pragma once
 #include "BaseComponent.h"
-#include "PlayerComponent.h"
 
 namespace dae
 {
+	class PlayerComponent;
+	class SpriteComponent;
+	class MoveComponent;
 	class LevelManager;
 	class NpcComponent : public BaseComponent
 	{
@@ -46,8 +48,18 @@ namespace dae
 
 	protected:
 		void Initialize() override;
+		
 		void Update(float deltaTime) override;
 		//void Render() override;
+
+		void SetChaseTarget(const int& index);
+		void StopMovement();
+		void Moving();
+		void StopChasing();
+		void Chasing();
+		void ChangeTunnel();
+		
+		void IdleMove();
 
 	private:
 		NPCType m_Type{};
@@ -56,14 +68,22 @@ namespace dae
 		bool m_IsInflate = false;
 		bool m_IsDead = false;
 		bool m_IsFalling = false;
+
 		bool m_IsIdle = true;
+		bool m_IsMoving = false;
 		bool m_IsChasing = false;
+		bool m_IsChangeTunnel = false;
 
 		float m_ActionTimer = 0.f;
 
-		float m_IdleMaxTime = 2.0f;
-		float m_ChaseMaxTime = 2.0f;
+		float m_ActionMaxTime = 1.0f;
+		float m_IdleMaxTime = 4.f;
+		float m_MovingMaxTime = 2.5f;
+		float m_ChaseMaxTime = 5.0f;
 		//float m_IdleMaxTime = 0.f;
+		PlayerComponent* m_pTarget = nullptr;
+		iVector2 m_TargetLocation = { 0,0 };
+		Direction m_NewDir = Direction::NONE;
 
 		bool m_IsCrushed = false;
 		bool m_IsReset = false;
@@ -74,11 +94,13 @@ namespace dae
 
 		UINT m_Points = 0;
 
-		LevelManager* m_pLevelManager;
+		LevelManager* m_pLevelManager = nullptr;
 
 		PlayerComponent* m_player = nullptr;
+		SpriteComponent* m_pSprite = nullptr;
+		MoveComponent* m_pMove = nullptr;
 		
-		std::map<UINT, UINT> m_CrushedPoints;
+		std::map<UINT, UINT> m_CrushedPoints{};
 		UINT m_Hits = 0;
 	};
 }

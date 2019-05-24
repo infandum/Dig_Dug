@@ -183,9 +183,13 @@ void dae::MoveComponent::SetVelocity(glm::vec3 direction)
 	m_Velocity = direction;
 	if (GetDirectionFromVelocity() != Direction::NONE)
 	{
-		m_PreviousDirection = m_CurrentDirection;
-		m_CurrentDirection = GetDirectionFromVelocity();
+		SetCurrentDirection(GetDirectionFromVelocity());
 	}
+}
+
+void dae::MoveComponent::MoveToTile(iVector2 vec2)
+{
+	MoveToTile(vec2.x, vec2.y);
 }
 
 dae::Direction dae::MoveComponent::GetDirectionFromVelocity() const
@@ -203,6 +207,12 @@ dae::Direction dae::MoveComponent::GetDirectionFromVelocity() const
 		dir = Direction::NONE;
 
 	return dir;
+}
+
+void dae::MoveComponent::FlipDirection()
+{
+	
+	SetCurrentDirection(AxisDirection(DirectionAxis(m_CurrentDirection) * glm::vec3{ -1 }));
 }
 
 void dae::MoveComponent::MoveToTile(unsigned int xIndex, unsigned int yIndex)

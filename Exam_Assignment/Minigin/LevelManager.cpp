@@ -167,6 +167,21 @@ dae::TileComponent* dae::LevelManager::GetTile(int x, int y)
 	return nullptr;
 }
 
+std::vector<dae::TileComponent*> dae::LevelManager::GetTilesByState(const TileState& state)
+{
+	std::vector<dae::TileComponent*> tiles;
+	auto i = m_pTileComponents[m_ActiveSceneIndex].begin(), end = m_pTileComponents[m_ActiveSceneIndex].end();
+	for (auto& component : m_pTileComponents[m_ActiveSceneIndex])
+	{
+		if (component->GetTileState() == state)
+		{
+			tiles.push_back(component);
+		}
+	}
+
+	return tiles;
+}
+
 void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 {
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
