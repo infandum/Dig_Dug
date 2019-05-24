@@ -57,6 +57,8 @@ namespace dae
 		virtual ~CrushedPlayerState() = default;
 		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
 		//void Update(float& deltaTime, GameObject& gameObject) override;
+	private:
+		bool m_IsCrushed = false;
 	};
 
 	class WeaponState : public DirectionState

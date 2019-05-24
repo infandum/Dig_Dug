@@ -23,20 +23,29 @@ dae::NpcComponent::NpcComponent(NPCType type) :m_Type(type)
 
 void dae::NpcComponent::Reset()
 {
+	m_IsCrushed = false;
 	m_IsDead = false;
 	m_IsHit = false;
-	m_isGhosting = false;
-	m_IsReset = true;
+	m_IsInflate = false;
+	m_IsFalling = false;
 	m_player = nullptr;
 	m_Hits = 0;
 
-	auto a = GetGameObject();
-	a->Enable(true);
-	GetGameObject()->GetRenderer()->EnableRender(true);
-	GetGameObject()->GetCollision()->EnableCollision(true);
-	GetGameObject()->GetTransform()->Reset();
-	GetGameObject()->GetComponent<MoveComponent>()->Reset();
-	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+	
+	m_IsChasing = false;
+	m_isGhosting = false;
+	m_IsIdle = true;
+	m_ActionTimer = 0.f;
+
+	const auto go = GetGameObject();
+	go->Enable(true);
+	go->GetRenderer()->EnableRender(true);
+	go->GetCollision()->EnableCollision(true);
+	go->GetTransform()->Reset();
+	go->GetComponent<MoveComponent>()->Reset();
+	go->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
+
+	m_IsReset = true;
 }
 
 void dae::NpcComponent::onNotify(GameObject& , NotifyEvent& )
@@ -58,20 +67,7 @@ void dae::NpcComponent::Initialize()
 	m_CrushedPoints[7] = 12000;
 	m_CrushedPoints[8] = 15000;
 
-	switch (m_Type)
-	{
-	case NPCType::POOKA:
-			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
-
-		break;
-	case NPCType::FYGAR:
-			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
-
-		break;
-	default:
-
-		break;
-	}
+	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 }
 
 void dae::NpcComponent::Update(float )
@@ -90,43 +86,12 @@ void dae::NpcComponent::Update(float )
 		m_isGhosting = true;
 	}
 
-	switch (m_Type)
-	{
-	case NPCType::POOKA:
-
+	if(m_Type != NPCType::ROCK)
 		if (!m_IsHit && !m_IsCrushed)
-		{
-			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_MOVE);
-			GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 1, 0, 0 });
-			if (GetGameObject()->GetComponent<MoveComponent>()->CheckTileSwapping() && GetGameObject()->GetComponent<MoveComponent>()->IsCentered())
+			if(m_IsIdle)
 			{
-				GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
 				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 			}
-		}
-
-		break;
-	case NPCType::FYGAR:
-		if (!m_IsHit && !m_IsCrushed)
-		{
-			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_MOVE);
-			GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 1, 0, 0 });
-			if (GetGameObject()->GetComponent<MoveComponent>()->CheckTileSwapping() && GetGameObject()->GetComponent<MoveComponent>()->IsCentered())
-			{
-				GetGameObject()->GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
-				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
-			}
-		}
-		
-		break;
-	case NPCType::ROCK:
-		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
-
-		break;
-	default:
-
-		break;
-	}
 	
 }
 

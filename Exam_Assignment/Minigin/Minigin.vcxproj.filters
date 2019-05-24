@@ -29,9 +29,6 @@
     <Filter Include="Engine\Managers\Input">
       <UniqueIdentifier>{4c81c308-e0e5-4eb1-8b27-9079bedc8971}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Managers\Game">
-      <UniqueIdentifier>{555d38c8-52f0-40dc-8502-b58cfaa51240}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Managers\Engine">
       <UniqueIdentifier>{6158519a-934e-40e5-8935-8a04f8fe3ca2}</UniqueIdentifier>
     </Filter>
@@ -46,6 +43,9 @@
     </Filter>
     <Filter Include="Game\States">
       <UniqueIdentifier>{af07b57b-cf9a-4d84-8c6f-24d08845e3cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Manager">
+      <UniqueIdentifier>{555d38c8-52f0-40dc-8502-b58cfaa51240}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -124,9 +124,6 @@
     <ClInclude Include="ServiceLocator.h">
       <Filter>Engine\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="LevelManager.h">
-      <Filter>Engine\Managers\Game</Filter>
-    </ClInclude>
     <ClInclude Include="Renderer.h">
       <Filter>Engine\Managers\Engine</Filter>
     </ClInclude>
@@ -187,6 +184,9 @@
     <ClInclude Include="NpcStates.h">
       <Filter>Game\States</Filter>
     </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Game\Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -246,9 +246,6 @@
     <ClCompile Include="ServiceLocator.cpp">
       <Filter>Engine\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="LevelManager.cpp">
-      <Filter>Engine\Managers\Game</Filter>
-    </ClCompile>
     <ClCompile Include="Renderer.cpp">
       <Filter>Engine\Managers\Engine</Filter>
     </ClCompile>
@@ -299,6 +296,9 @@
     </ClCompile>
     <ClCompile Include="NpcStates.cpp">
       <Filter>Game\States</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Game\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

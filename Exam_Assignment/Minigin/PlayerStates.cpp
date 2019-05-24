@@ -5,6 +5,9 @@
 
 std::shared_ptr<dae::BaseState> dae::IdlePlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
+	if (gameObject.GetComponent<PlayerComponent>()->IsCrushed())
+		return gameObject.GetComponent<SpriteComponent>()->GetState<CrushedPlayerState>();
+
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
@@ -31,6 +34,9 @@ std::shared_ptr<dae::BaseState> dae::IdlePlayerState::Swap(NotifyEvent event, Ga
 
 std::shared_ptr<dae::BaseState> dae::MovePlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
+	if (gameObject.GetComponent<PlayerComponent>()->IsCrushed())
+		return gameObject.GetComponent<SpriteComponent>()->GetState<CrushedPlayerState>();
+
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
@@ -55,6 +61,9 @@ std::shared_ptr<dae::BaseState> dae::MovePlayerState::Swap(NotifyEvent event, Ga
 
 std::shared_ptr<dae::BaseState> dae::DigPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
+	if (gameObject.GetComponent<PlayerComponent>()->IsCrushed())
+		return gameObject.GetComponent<SpriteComponent>()->GetState<CrushedPlayerState>();
+
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
@@ -81,7 +90,9 @@ std::shared_ptr<dae::BaseState> dae::DigPlayerState::Swap(NotifyEvent event, Gam
 
 std::shared_ptr<dae::BaseState> dae::AttackPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	UNREFERENCED_PARAMETER(gameObject);
+	if (gameObject.GetComponent<PlayerComponent>()->IsCrushed())
+		return gameObject.GetComponent<SpriteComponent>()->GetState<CrushedPlayerState>();
+
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
@@ -102,8 +113,9 @@ std::shared_ptr<dae::BaseState> dae::AttackPlayerState::Swap(NotifyEvent event, 
 
 std::shared_ptr<dae::BaseState> dae::ActionPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	UNREFERENCED_PARAMETER(event);
-	UNREFERENCED_PARAMETER(gameObject);
+	if (gameObject.GetComponent<PlayerComponent>()->IsCrushed())
+		return gameObject.GetComponent<SpriteComponent>()->GetState<CrushedPlayerState>();
+
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
@@ -114,6 +126,8 @@ std::shared_ptr<dae::BaseState> dae::ActionPlayerState::Swap(NotifyEvent event, 
 		return gameObject.GetComponent<SpriteComponent>()->GetState<DeadPlayerState>();
 	case NotifyEvent::EVENT_INTERACT:
 		return nullptr;
+	case NotifyEvent::EVENT_ACTION:
+		return nullptr;
 	default:;
 	}
 	return nullptr;
@@ -121,7 +135,6 @@ std::shared_ptr<dae::BaseState> dae::ActionPlayerState::Swap(NotifyEvent event, 
 
 std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	UNREFERENCED_PARAMETER(gameObject);
 	switch (event)
 	{
 	case NotifyEvent::EVENT_IDLE:
@@ -143,8 +156,24 @@ std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, Ga
 
 std::shared_ptr<dae::BaseState> dae::CrushedPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
 {
-	UNREFERENCED_PARAMETER(event);
-	UNREFERENCED_PARAMETER(gameObject);
+	const auto move = gameObject.GetComponent<MoveComponent>();
+	gameObject.GetCollision()->EnableCollision(false);
+
+	const auto trans = gameObject.GetTransform();
+	const iVector2 currTileIndex = { trans->GetPositionIndex().x , trans->GetPositionIndex().y };
+	const auto currTile = m_pLevelManager->GetTile(currTileIndex.x, currTileIndex.y);
+
+	if(event == NotifyEvent::EVENT_SPAWN)
+	{
+		m_IsCrushed = false;
+		return gameObject.GetComponent<SpriteComponent>()->GetState<IdlePlayerState>();
+	}
+
+	if ((currTile->GetTileState() == TileState::USED && !currTile->GetIsConnectedBorder(Direction::DOWN)) && gameObject.GetComponent<MoveComponent>()->IsCentered())
+	{
+		gameObject.GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
+		gameObject.GetComponent<PlayerComponent>()->Dead();
+	}
 	return nullptr;
 }
 

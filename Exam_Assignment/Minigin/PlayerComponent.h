@@ -21,11 +21,16 @@ namespace dae
 		void SetAttackSpeed(float speed) { m_AttackSpeed = speed; }
 		bool IsAttacking() const { return m_isAttacking; }
 
-		bool IsGameOver() const { if (m_Health <= 0)return true; return false; }
+		bool IsGameOver() const { return m_Health <= 0; }
+		void Dead();
 		bool IsDead() const { return m_IsDead; }
+
 		void SetHealth(int health);
 		int GetHealth() const { return m_Health; }
 		void ChangeHealth(int amount);
+
+		void EnableCrushing(const bool& enable = true);
+		bool IsCrushed() const { return m_IsCrushed; }
 
 		int GetPoints() const{ return m_Points; }
 		void AddPoints(const int& points)
@@ -49,7 +54,7 @@ namespace dae
 		void AllignAttack();
 		void MoveAttack(float deltaTime);
 		void CollisionEvents();
-		void Dead();
+		
 		void Respawn();
 
 	private:
@@ -71,6 +76,7 @@ namespace dae
 		bool m_IsCharging = false;
 		bool m_IsAttackHit = false;
 
+		bool m_IsCrushed = false;
 		bool m_IsDead = false;
 		bool m_IsReset = false;
 

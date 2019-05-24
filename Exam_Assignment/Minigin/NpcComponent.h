@@ -24,6 +24,9 @@ namespace dae
 		void EnableCrushing(const bool& enable = true);
 		bool IsCrushed() const { return m_IsCrushed; }
 
+		void EnableInflated(const bool& enable = true) { m_IsInflate = enable; }
+		bool IsInflated() const { return m_IsInflate; }
+
 		void SetHit(const bool& isHit) { m_IsHit = isHit; }
 		void Hit(PlayerComponent* player);
 		bool IsHit() const { return m_IsHit; }
@@ -50,9 +53,18 @@ namespace dae
 		NPCType m_Type{};
 		bool m_isGhosting = false;
 		bool m_IsHit = false;
+		bool m_IsInflate = false;
 		bool m_IsDead = false;
 		bool m_IsFalling = false;
+		bool m_IsIdle = true;
 		bool m_IsChasing = false;
+
+		float m_ActionTimer = 0.f;
+
+		float m_IdleMaxTime = 2.0f;
+		float m_ChaseMaxTime = 2.0f;
+		//float m_IdleMaxTime = 0.f;
+
 		bool m_IsCrushed = false;
 		bool m_IsReset = false;
 

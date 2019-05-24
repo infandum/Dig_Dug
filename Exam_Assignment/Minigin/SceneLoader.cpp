@@ -40,7 +40,7 @@ void dae::SceneLoader::Initialize()
 	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 64}, { 32 , 32 }, 0, 1, true, false }, 4);					//Attack
 	animations->LoadSpriteClip(SpriteClip{ "Dead", {0, 224}, { 32 , 32 }, 0, 4, true, false }, 5);					//Dead
 	animations->LoadSpriteClip(SpriteClip{ "Pump", {0, 160}, { 32 , 32 }, 0, 2, true, true }, 6);					//Pump
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {0, 384}, { 64 , 64 }, 0, 2, true, true }, 7);				//Crushed
+	animations->LoadSpriteClip(SpriteClip{ "Crushed", {0, 192}, { 32, 32 }, 0, 2, true, false }, 7);				//Crushed
 
 	animations->LoadSpriteClip(SpriteClip{ "Spear", {0, 96}, { 64 , 64 }, 0, 1, true, false }, 9);					//Spear
 
@@ -62,7 +62,7 @@ void dae::SceneLoader::Initialize()
 	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);				//Charging
 	animations->LoadSpriteClip(SpriteClip{ "Inflate", {0, 448}, { 64 , 64 }, 0, 4, false, false }, 25);				//Inflate
 	animations->LoadSpriteClip(SpriteClip{ "Deflate", {0, 448}, { 64 , 64 }, 3, 4, false, false, -0.5f }, 26);		//Deflate									   
-	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 352}, { 64 , 64 }, 0, 1, false, false }, 27);			//Crushed
+	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 352}, { 32 , 32 }, 0, 1, false, false }, 27);			//Crushed
 	animations->LoadSpriteClip(SpriteClip{ "DEAD", {0, 448}, { 64 , 64 }, 3, 4, false, false, 0.5f }, 28);			//DEAD				
 	animations->LoadSpriteClip(SpriteClip{ "Chase", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 29);				//Chase
 	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 30);				//Attack
@@ -113,17 +113,21 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		
 		GenerateTile();
 		
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 6, 32.f * 9);
 		
-		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
+		AddNpc(NPCType::POOKA, 32.f, 32.f * 4);
 		
-		AddNpc(NPCType::POOKA, 32.f * 10, 32 * 12.f);
+		AddNpc(NPCType::POOKA, 32.f * 10, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 9, 32.f * 14);
 		
-		AddNpc(NPCType::FYGAR, 32.f * 10.f, 32 * 5.f);
+		AddNpc(NPCType::FYGAR, 32.f * 3, 32.f * 12);
 		
-		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
+		AddNpc(NPCType::ROCK, 32.f * 3, 32.f * 13);
 		
-		AddNpc(NPCType::ROCK, 32.f, 32.f * 1);
+		AddNpc(NPCType::ROCK, 32.f * 4, 32.f * 5);
+
+		AddNpc(NPCType::ROCK, 32.f * 10, 32.f * 11);
 		
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
@@ -138,10 +142,10 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		GenerateTile();
 		
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
-		
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);	
-		
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 7, 32.f * 9);
+
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 5, 32.f * 9);
+
 		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
 		
 		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
@@ -158,7 +162,7 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 
 		GenerateTile();
 		
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 0.f, 96.f);
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 6, 32.f * 9);
 		
 		AddPlayer(PlayerType::PLAYER_FYGAR, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);	
 		
@@ -184,16 +188,29 @@ void dae::SceneLoader::PostInitScene(SceneList scene)
 	case SceneList::MAIN_MENU:
 		break;
 	case SceneList::LEVEL_SINGLE:
-		level->CreateTunnel(1, 7, Direction::DOWN, 3);
-		level->CreateTunnel(12, 12, Direction::UP, 2);
-		level->CreateTunnel(12, 12, Direction::LEFT, 2);
+		level->CreateTunnel(6, 2, Direction::DOWN, 7);
+		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
+
+		level->CreateTunnel(1, 4, Direction::DOWN, 4);
+
+		level->CreateTunnel(2, 12, Direction::RIGHT, 3);
+
+		level->CreateTunnel(9, 4, Direction::RIGHT, 3);
+
+		level->CreateTunnel(9, 11, Direction::DOWN, 4);
 		break;
 	case SceneList::LEVEL_COOP:
+		level->CreateTunnel(6, 2, Direction::DOWN, 7);
+		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
+
 		level->CreateTunnel(1, 7, Direction::DOWN, 3);
 		level->CreateTunnel(12, 12, Direction::UP, 2);
 		level->CreateTunnel(12, 12, Direction::LEFT, 2);
 		break;
 	case SceneList::LEVEL_VS:
+		level->CreateTunnel(6, 2, Direction::DOWN, 7);
+		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
+
 		level->CreateTunnel(12, 12, Direction::UP, 2);
 		level->CreateTunnel(12, 12, Direction::LEFT, 2);
 		break;
@@ -250,6 +267,7 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, 
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(4, std::make_shared<AttackPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(5, std::make_shared<DeadPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(6, std::make_shared<ActionPlayerState>());
+		player->GetComponent<SpriteComponent>()->SetAnimationToState(7, std::make_shared<CrushedPlayerState>());
 		
 		break;
 
@@ -260,6 +278,7 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, 
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(23, std::make_shared<DigPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(24, std::make_shared<AttackPlayerState>());
 		player->GetComponent<SpriteComponent>()->SetAnimationToState(25, std::make_shared<DeadPlayerState>());
+		player->GetComponent<SpriteComponent>()->SetAnimationToState(27, std::make_shared<CrushedPlayerState>());
 		
 		break;
 	}

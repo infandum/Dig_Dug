@@ -84,20 +84,21 @@ void dae::LevelManager::Update(float deltaTime)
 					int x = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
 					int y = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
 					const auto nextTile = GetTile(x, y);
+					
 					if (nextTile != nullptr && nextTile != m_StartTile[m_ActiveSceneIndex][i])
 					{
 						const auto dir = m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
 						if (dir != Direction::NONE)
 						{
 							m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
-
-							if (m_pPlayers[m_ActiveSceneIndex][i]->GetType() == PlayerType::PLAYER_DIGDUG)
-							{
-								DigConnection(m_StartTile[m_ActiveSceneIndex][i], nextTile, dir);
-								if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
-									GetTile(x, y)->SetTileState(TileState::USED, m_pPlayers[m_ActiveSceneIndex][i]);
-								m_StartTile[m_ActiveSceneIndex][i] = nextTile;
-							}
+							if (!m_pPlayers[m_ActiveSceneIndex][i]->IsCrushed() && !m_pPlayers[m_ActiveSceneIndex][i]->IsDead())
+								if (m_pPlayers[m_ActiveSceneIndex][i]->GetType() == PlayerType::PLAYER_DIGDUG)
+								{
+									DigConnection(m_StartTile[m_ActiveSceneIndex][i], nextTile, dir);
+									if (GetTile(x, y)->GetTileState() != TileState::EMPITY)
+										GetTile(x, y)->SetTileState(TileState::USED, m_pPlayers[m_ActiveSceneIndex][i]);
+									m_StartTile[m_ActiveSceneIndex][i] = nextTile;
+								}
 							
 						}
 					}
@@ -266,7 +267,6 @@ void dae::LevelManager::DigConnection(TileComponent* start, TileComponent* end, 
 
 void dae::LevelManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int distance)
 {
-	UNREFERENCED_PARAMETER(dir);
 	auto tile = GetTile(xIndex, yIndex);
 	if(tile == nullptr)
 	{
@@ -275,7 +275,7 @@ void dae::LevelManager::CreateTunnel(int xIndex, int yIndex, Direction dir, int 
 	}
 
 	tile->SetTileState(TileState::USED);
-	for(auto i = 0; i < distance; ++i)
+	for(auto i = 0; i < distance; i++)
 	{
 		TileComponent* nextTile = nullptr;
 		switch (dir)
