@@ -34,6 +34,13 @@ bool dae::InputManager::ProcessInput()
 		}
 	}
 
+	if(m_DoAgain)
+	{
+		m_DoAgain = false;
+		m_IsButtonUp = false;
+		m_IsButtonDown = false;
+	}
+
 	return true;
 }
 
@@ -41,56 +48,52 @@ std::shared_ptr<dae::Command> dae::InputManager::HandleInput(SceneObject* owner)
 {
 	for (auto& command : m_pCommands)
 	{
-		GetButtonState(command->GetButton());
-		if ((IsPressed(command->GetButton()) || IsPressed(command->GetKey())) && command->GetOwner() == owner)
-		{	
-			if(m_WasPressed != command->GetButton())
-			{
+		const auto bButton = IsPressed(command->GetButton());
+		if ((bButton || IsPressed(command->GetKey())) && command->GetOwner() == owner)
+		{
+			if(bButton)
 				m_WasPressed = command->GetButton();
-			}
-				
+		
 			return command;
 		}
 	}
-	//m_WasPressed = ControllerButton::ButtonNone;
 	return nullptr;
 }
 
 bool dae::InputManager::IsPressed(ControllerButton button) 
 {
-	bool isPressed = (currentState.Gamepad.wButtons & WORD(button)) != 0;
+	if (m_WasPressed == button)
+		if(m_DoAgain)
+		{
+			m_IsButtonDown = false;
+			return m_IsButtonUp;
+		}
+
+	const bool isPressed = (currentState.Gamepad.wButtons & WORD(button)) != 0;
+
+	if(m_WasPressed == button)
+		if(!m_IsButtonUp && m_IsButtonDown && !isPressed)
+		{
+			m_DoAgain = true;
+
+			m_IsButtonUp = true;
+			m_IsButtonDown = false;	
+			return m_IsButtonUp;
+		}
+
+	if(isPressed)
+	{
+		m_DoAgain = false;
+		m_IsButtonUp = false;
+		m_IsButtonDown = true;
+	}
+
 	return isPressed;
 }
 
 bool dae::InputManager::IsPressed(SDL_Keycode key) const
 {
 	return m_KeyDown == key || m_KeyUp == key;
-}
-
-bool dae::InputManager::WasPressed(ControllerButton button)
-{
-	if(button != ControllerButton::ButtonNone)
-		return m_WasPressed == button;
-
-	return false;
-}
-
-void dae::InputManager::GetButtonState(ControllerButton button)
-{
-	if (WasPressed(button))
-	{
-		if (IsPressed(button))
-			m_IsKeyDown = true;
-		else
-			m_IsKeyUp = true;
-	}
-	else
-	{
-		if (IsPressed(button))
-			m_IsKeyDown = true;
-		else
-			m_IsKeyUp = false;
-	}
 }
 
 bool dae::InputManager::IsKeyDown() const
@@ -101,6 +104,16 @@ bool dae::InputManager::IsKeyDown() const
 bool dae::InputManager::IsKeyUp() const
 {
 	return m_IsKeyUp;
+}
+
+bool dae::InputManager::IsButtonDown() const
+{
+	return m_IsButtonDown;
+}
+
+bool dae::InputManager::IsButtonUp() const
+{
+	return m_IsButtonUp;
 }
 
 void dae::InputManager::AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key, GameObject* owner)

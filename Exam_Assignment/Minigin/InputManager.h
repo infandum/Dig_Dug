@@ -16,12 +16,12 @@ namespace dae
 			
 		bool IsPressed(ControllerButton button) ;
 		bool IsPressed(SDL_Keycode key) const;
-		bool WasPressed(ControllerButton button);
-
-		void GetButtonState(ControllerButton button);
 
 		bool IsKeyDown() const;
 		bool IsKeyUp() const;
+
+		bool IsButtonDown() const;
+		bool IsButtonUp() const;
 
 		void AddCommand(std::shared_ptr<Command> command, ControllerButton button, SDL_Keycode key, GameObject* owner);
 
@@ -38,9 +38,17 @@ namespace dae
 		SDL_Keycode m_KeyDown{};
 		SDL_Keycode m_KeyUp{};
 
+		bool m_DoAgain = false;;
+
 		bool m_IsKeyDown = false;
 		bool m_IsKeyUp = false;
+
+		bool m_IsButtonDown = false;
+		bool m_IsButtonUp = false;
+
 		bool m_CloseWindow = false;
+
+		std::shared_ptr<Command> m_LastCommand = nullptr;
 
 		std::vector<std::shared_ptr<Command>> m_pCommands;
 

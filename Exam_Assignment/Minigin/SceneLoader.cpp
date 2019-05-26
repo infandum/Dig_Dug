@@ -382,7 +382,7 @@ void dae::SceneLoader::AddLevelExit() const
 	std::shared_ptr<GameObject> menu = std::make_shared<GameObject>();
 	menu->AddComponent(std::make_shared<InputComponent>());
 	menu->SetName("Menu");
-	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonSelect, SDLK_ESCAPE, menu.get());
+	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonStart, SDLK_ESCAPE, menu.get());
 	m_Scene->Add(menu);
 }
 

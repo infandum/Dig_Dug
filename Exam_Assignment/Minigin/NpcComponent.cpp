@@ -468,10 +468,16 @@ void dae::NpcComponent::StartTunneling()
 	}
 
 
+
+	if(m_pTarget != nullptr)
+		m_TargetLocation = m_pTarget->GetGameObject()->GetTransform()->GetPositionIndex();
+	else
+		return;
+
+
 	m_IsChangeTunnel = true;
 	m_IsIdle = false;
 
-	m_TargetLocation = m_pTarget->GetGameObject()->GetTransform()->GetPositionIndex();
 	m_ActionMaxTime = RandomFloatBetween(0.25f, m_ChaseMaxTime);
 	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_MOVE);
 }

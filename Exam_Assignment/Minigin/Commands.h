@@ -50,7 +50,7 @@ namespace dae
 
 	inline void ExitCommand::Execute()
 	{
-		if (m_Input->IsKeyUp())
+		if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 		{
 			if (m_pOwner->GetComponent<MainMenuComponent>())
 			{
@@ -75,8 +75,10 @@ namespace dae
 	{
 		if (m_pOwner->GetComponent<MainMenuComponent>())
 		{
-			if (m_Input->IsKeyUp())
+			if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 			{
+
+				
 				m_pOwner->GetComponent<MainMenuComponent>()->SelectButton();
 			}
 		}
@@ -92,14 +94,14 @@ namespace dae
 	{
 		if (m_pOwner->GetComponent<MoveComponent>() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
 		{
-			if (m_Input->IsKeyDown())
+			if (m_Input->IsKeyDown() || m_Input->IsButtonDown())
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, -m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0 });
 			}
 
-			if (m_Input->IsKeyUp())
+			if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 			{
 				notify(NotifyEvent::EVENT_IDLE);
 
@@ -109,7 +111,7 @@ namespace dae
 		}
 		else if(m_pOwner->GetComponent<MainMenuComponent>())
 		{
-			if (m_Input->IsKeyUp())
+			if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 			{
 				m_pOwner->GetComponent<MainMenuComponent>()->PreviousButton();
 			}
@@ -126,14 +128,14 @@ namespace dae
 	{
 		if (m_pOwner->GetComponent<MoveComponent>() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
 		{
-			if (m_Input->IsKeyDown())
+			if (m_Input->IsKeyDown() || m_Input->IsButtonDown())
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0 });
 			}
 
-			if (m_Input->IsKeyUp())
+			if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 			{
 				notify(NotifyEvent::EVENT_IDLE);
 
@@ -143,7 +145,7 @@ namespace dae
 		}
 		else if (m_pOwner->GetComponent<MainMenuComponent>())
 		{
-			if (m_Input->IsKeyUp())
+			if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 			{
 				m_pOwner->GetComponent<MainMenuComponent>()->NextButton();
 			}
@@ -160,14 +162,14 @@ namespace dae
 	{
 		if (m_pOwner->GetTransform() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
 		{
-			if (m_Input->IsKeyDown())
+			if (m_Input->IsKeyDown() || m_Input->IsButtonDown())
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ -m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0, 0 });
 			}
 
-			if (m_Input->IsKeyUp())
+			if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 			{
 				notify(NotifyEvent::EVENT_IDLE);
 
@@ -187,14 +189,14 @@ namespace dae
 	{
 		if (m_pOwner->GetTransform() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
 		{
-			if (m_Input->IsKeyDown())
+			if (m_Input->IsKeyDown() || m_Input->IsButtonDown())
 			{
 				notify(NotifyEvent::EVENT_MOVE);
 
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ m_pOwner->GetComponent<MoveComponent>()->GetMoveSpeed(), 0, 0 });
 			}
 				
-			if (m_Input->IsKeyUp())
+			if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 			{
 				notify(NotifyEvent::EVENT_IDLE);
 
@@ -213,14 +215,14 @@ namespace dae
 	{
 		//std::cout << m_pOwner->GetName() << ">> ATTACKING" << '\n';
 		bool attack;
-		if (m_Input->IsKeyDown())
+		if (m_Input->IsKeyDown() || m_Input->IsButtonDown())
 		{
 			notify(NotifyEvent::EVENT_ACTION);
 			m_pOwner->GetComponent<PlayerComponent>()->Attack(attack = true);
 			m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 		}
 
-		if (m_Input->IsKeyUp())
+		if (m_Input->IsKeyUp() || m_Input->IsButtonUp())
 		{
 			notify(NotifyEvent::EVENT_IDLE);
 			m_pOwner->GetComponent<PlayerComponent>()->Attack(attack = false);
