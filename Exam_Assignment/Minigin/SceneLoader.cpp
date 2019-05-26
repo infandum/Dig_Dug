@@ -60,12 +60,13 @@ void dae::SceneLoader::Initialize()
 	animations->LoadSpriteClip(SpriteClip{ "Walk", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 22);					//Walk
 	animations->LoadSpriteClip(SpriteClip{ "Ghost", {192, 352}, { 32 , 32 }, 0, 2, false, true, 1.f, true }, 23);	//Ghost
 	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 384}, { 32 , 32 }, 0, 2, false, true }, 24);				//Charging
-	animations->LoadSpriteClip(SpriteClip{ "Inflate", {0, 448}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 25);				//Inflate
+	animations->LoadSpriteClip(SpriteClip{ "Inflate", {0, 448}, { 64 , 64 }, 0, 4, false, false, 0.5f }, 25);		//Inflate
 	animations->LoadSpriteClip(SpriteClip{ "Deflate", {0, 448}, { 64 , 64 }, 0, 4, false, false, -0.5f }, 26);		//Deflate									   
 	animations->LoadSpriteClip(SpriteClip{ "Crushed", {128, 352}, { 32 , 32 }, 0, 1, false, false }, 27);			//Crushed
 	animations->LoadSpriteClip(SpriteClip{ "DEAD", {0, 448}, { 64 , 64 }, 3, 4, false, false, 0.5f }, 28);			//DEAD				
 	animations->LoadSpriteClip(SpriteClip{ "Chase", {0, 352}, { 32 , 32 }, 0, 2, false, true }, 29);				//Chase
 	animations->LoadSpriteClip(SpriteClip{ "Attack", {0, 352}, { 32 , 32 }, 1, 2, false, false }, 30);				//Attack
+
 	animations->LoadSpriteClip(SpriteClip{ "Fire", {0, 416}, { 96 , 32 }, 0, 3, false, false }, 31);				//Fire
 
 	//Rock																							
@@ -203,9 +204,16 @@ void dae::SceneLoader::PostInitScene(SceneList scene)
 		level->CreateTunnel(6, 2, Direction::DOWN, 7);
 		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
 
-		level->CreateTunnel(1, 7, Direction::DOWN, 3);
-		level->CreateTunnel(12, 12, Direction::UP, 2);
-		level->CreateTunnel(12, 12, Direction::LEFT, 2);
+		level->CreateTunnel(1, 8, Direction::RIGHT, 2);
+
+		level->CreateTunnel(8, 5, Direction::RIGHT, 2);
+
+		level->CreateTunnel(6, 11, Direction::RIGHT, 2);
+
+		level->CreateTunnel(8, 14, Direction::RIGHT, 2);
+
+		level->CreateTunnel(1, 10, Direction::DOWN, 2);
+
 		break;
 	case SceneList::LEVEL_VS:
 		level->CreateTunnel(6, 2, Direction::DOWN, 7);
@@ -226,8 +234,9 @@ void dae::SceneLoader::ResetScene(SceneList scene)
 	auto physics = ServiceLocator::GetPhysicsManager();
 	physics->SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
 
-	physics->Reset();
 	level->Reset();
+	physics->Reset();
+	
 	PostInitScene(scene);
 }
 
@@ -364,7 +373,6 @@ void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(16, std::make_shared<PookaDeflateState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(17, std::make_shared<PookaCrushState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(18, std::make_shared<PookaDeadState>());
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(19, std::make_shared<PookaChaseState>());
 		break;
 	case NPCType::FYGAR:
 		NPC->SetName("Fygar");
@@ -380,7 +388,6 @@ void dae::SceneLoader::AddNpc(NPCType type, float x, float y) const
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(27, std::make_shared<FygarCrushState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(28, std::make_shared<FygarDeadState>());
 
-		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(29, std::make_shared<FygarChaseState>());
 		NPC->GetComponent<SpriteComponent>()->SetAnimationToState(30, std::make_shared<FygarAttackState>());
 		break;
 	}

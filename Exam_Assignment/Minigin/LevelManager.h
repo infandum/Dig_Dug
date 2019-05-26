@@ -20,14 +20,17 @@ namespace dae {
 
 		LevelManager() = default;
 
-		void Reset(); //{ m_pTileComponents.clear(); m_pPlayers.clear(); m_pEntities.clear(); m_StartTile.clear(); }
+		void Reset();
+		void Respawn();
 
 		void AddTile(TileComponent* tile);
+		TileComponent* GetTile(const iVector2& vec2) { return GetTile(vec2.x, vec2.y); }
 		TileComponent* GetTile(int x, int y);
 		std::vector<TileComponent*> GetTilesByState(const TileState& state);
 
 		void AddPlayer(PlayerComponent* pPlayer);
 		void RemovePlayer(PlayerComponent* pPlayer);
+		bool PlayerDied();
 
 		size_t GetPlayerCount() const { if (m_pPlayers.empty()) return 0; return  m_pPlayers[m_ActiveSceneIndex].size(); }
 		std::vector<PlayerComponent*> GetPlayers() const { return m_pPlayers[m_ActiveSceneIndex]; }
@@ -36,7 +39,7 @@ namespace dae {
 		void AddEntity(NpcComponent* pEntity);
 		void RemoveEntity(NpcComponent* pEntity);
 
-		void DigConnection(TileComponent* start, TileComponent* end, Direction dir);
+		static void DigConnection(TileComponent* start, TileComponent* end, Direction dir);
 		void CreateTunnel(int xIndex, int yIndex, Direction dir, int distance = {0});
 
 		

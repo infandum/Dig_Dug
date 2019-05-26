@@ -48,6 +48,30 @@ void dae::LevelManager::Reset()
 	m_Reset = true;
 }
 
+void dae::LevelManager::Respawn()
+{
+	if (!m_pEntities.empty())
+		if (!m_pEntities[m_ActiveSceneIndex].empty())
+			for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
+			{
+				if(m_pEntities[m_ActiveSceneIndex][i]->IsDead())
+					continue;
+
+				m_pEntities[m_ActiveSceneIndex][i]->GetGameObject()->Enable(true);
+				m_pEntities[m_ActiveSceneIndex][i]->Reset();
+			}
+
+	if (!m_pPlayers.empty())
+		if (!m_pPlayers[m_ActiveSceneIndex].empty())
+			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			{
+
+				m_pPlayers[m_ActiveSceneIndex][i]->Respawn();
+			}
+
+	m_Reset = true;
+}
+
 void dae::LevelManager::Initialize()
 {
 	m_Reset = true;
@@ -215,6 +239,21 @@ void dae::LevelManager::RemovePlayer(PlayerComponent* pPlayer)
 		return;
 	}
 	m_pPlayers[m_ActiveSceneIndex].erase(ent);
+}
+
+bool dae::LevelManager::PlayerDied()
+{
+	bool died = false;
+	if (!m_pPlayers.empty())
+		if (!m_pPlayers[m_ActiveSceneIndex].empty())
+			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			{
+
+				died = m_pPlayers[m_ActiveSceneIndex][i]->IsDead();
+			}
+	
+
+	return died;
 }
 
 void dae::LevelManager::AddEntity(NpcComponent* pEntity)

@@ -25,6 +25,7 @@ void dae::PlayerComponent::Reset()
 	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);
 	Notify(*GetGameObject(), NotifyEvent::EVENT_RESET);
 
+	GetGameObject()->GetRenderer()->EnableRender();
 	GetGameObject()->GetCollision()->EnableCollision();
 }
 
@@ -116,15 +117,24 @@ void dae::PlayerComponent::PlayerUpdate()
 void dae::PlayerComponent::Update(float deltaTime)
 {
 	if (m_IsReset)
-	{	
-		m_IsCrushed = false;
-		m_IsReset = false;
-		m_IsDead = false;
-		GetGameObject()->GetCollision()->EnableCollision();
+	{
+		if (m_RespawnTimer >= m_RespawnMaxTime)
+		{
+			m_IsCrushed = false;
+			m_IsReset = false;
+			m_IsDead = false;
+			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+			GetGameObject()->GetCollision()->EnableCollision();
+			GetGameObject()->GetRenderer()->EnableRender();
+
+			m_RespawnTimer = 0.f;
+		}
+		m_RespawnTimer += deltaTime;
 	}
 
 	if(m_IsDead)
 	{
+		GetGameObject()->GetCollision()->EnableCollision(false);
 		if (!IsGameOver())
 			RespawnTime(deltaTime);
 	}
@@ -138,8 +148,6 @@ void dae::PlayerComponent::Update(float deltaTime)
 	{
 		AllignAttack();
 		MoveAttack(deltaTime);
-
-		
 	}
 	PlayerUpdate();
 
@@ -150,9 +158,10 @@ void dae::PlayerComponent::RespawnTime(float deltaTime)
 {
 	if (GetGameObject()->GetSprite()->IsAnimationEnded())
 	{
+		GetGameObject()->GetRenderer()->EnableRender(false);
 		if (m_RespawnTimer >= m_RespawnMaxTime)
 		{
-			Respawn();
+			m_pLevelManager->Respawn();
 			if (IsGameOver())
 				GetGameObject()->Enable(false);
 		}
@@ -171,6 +180,12 @@ void dae::PlayerComponent::Attack(bool& isAttacking)
 
 		if (m_Type == PlayerType::PLAYER_FYGAR)
 			m_IsCharging = true;
+
+	}
+
+	if (m_isAttacking && !isAttacking)
+	{
+		GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 
 	}
 	m_isAttacking = isAttacking;
@@ -383,7 +398,7 @@ void dae::PlayerComponent::CollisionEvents()
 			std::cout << "Collision" << std::endl;
 			//HIT ENEMY PLAYER
 			if(collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>())
-				if(collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->GetType() != m_Type)
+				if(collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->GetType() != m_Type && !collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->IsDead())
 				{
 					Dead();
 					collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->Dead();
@@ -419,7 +434,11 @@ void dae::PlayerComponent::CollisionEvents()
 						m_IsAttackHit = true;
 					}
 					else
+					{
 						collision->GetCollision()->GetGameObject()->GetComponent<NpcComponent>()->SetHit(false);
+						collision->GetCollision()->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+					}
+						
 
 			collision->SetHasCollision(false);
 
@@ -431,8 +450,14 @@ void dae::PlayerComponent::CollisionEvents()
 		{
 			if (collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->GetType() != m_Type)
 			{
+				collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->SetHit(true);
 				collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->Dead();
 				m_IsAttackHit = true;
+			}
+			else
+			{
+				collision->GetCollision()->GetGameObject()->GetComponent<PlayerComponent>()->SetHit(false);
+				collision->GetCollision()->GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
 			}
 			collision->SetHasCollision(false);
 		}
@@ -460,11 +485,22 @@ void dae::PlayerComponent::Respawn()
 	GetGameObject()->GetTransform()->Reset();
 	GetGameObject()->GetComponent<MoveComponent>()->Reset();
 
-	m_isAttacking = false;
-	m_IsAttackHit = false;
+	
+
+
 	m_AttackTimer = 0;
 	m_IsReset = true;
 	m_RespawnTimer = 0.f;
+
+	m_isAttacking = false;
+	m_AttackAtMaxRange = false;
+	m_IsCharging = false;
+	m_IsAttackHit = false;
+
+	m_IsCrushed = false;
+	m_IsDead = false;
+
+	m_IsHit = false;
 
 	m_Health--;
 

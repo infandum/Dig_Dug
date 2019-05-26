@@ -29,7 +29,7 @@ namespace dae
 		void EnableInflated(const bool& enable = true) { m_IsInflate = enable; }
 		bool IsInflated() const { return m_IsInflate; }
 
-		void SetHit(const bool& isHit) { m_IsHit = isHit; }
+		void SetHit(const bool& isHit);
 		void Hit(PlayerComponent* player);
 		bool IsHit() const { return m_IsHit; }
 		PlayerComponent* HitByPlayer() const { return m_player; }
@@ -48,21 +48,35 @@ namespace dae
 
 	protected:
 		void Initialize() override;
-		
+		void StartAttacking();
+		void StartTunneling();
+		void StartIdleMove();
+		void StartChasing();
+
 		void Update(float deltaTime) override;
 		//void Render() override;
 
 		void SetChaseTarget(const int& index);
 		void StopMovement();
-		void Moving();
+		void IdleMove(float deltaTime);
 		void StopChasing();
-		void Chasing();
-		void ChangeTunnel();
-		
-		void IdleMove();
+		void Chasing(float deltaTime);
+		void StopTunneling();
+		void Tunneling();
 
+		void AllignAttack() const;
+		//void MoveAttack(float deltaTime);
+		void Fire(float deltaTime);
+		void CollisionEvents() const;
+
+		void Attacking(float deltaTime);
+		
 	private:
 		NPCType m_Type{};
+
+		std::shared_ptr<GameObject> m_Attack{};
+		std::shared_ptr<GameObject> m_AttackSprite{};
+
 		bool m_isGhosting = false;
 		bool m_IsHit = false;
 		bool m_IsInflate = false;
@@ -75,15 +89,19 @@ namespace dae
 		bool m_IsChangeTunnel = false;
 
 		float m_ActionTimer = 0.f;
-
+		float m_MaxActionTimer = 0.f;
+		float m_MaxActionMaxTime = 5.0f;
 		float m_ActionMaxTime = 1.0f;
-		float m_IdleMaxTime = 4.f;
-		float m_MovingMaxTime = 2.5f;
-		float m_ChaseMaxTime = 5.0f;
+		float m_IdleMaxTime = 2.f;
+		float m_MovingMaxTime = 1.5f;
+		float m_ChaseMaxTime = 2.f;
+		float m_AttackMaxTime = 2.0f;
+		float m_FireMaxTime = 0.5f;
 		//float m_IdleMaxTime = 0.f;
 		PlayerComponent* m_pTarget = nullptr;
 		iVector2 m_TargetLocation = { 0,0 };
 		Direction m_NewDir = Direction::NONE;
+		Direction m_LastHorDir = Direction::RIGHT;
 
 		bool m_IsCrushed = false;
 		bool m_IsReset = false;

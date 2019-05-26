@@ -25,6 +25,9 @@ namespace dae
 		void Dead();
 		bool IsDead() const { return m_IsDead; }
 
+		void SetHit(const bool& isHit) { m_IsHit = isHit; }
+		bool IsHit() const { return m_IsHit; }
+
 		void SetHealth(int health);
 		int GetHealth() const { return m_Health; }
 		void ChangeHealth(int amount);
@@ -42,6 +45,7 @@ namespace dae
 		PlayerType GetType() const { return m_Type; }
 
 		void Reset();
+		void Respawn();
 
 		void onNotify(GameObject& gameObject, NotifyEvent& event) override;
 
@@ -55,7 +59,7 @@ namespace dae
 		void MoveAttack(float deltaTime);
 		void CollisionEvents();
 		
-		void Respawn();
+		
 
 	private:
 		PlayerType m_Type{};
@@ -69,7 +73,7 @@ namespace dae
 		float m_AttackMaxTime = 0.25f;
 
 		float m_RespawnTimer = 0.0f;
-		float m_RespawnMaxTime = 1.0f;
+		float m_RespawnMaxTime = 0.5f;
 
 		bool m_isAttacking = false;
 		bool m_AttackAtMaxRange = false;
@@ -78,6 +82,8 @@ namespace dae
 
 		bool m_IsCrushed = false;
 		bool m_IsDead = false;
+	
+		bool m_IsHit = false;
 		bool m_IsReset = false;
 
 		Direction m_LastHorDir = Direction::RIGHT;

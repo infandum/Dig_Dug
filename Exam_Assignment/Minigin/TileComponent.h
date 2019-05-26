@@ -24,6 +24,7 @@ namespace dae
 		iVector2 GetPositionIndex() const { return m_TileIndex; }
 
 		void SetBorder(Direction dir, bool isCrossed);
+		bool HasOpenBorders() const { return m_IsBorderConnected[0] && m_IsBorderConnected[1] && m_IsBorderConnected[2] && m_IsBorderConnected[3]; }
 		bool GetIsConnectedBorder(Direction dir) { return m_IsBorderConnected[static_cast<int>(dir)]; }
 
 		void SetOccupied(const bool& occupied) { m_Occupied = occupied; }

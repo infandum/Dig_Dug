@@ -104,7 +104,7 @@ std::shared_ptr<dae::BaseState> dae::AttackPlayerState::Swap(NotifyEvent event, 
 	case NotifyEvent::EVENT_COLLISION:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<DeadPlayerState>();
 	case NotifyEvent::EVENT_INTERACT:
-		return gameObject.GetComponent<SpriteComponent>()->GetState<AttackPlayerState>();
+		return gameObject.GetComponent<SpriteComponent>()->GetState<ActionPlayerState>();
 	default:;
 	}
 
@@ -115,6 +115,9 @@ std::shared_ptr<dae::BaseState> dae::ActionPlayerState::Swap(NotifyEvent event, 
 {
 	if (gameObject.GetComponent<PlayerComponent>()->IsCrushed())
 		return gameObject.GetComponent<SpriteComponent>()->GetState<CrushedPlayerState>();
+
+	if (!gameObject.GetComponent<PlayerComponent>()->IsAttacking())
+		return gameObject.GetComponent<SpriteComponent>()->GetState<IdlePlayerState>();
 
 	switch (event)
 	{
@@ -137,21 +140,11 @@ std::shared_ptr<dae::BaseState> dae::DeadPlayerState::Swap(NotifyEvent event, Ga
 {
 	switch (event)
 	{
-	case NotifyEvent::EVENT_IDLE:
-		return nullptr;
-	case NotifyEvent::EVENT_MOVE:
-		return nullptr;
-	case NotifyEvent::EVENT_ACTION:
-		return nullptr;
-	case NotifyEvent::EVENT_COLLISION:
-		gameObject.GetComponent<SpriteComponent>()->onNotify(NotifyEvent::EVENT_IDLE);
-		return nullptr;
 	case NotifyEvent::EVENT_SPAWN:
 		return gameObject.GetComponent<SpriteComponent>()->GetState<IdlePlayerState>();
-	default:;
+	default:
+		return nullptr;
 	}
-
-	return nullptr;
 }
 
 std::shared_ptr<dae::BaseState> dae::CrushedPlayerState::Swap(NotifyEvent event, GameObject& gameObject)
@@ -172,14 +165,19 @@ std::shared_ptr<dae::BaseState> dae::CrushedPlayerState::Swap(NotifyEvent event,
 	if ((currTile->GetTileState() == TileState::USED && !currTile->GetIsConnectedBorder(Direction::DOWN)) && gameObject.GetComponent<MoveComponent>()->IsCentered())
 	{
 		gameObject.GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
-		gameObject.GetComponent<PlayerComponent>()->Dead();
+		//gameObject.GetComponent<PlayerComponent>()->Dead();
 	}
 	return nullptr;
 }
 
 //WEAPON STATE
 //************
-std::shared_ptr<dae::BaseState> dae::WeaponState::Swap(NotifyEvent, GameObject&)
+std::shared_ptr<dae::BaseState> dae::WeaponState::Swap(NotifyEvent event, GameObject& gameObject)
 {
+	if (event == NotifyEvent::EVENT_SPAWN)
+	{
+		return gameObject.GetComponent<SpriteComponent>()->GetState<WeaponState>();
+	}
+
 	return nullptr;
 }

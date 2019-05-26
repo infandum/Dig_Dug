@@ -21,14 +21,6 @@ namespace dae
 		//void Update(float& deltaTime, GameObject& gameObject) override;
 	};
 
-	class PookaChaseState : public DirectionState
-	{
-	public:
-		virtual ~PookaChaseState() = default;
-		std::shared_ptr<BaseState> Swap(NotifyEvent event, GameObject& gameObject) override;
-		//void Update(float& deltaTime, GameObject& gameObject) override;
-	};
-
 	class PookaGhostState : public DirectionState
 	{
 	public:

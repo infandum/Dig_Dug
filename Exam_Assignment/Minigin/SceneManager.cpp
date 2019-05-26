@@ -51,20 +51,16 @@ std::shared_ptr<dae::Scene> dae::SceneManager::CreateScene(const std::string& na
 
 void dae::SceneManager::NextScene()
 {
-	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 	auto i = ActiveSceneIndex;
 	i++;
 	SetActive(i);
-	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 }
 
 void dae::SceneManager::PreviousScene()
 {
-	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 	auto i = ActiveSceneIndex;
 	i--;
 	SetActive(i);
-	//ServiceLocator::GetSceneLoader()->ResetScene(static_cast<SceneList>(ActiveSceneIndex));
 }
 
 void dae::SceneManager::SetActive(const std::string& sceneName)
