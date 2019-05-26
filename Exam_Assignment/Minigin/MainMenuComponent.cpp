@@ -14,7 +14,7 @@ void dae::MainMenuComponent::SetActiveButton(int index)
 		if (m_ActiveButton < 0)
 			m_ActiveButton = static_cast<int>(m_pButtons.size()) - 1;
 
-		if (m_ActiveButton >= m_pButtons.size())
+		if (m_ActiveButton >= static_cast<int>(m_pButtons.size()))
 			m_ActiveButton = 0;
 
 		m_NeedUpdate = true;
@@ -120,7 +120,7 @@ void dae::MainMenuComponent::Update(float )
 {
 	if (m_NeedUpdate)
 	{
-		for (auto i = 0; i < m_pButtons.size(); i++)
+		for (auto i = 0; i < static_cast<int>(m_pButtons.size()); i++)
 		{
 			if (i == m_ActiveButton)
 				m_pButtons[i]->SetColor(m_ActiveColor);

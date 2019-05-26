@@ -17,7 +17,7 @@ std::shared_ptr<dae::Scene> dae::SceneManager::GetScene(std::string name)
 
 void dae::SceneManager::Initialize()
 {
-	for(ActiveSceneIndex = 0; ActiveSceneIndex < m_spScenes.size(); ++ActiveSceneIndex)
+	for(ActiveSceneIndex = 0; ActiveSceneIndex < static_cast<int>(m_spScenes.size()); ++ActiveSceneIndex)
 	{
 		m_spScenes[ActiveSceneIndex]->Initialize();
 	}
@@ -65,7 +65,7 @@ void dae::SceneManager::PreviousScene()
 
 void dae::SceneManager::SetActive(const std::string& sceneName)
 {
-	for(auto i = 0; i < m_spScenes.size(); i++)
+	for(auto i = 0; i < static_cast<int>(m_spScenes.size()); i++)
 	{
 		if (m_spScenes[i]->GetName() == sceneName)
 		{
@@ -84,7 +84,7 @@ void dae::SceneManager::SetActive(const int& index)
 	if (ActiveSceneIndex < 0)
 		ActiveSceneIndex = static_cast<int>(m_spScenes.size()) - 1;
 
-	if (ActiveSceneIndex >= m_spScenes.size())
+	if (ActiveSceneIndex >= static_cast<int>(m_spScenes.size()))
 		ActiveSceneIndex = 0;
 
 	if (ServiceLocator::GetSceneLoader()->m_Scene != m_spScenes[ActiveSceneIndex])

@@ -31,7 +31,7 @@ namespace dae {
 
 		size_t GetPlayerCount() const { if (m_pPlayers.empty()) return 0; return  m_pPlayers[m_ActiveSceneIndex].size(); }
 		std::vector<PlayerComponent*> GetPlayers() const { return m_pPlayers[m_ActiveSceneIndex]; }
-		PlayerComponent* GetPlayer(int index) { if (index < m_pPlayers[m_ActiveSceneIndex].size()) { return m_pPlayers[m_ActiveSceneIndex][index]; } else return nullptr; }
+		PlayerComponent* GetPlayer(int index) { if (index < static_cast<int>(m_pPlayers[m_ActiveSceneIndex].size())) { return m_pPlayers[m_ActiveSceneIndex][index]; } else return nullptr; }
 		PlayerComponent* GetPlayer(const PlayerType& type);
 
 		void AddEntity(NpcComponent* pEntity);
@@ -40,7 +40,7 @@ namespace dae {
 		static void DigConnection(TileComponent* start, TileComponent* end, Direction dir);
 		void CreateTunnel(int xIndex, int yIndex, Direction dir, int distance = {0});
 
-		NpcComponent* GetNPC(int index) { if (index < m_pEntities[m_ActiveSceneIndex].size()) { return m_pEntities[m_ActiveSceneIndex][index]; } else return nullptr; }
+		NpcComponent* GetNPC(int index) { if (index < static_cast<int>(m_pEntities[m_ActiveSceneIndex].size())) { return m_pEntities[m_ActiveSceneIndex][index]; } else return nullptr; }
 
 		void SetActiveScene(size_t sceneIndex) { m_ActiveSceneIndex = sceneIndex; }
 		size_t GetActiveScene() const { return m_ActiveSceneIndex; }

@@ -14,7 +14,7 @@ void dae::LevelManager::Reset()
 
 	if (!m_pEntities.empty())
 		if(!m_pEntities[m_ActiveSceneIndex].empty())
-			for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
+			for (auto i = 0; i < static_cast<int>(m_pEntities[m_ActiveSceneIndex].size()); i++)
 			{
 				m_pEntities[m_ActiveSceneIndex][i]->GetGameObject()->Enable(true);
 				m_pEntities[m_ActiveSceneIndex][i]->Reset();
@@ -22,7 +22,7 @@ void dae::LevelManager::Reset()
 
 	if (!m_pPlayers.empty())
 		if (!m_pPlayers[m_ActiveSceneIndex].empty())
-			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			for (auto i = 0; i < static_cast<int>(m_pPlayers[m_ActiveSceneIndex].size()); i++)
 			{
 
 				m_pPlayers[m_ActiveSceneIndex][i]->Reset();
@@ -58,7 +58,7 @@ void dae::LevelManager::Respawn()
 {
 	if (!m_pEntities.empty())
 		if (!m_pEntities[m_ActiveSceneIndex].empty())
-			for (auto i = 0; i < m_pEntities[m_ActiveSceneIndex].size(); i++)
+			for (auto i = 0; i < static_cast<int>(m_pEntities[m_ActiveSceneIndex].size()); i++)
 			{
 				if(m_pEntities[m_ActiveSceneIndex][i]->IsDead())
 					continue;
@@ -69,7 +69,7 @@ void dae::LevelManager::Respawn()
 
 	if (!m_pPlayers.empty())
 		if (!m_pPlayers[m_ActiveSceneIndex].empty())
-			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			for (auto i = 0; i < static_cast<int>(m_pPlayers[m_ActiveSceneIndex].size()); i++)
 			{
 
 				m_pPlayers[m_ActiveSceneIndex][i]->Respawn();
@@ -106,7 +106,7 @@ void dae::LevelManager::PlayerTracking()
 		if (!m_pPlayers[m_ActiveSceneIndex].empty())
 		{
 			int GameOvers = 0;
-			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			for (auto i = 0; i < static_cast<int>(m_pPlayers[m_ActiveSceneIndex].size()); i++)
 			{
 				if (m_Reset || m_pPlayers[m_ActiveSceneIndex][i]->IsDead())
 				{
@@ -114,7 +114,7 @@ void dae::LevelManager::PlayerTracking()
 					m_StartTile[m_ActiveSceneIndex][i]->SetTileState(TileState::USED);
 					m_StartTile[m_ActiveSceneIndex][i]->SetOccupied(true);
 
-					if (i >= m_pPlayers[m_ActiveSceneIndex].size() - 1 && m_StartTile[m_ActiveSceneIndex][i]->GetTileState() == TileState::USED)
+					if (i >= static_cast<int>(m_pPlayers[m_ActiveSceneIndex].size()) - 1 && m_StartTile[m_ActiveSceneIndex][i]->GetTileState() == TileState::USED)
 						m_Reset = false;
 
 				}
@@ -149,7 +149,7 @@ void dae::LevelManager::PlayerTracking()
 					GameOvers++;
 			}
 
-			if (GameOvers >= m_pPlayers[m_ActiveSceneIndex].size())
+			if (GameOvers >= static_cast<int>(m_pPlayers[m_ActiveSceneIndex].size()))
 			{
 				ServiceLocator::GetSceneManager()->SetActive("Main menu");
 			}
@@ -184,7 +184,7 @@ void dae::LevelManager::EnityTracking()
 				}
 			}
 
-			if (deadEnities >= m_pEntities[m_ActiveSceneIndex].size() - rockCount)
+			if (deadEnities >= static_cast<int>(m_pEntities[m_ActiveSceneIndex].size()) - rockCount)
 			{
 				auto player = GetPlayer(PlayerType::PLAYER_FYGAR);
 				if (player)
@@ -292,7 +292,7 @@ bool dae::LevelManager::PlayerDied()
 	bool died = false;
 	if (!m_pPlayers.empty())
 		if (!m_pPlayers[m_ActiveSceneIndex].empty())
-			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			for (auto i = 0; i < static_cast<int>(m_pPlayers[m_ActiveSceneIndex].size()); i++)
 			{
 
 				died = m_pPlayers[m_ActiveSceneIndex][i]->IsDead();

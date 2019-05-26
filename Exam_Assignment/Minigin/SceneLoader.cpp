@@ -433,19 +433,19 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, 
 	
 	if(level->GetPlayerCount() == 1)
 	{
-		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_UP, player.get());
-		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_DOWN, player.get());
-		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_LEFT, player.get());
-		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_RIGHT, player.get());
-		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_RSHIFT, player.get());
+		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_w, player.get());
+		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_s, player.get());
+		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_a, player.get());
+		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_d, player.get());
+		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_LSHIFT, player.get());
 	}
 	else
 	{
-		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonNone, SDLK_w, player.get());
-		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonNone, SDLK_s, player.get());
-		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonNone, SDLK_a, player.get());
-		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonNone, SDLK_d, player.get());
-		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonNone, SDLK_LSHIFT, player.get());
+		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonNone, SDLK_UP, player.get());
+		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonNone, SDLK_DOWN, player.get());
+		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonNone, SDLK_LEFT, player.get());
+		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonNone, SDLK_RIGHT, player.get());
+		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonNone, SDLK_RSHIFT, player.get());
 	}
 
 	//HEALTH GUI
