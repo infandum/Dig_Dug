@@ -8,6 +8,7 @@ void dae::HealthDisplayComponent::onNotify(GameObject& gameObject, NotifyEvent& 
 	if (event == NotifyEvent::EVENT_RESET || event == NotifyEvent::EVENT_VALUE_CHECK)
 	{
 		m_Health = gameObject.GetComponent<PlayerComponent>()->GetHealth();
+		m_NeedUpdate = true;
 	}
 }
 
@@ -30,6 +31,11 @@ void dae::HealthDisplayComponent::Initialize()
 
 void dae::HealthDisplayComponent::Update(float  )
 {
-	std::string str = "HP:" + std::to_string(m_Health);
-	m_pTextComponent->SetText(str.c_str());
+	if (m_NeedUpdate)
+	{
+		std::string str = "HP:" + std::to_string(m_Health);
+		m_pTextComponent->SetText(str.c_str());
+	
+		m_NeedUpdate = false;
+	}
 }

@@ -1,17 +1,13 @@
 #pragma once
-#include "Components.h"
-#include "TileComponent.h"
-
+#include "BaseComponent.h"
 
 namespace dae
 {
+	class TextureComponent;
+	class TransformComponent;
+	class SpriteComponent;
 	class RenderComponent : public BaseComponent
 	{
-		/*class TextureComponent;
-		class TransformComponent;
-		class CollisionComponent;
-		class TileComponent;
-		class SpriteComponent;*/
 		friend class GameObject;
 	public:
 		RenderComponent(const RenderComponent& other) = delete;
@@ -33,8 +29,6 @@ namespace dae
 	private:
 		TextureComponent* m_pTextureComponent = nullptr;
 		TransformComponent* m_pTransformComponent = nullptr;
-		CollisionComponent* m_pCollisionComponent = nullptr;
-		TileComponent* m_pTileComponent = nullptr;
 		SpriteComponent* m_pSpriteComponent = nullptr;
 
 		bool m_Render = true;

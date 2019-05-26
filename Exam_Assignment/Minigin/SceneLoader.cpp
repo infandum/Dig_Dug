@@ -13,6 +13,7 @@
 
 #include "NpcStates.h"
 #include "PlayerStates.h"
+#include "RoundDisplayComponent.h"
 
 //TODO: FILE READING LEVEL LOADING
 void dae::SceneLoader::Initialize()
@@ -21,14 +22,12 @@ void dae::SceneLoader::Initialize()
 	resource->LoadTexture("images/DigDug_BackGround.png", 01);
 	resource->LoadTexture("images/SpriteSheet.png", 02);
 
-	resource->LoadTexture("images/Dirt.png", 10);
-	resource->LoadTexture("images/Free.png", 11);
-	resource->LoadTexture("images/Rock.png", 12);
-	resource->LoadTexture("images/Occupied.png", 13);
+	resource->LoadTexture("images/DugDirt.png", 03);
+	resource->LoadTexture("images/DugDirtFloor.png", 04);
+	resource->LoadTexture("images/DugDirtWall.png", 05);
 
 	resource->LoadTexture("images/Collision.png", 10000);
-	resource->LoadTexture("images/OpenWallNZ.png", 10002);
-	resource->LoadTexture("images/OpenWallEW.png", 10004);
+
 
 	auto animations = ServiceLocator::GetAnimationManager();
 	animations->SetAnimationSpeed(10.0f);
@@ -547,6 +546,7 @@ void dae::SceneLoader::AddFPS(std::shared_ptr<dae::Font> font, const SDL_Color& 
 
 void dae::SceneLoader::GenerateTile() const
 {
+	const auto resource = ServiceLocator::GetResourceManager();
 	for (auto x = 0; x < 14; ++x)
 	{
 		for (auto y = 0; y < 17; ++y)
@@ -554,7 +554,7 @@ void dae::SceneLoader::GenerateTile() const
 			auto tile = std::make_shared<GameObject>();
 			tile->AddComponent(std::make_shared<RenderComponent>());
 			tile->AddComponent(std::make_shared<TransformComponent>(static_cast<float>(x) * 32, static_cast<float>(y) * 32));
-			tile->AddComponent(std::make_shared<TextureComponent>());
+			tile->AddComponent(std::make_shared<TextureComponent>(resource->GetTexture(03)));
 			tile->AddComponent(std::make_shared<TileComponent>(TileState::EMPITY, x, y));
 			tile->GetComponent<TileComponent>()->SetTileState(TileState::EMPITY);
 			if (y <= 1)
@@ -564,6 +564,18 @@ void dae::SceneLoader::GenerateTile() const
 			m_Scene->Add(tile);
 		}
 	}
+
+	//ROUNDS GUI
+	std::shared_ptr<GameObject> gui;
+	gui = std::make_shared<GameObject>();
+	gui->SetName("GUI>>ROUNDS");
+	gui->AddComponent(std::make_shared<TransformComponent>(32.f * 9.9f, 32.f * 17.1f));
+	gui->AddComponent(std::make_shared<RenderComponent>());
+	gui->AddComponent(std::make_shared<TextureComponent>());
+	gui->AddComponent(std::make_shared<RoundDisplayComponent>());
+
+	ServiceLocator::GetLevelManager()->AddObserver(gui->GetComponent<RoundDisplayComponent>());
+	m_Scene->Add(gui);
 }
 
 void dae::SceneLoader::AddBackground(UINT textureID) const

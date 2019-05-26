@@ -90,11 +90,22 @@ void dae::PlayerComponent::Initialize()
 	}	
 }
 
-
 void dae::PlayerComponent::PlayerUpdate()
 {
+	
+
 	const auto index = GetGameObject()->GetTransform()->GetPositionIndex();
 	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
+
+	if (m_IsCrushed)
+	{
+		if (tile->GetTileState() != TileState::USED)
+		{
+			Dead();
+		}
+	}
+
+	
 	switch (m_Type)
 	{
 	case PlayerType::PLAYER_DIGDUG:
@@ -102,7 +113,7 @@ void dae::PlayerComponent::PlayerUpdate()
 		break;
 	case PlayerType::PLAYER_FYGAR:
 		
-		if (tile->GetTileState() == TileState::FREE)
+		if (tile->GetTileState() != TileState::FREE)
 		{
 			m_isAttacking = false;
 			m_IsCharging = false;

@@ -48,6 +48,9 @@ void dae::LevelManager::Reset()
 				}
 			}
 
+	const auto go = std::make_shared<GameObject>();
+	Notify(*go, NotifyEvent::EVENT_RESET);
+
 	m_Reset = true;
 }
 
@@ -96,6 +99,9 @@ void dae::LevelManager::Update(float deltaTime)
 
 void dae::LevelManager::PlayerTracking()
 {
+	
+
+
 	if (!m_pPlayers.empty())
 		if (!m_pPlayers[m_ActiveSceneIndex].empty())
 		{

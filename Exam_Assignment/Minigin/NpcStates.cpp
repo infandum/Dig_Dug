@@ -570,6 +570,7 @@ std::shared_ptr<dae::BaseState> dae::RockFallingState::Swap(NotifyEvent event, G
 {
 	if (event == NotifyEvent::EVENT_SPAWN)
 	{
+		gameObject.Enable(true);
 		gameObject.GetComponent<MoveComponent>()->SetIsStatic(true);
 		return gameObject.GetComponent<SpriteComponent>()->GetState<RockIdleState>();
 	}
@@ -623,6 +624,9 @@ std::shared_ptr<dae::BaseState> dae::RockLoseState::Swap(NotifyEvent event, Game
 {
 	if (event == NotifyEvent::EVENT_SPAWN)
 	{
+		m_IsFree = false;
+		m_DelayTimer = 0.f;
+		gameObject.Enable(true);
 		gameObject.GetComponent<MoveComponent>()->SetIsStatic(true);
 		return gameObject.GetComponent<SpriteComponent>()->GetState<RockIdleState>();
 	}

@@ -9,6 +9,7 @@ void dae::PointDisplayComponent::onNotify(GameObject & gameObject, NotifyEvent &
 	if (event == NotifyEvent::EVENT_RESET || event == NotifyEvent::EVENT_VALUE_CHECK)
 	{
 		m_Points = gameObject.GetComponent<PlayerComponent>()->GetPoints();
+		m_NeedUpdate = true;
 	}
 }
 
@@ -31,8 +32,12 @@ void dae::PointDisplayComponent::Initialize()
 
 void dae::PointDisplayComponent::Update(float)
 {
+	if (m_NeedUpdate)
+	{
+		std::string str = std::to_string(m_Points);
+		str = std::string(6 - std::to_string(m_Points).length(), '0') + std::to_string(m_Points);
+		m_pTextComponent->SetText(str.c_str());
 
-	std::string str = std::to_string(m_Points);
-	str = std::string(6 - std::to_string(m_Points).length(), '0') + std::to_string(m_Points);
-	m_pTextComponent->SetText(str.c_str());
+		m_NeedUpdate = false;
+	}
 }

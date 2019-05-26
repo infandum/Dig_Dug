@@ -28,6 +28,7 @@ namespace  dae
 	private:
 		TextComponent* m_pTextComponent;
 		int m_Health;
+		bool m_NeedUpdate = false;
 
 		ResourceManager* m_Resource = nullptr;
 	};

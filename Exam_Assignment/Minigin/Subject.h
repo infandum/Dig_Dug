@@ -13,7 +13,7 @@ namespace dae
 		{
 			for (auto& observer : m_pObservers)
 			{
-				if (typeid(*observer) == typeid(*pObserver))
+				if (observer == pObserver)
 				{
 					std::cout << "Subject::AddObserver > Duplicate: " << typeid(*pObserver).name() << " >> Already added!!";
 					return;

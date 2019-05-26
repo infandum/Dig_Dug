@@ -190,6 +190,9 @@
     <ClInclude Include="MainMenuComponent.h">
       <Filter>Game\Components</Filter>
     </ClInclude>
+    <ClInclude Include="RoundDisplayComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -304,6 +307,9 @@
       <Filter>Game\Manager</Filter>
     </ClCompile>
     <ClCompile Include="MainMenuComponent.cpp">
+      <Filter>Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="RoundDisplayComponent.cpp">
       <Filter>Game\Components</Filter>
     </ClCompile>
   </ItemGroup>
