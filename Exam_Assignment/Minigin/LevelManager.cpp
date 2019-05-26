@@ -6,6 +6,9 @@
 
 void dae::LevelManager::Reset()
 {
+	m_WinTimer = 0.f;
+	m_Won = false;
+
 	if (m_pTileComponents.empty())
 		return;
 
@@ -80,17 +83,25 @@ void dae::LevelManager::Initialize()
 
 void dae::LevelManager::Update(float deltaTime)
 {
-	UNREFERENCED_PARAMETER(deltaTime);
-
-	//TODO: TRACK NPCs
 	//TODO: CLEAN UP AND REFRACTOR
 	//TODO: MOVE DIGGING TO PLAYER
-
-	//TODO: CLEAN THIS UP SO IT DOENS GET DONE EVERY UPDATE;
 	SetActiveScene(ServiceLocator::GetSceneManager()->GetActiveSceneIndex());
+	PlayerTracking();
+		
+
+	EnityTracking();
+
+	LevelWin(deltaTime);
+}
+
+void dae::LevelManager::PlayerTracking()
+{
 	if (!m_pPlayers.empty())
-		for(auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+		if (!m_pPlayers[m_ActiveSceneIndex].empty())
 		{
+			int GameOvers = 0;
+			for (auto i = 0; i < m_pPlayers[m_ActiveSceneIndex].size(); i++)
+			{
 				if (m_Reset || m_pPlayers[m_ActiveSceneIndex][i]->IsDead())
 				{
 					m_StartTile[m_ActiveSceneIndex][i] = GetTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPositionIndex().y);
@@ -102,13 +113,13 @@ void dae::LevelManager::Update(float deltaTime)
 
 				}
 
-			
+
 				if (IsSwitchingTile(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x, m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y))
 				{
 					int x = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
 					int y = static_cast<int>(round(m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
 					const auto nextTile = GetTile(x, y);
-					
+
 					if (nextTile != nullptr && nextTile != m_StartTile[m_ActiveSceneIndex][i])
 					{
 						const auto dir = m_pPlayers[m_ActiveSceneIndex][i]->GetGameObject()->GetComponent<MoveComponent>()->GetCurrentDirection();
@@ -123,31 +134,63 @@ void dae::LevelManager::Update(float deltaTime)
 										GetTile(x, y)->SetTileState(TileState::USED, m_pPlayers[m_ActiveSceneIndex][i]);
 									m_StartTile[m_ActiveSceneIndex][i] = nextTile;
 								}
-							
+
 						}
 					}
 				}
 
-				m_GameOvers[m_ActiveSceneIndex][i] = m_pPlayers[m_ActiveSceneIndex][i]->IsGameOver();
+				if (m_pPlayers[m_ActiveSceneIndex][i]->IsGameOver())
+					GameOvers++;
+			}
 
-				if(m_GameOvers[m_ActiveSceneIndex][i])
-					if (std::adjacent_find(m_GameOvers[m_ActiveSceneIndex].begin(), m_GameOvers[m_ActiveSceneIndex].end(), std::not_equal_to<>()) == m_GameOvers[m_ActiveSceneIndex].end())
-					{
-						std::cout << "GAME OVER!" << std::endl;
-						ServiceLocator::GetSceneManager()->SetActive("Main menu");
-					}
-		}
-
-	if(!m_pEntities.empty())
-		for(auto& entity : m_pEntities[m_ActiveSceneIndex])
-		{
-			if (entity != nullptr  && entity->GetGameObject()->GetTransform() != nullptr)
+			if (GameOvers >= m_pPlayers[m_ActiveSceneIndex].size())
 			{
-				if (IsSwitchingTile(entity->GetGameObject()->GetTransform()->GetPosition().x, entity->GetGameObject()->GetTransform()->GetPosition().y))
+				ServiceLocator::GetSceneManager()->SetActive("Main menu");
+			}
+
+		}
+}
+
+void dae::LevelManager::EnityTracking()
+{
+
+	if (!m_pEntities.empty())
+		if (!m_pEntities[m_ActiveSceneIndex].empty())
+		{
+			int deadEnities = 0;
+			int rockCount = 0;
+			for (auto& entity : m_pEntities[m_ActiveSceneIndex])
+			{
+				if (entity->IsDead())
+					deadEnities++;
+
+				if (entity->GetType() == NPCType::ROCK)
+					rockCount++;
+
+				if (entity != nullptr  && entity->GetGameObject()->GetTransform() != nullptr)
 				{
-					int x = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
-					int y = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
-					entity->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+					if (IsSwitchingTile(entity->GetGameObject()->GetTransform()->GetPosition().x, entity->GetGameObject()->GetTransform()->GetPosition().y))
+					{
+						int x = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().x / 32.0f));
+						int y = static_cast<int>(round(entity->GetGameObject()->GetTransform()->GetPosition().y / 32.0f));
+						entity->GetGameObject()->GetComponent<TransformComponent>()->SetPositionIndex({ x, y });
+					}
+				}
+			}
+
+			if (deadEnities >= m_pEntities[m_ActiveSceneIndex].size() - rockCount)
+			{
+				auto player = GetPlayer(PlayerType::PLAYER_FYGAR);
+				if (player)
+				{
+					if (player->IsDead())
+						m_Won = true;
+				}
+				else
+				{
+					m_Won = true;
+
+
 				}
 			}
 		}
@@ -155,7 +198,6 @@ void dae::LevelManager::Update(float deltaTime)
 
 void dae::LevelManager::AddTile(TileComponent* tile)
 {
-	//std::cout << this->GetGameObject()->GetName() << std::endl;
 	m_ActiveSceneIndex = ServiceLocator::GetSceneManager()->GetActiveSceneIndex();
 	if (m_pTileComponents.empty() || m_pTileComponents.size() <= m_ActiveSceneIndex)
 		for (auto i = m_pTileComponents.size(); i <= m_ActiveSceneIndex; ++i)
@@ -214,7 +256,6 @@ void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 		{
 			m_pPlayers.push_back(std::vector<PlayerComponent*>());
 			m_StartTile.push_back(std::vector<TileComponent*>());
-			m_GameOvers.push_back(std::vector<bool>());
 		}
 
 	for (auto& player : m_pPlayers[m_ActiveSceneIndex])
@@ -227,7 +268,6 @@ void dae::LevelManager::AddPlayer(PlayerComponent* pPlayer)
 	}
 	m_pPlayers[m_ActiveSceneIndex].push_back(pPlayer);
 	m_StartTile[m_ActiveSceneIndex].push_back(nullptr);
-	m_GameOvers[m_ActiveSceneIndex].push_back(false);
 }
 
 void dae::LevelManager::RemovePlayer(PlayerComponent* pPlayer)
@@ -254,6 +294,17 @@ bool dae::LevelManager::PlayerDied()
 	
 
 	return died;
+}
+
+dae::PlayerComponent* dae::LevelManager::GetPlayer(const PlayerType& type)
+{
+	for (auto& player : m_pPlayers[m_ActiveSceneIndex])
+	{
+		if (player->GetType() == type)
+			return player;
+	}
+
+	return nullptr;
 }
 
 void dae::LevelManager::AddEntity(NpcComponent* pEntity)
@@ -413,4 +464,29 @@ bool dae::LevelManager::IsSwitchingTile(float posX, float posY) const
 	}
 
 	return isSwapping;
+}
+
+void dae::LevelManager::LevelWin(float deltaTime)
+{
+
+	if(m_Won)
+	{
+		if(m_WinTimer >= m_WinDelayTime)
+		{
+			m_WinTimer = 0.f;
+			m_Won = false;
+			const auto scene = ServiceLocator::GetSceneManager();
+			m_ActiveSceneIndex++;
+			if (m_ActiveSceneIndex == 3 || m_ActiveSceneIndex == 5 || m_ActiveSceneIndex == 7)
+			{
+				scene->SetActive("Main menu");
+			}
+			else
+			{
+				scene->SetActive(static_cast<int>(m_ActiveSceneIndex));
+			}
+		}
+		m_WinTimer += deltaTime;
+	}
+	
 }

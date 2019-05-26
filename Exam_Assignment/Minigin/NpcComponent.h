@@ -17,6 +17,8 @@ namespace dae
 		NpcComponent(NPCType type);
 		virtual ~NpcComponent() = default;
 
+		NPCType GetType() const { return m_Type; }
+
 		void EnableGhosting(const bool& enable = true) { m_isGhosting = enable; }
 		bool IsGhosting() const { return m_isGhosting; }
 
