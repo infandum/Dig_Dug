@@ -1,6 +1,7 @@
 # MINIGIN: DIG DUG
-Reproduction of Dig Dug game using C++ and SDL
+Reproduction of Dig Dug game using C++ and SDL for the programming 4 course 2018-2019
 
+# ENGINE
 The Minigin engine is build up using the following patterns
 -GameObject
 -Component
@@ -8,24 +9,31 @@ The Minigin engine is build up using the following patterns
 -Concurrent Hierarchical State Machine
 -Commands
 
+# GAME
+
 # CONTROLS
-Supports only 1 controller
-#Player 1 : Keyboard : Controller
-UP:         up         directional pad up
-DOWN:       down       directional pad down
-LEFT:       left       directional pad left 
-RIGHT:      right      directional pad right
-ATTACK:     Lshift     A
+Supports Keyboard controls but only 1 controller
 
-#Player 2
-UP:        up
-DOWN:      down
-LEFT:      left
-RIGHT:     right
-ATTACK:    Rshift
+# Commad : Keyboard : Controller
 
-#Menu
+UP:         up, w	:	directional pad up
+
+DOWN:       down, s	:	directional pad down
+
+LEFT:       left, a	:	directional pad left 
+
+RIGHT:      right, d	:	directional pad right
+
+ATTACK:     Lshift,Rshift	:	A
+
+
+# Menu
+
 Exit:      esc
+
 UP:        up
+
 DOWN:      down
+
 SELECT:    space
+
