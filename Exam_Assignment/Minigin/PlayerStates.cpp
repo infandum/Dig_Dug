@@ -165,7 +165,7 @@ std::shared_ptr<dae::BaseState> dae::CrushedPlayerState::Swap(NotifyEvent event,
 	if ((currTile->GetTileState() == TileState::USED && !currTile->GetIsConnectedBorder(Direction::DOWN)) && gameObject.GetComponent<MoveComponent>()->IsCentered())
 	{
 		gameObject.GetComponent<MoveComponent>()->SetMovementInput({ 0, 0, 0 });
-		//gameObject.GetComponent<PlayerComponent>()->Dead();
+		gameObject.GetComponent<PlayerComponent>()->Dead();
 	}
 	return nullptr;
 }

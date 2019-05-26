@@ -14,8 +14,11 @@ namespace dae
 		bool ProcessInput();
 		std::shared_ptr<Command> HandleInput(SceneObject* owner);
 			
-		bool IsPressed(ControllerButton button) const;
+		bool IsPressed(ControllerButton button) ;
 		bool IsPressed(SDL_Keycode key) const;
+		bool WasPressed(ControllerButton button);
+
+		void GetButtonState(ControllerButton button);
 
 		bool IsKeyDown() const;
 		bool IsKeyUp() const;
@@ -25,9 +28,12 @@ namespace dae
 		void CloseWindow() { m_CloseWindow = true; }
 
 	private:
-		
+
+
 		XINPUT_STATE currentState{};
 		SDL_Event m_Event{};
+
+		ControllerButton m_WasPressed = ControllerButton::ButtonNone;
 
 		SDL_Keycode m_KeyDown{};
 		SDL_Keycode m_KeyUp{};

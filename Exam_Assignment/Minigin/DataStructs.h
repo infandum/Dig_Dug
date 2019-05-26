@@ -164,7 +164,8 @@ namespace dae
 		ButtonLeftThumb = 0x0040,
 		ButtonRightThumb = 0x0080,
 		ButtonLeftTrigger = 0x0100,
-		ButtonRightTrigger = 0x0200
+		ButtonRightTrigger = 0x0200,
+		ButtonNone = 0x0000
 	};
 
 	inline glm::vec3 DirectionAxis(Direction dir)

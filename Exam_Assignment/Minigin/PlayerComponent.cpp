@@ -486,7 +486,8 @@ void dae::PlayerComponent::Respawn()
 	GetGameObject()->GetComponent<MoveComponent>()->Reset();
 
 	
-
+	if (m_IsDead)
+		m_Health--;
 
 	m_AttackTimer = 0;
 	m_IsReset = true;
@@ -502,7 +503,7 @@ void dae::PlayerComponent::Respawn()
 
 	m_IsHit = false;
 
-	m_Health--;
+	
 
 	Notify(*GetGameObject(), NotifyEvent::EVENT_VALUE_CHECK);
 	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_SPAWN);	

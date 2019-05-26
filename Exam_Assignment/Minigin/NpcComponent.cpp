@@ -21,7 +21,6 @@ dae::NpcComponent::NpcComponent(NPCType type) :m_Type(type)
 	m_IsReset = true;
 }
 
-
 void dae::NpcComponent::Reset()
 {
 	m_IsCrushed = false;
@@ -109,37 +108,6 @@ void dae::NpcComponent::Initialize()
 	}
 }
 
-void dae::NpcComponent::StartAttacking()
-{
-	
-	if (m_pLevelManager->GetPlayerCount() > 1)
-	{
-		if (RandomIntBetween(0, 100 * static_cast<int>(m_pLevelManager->GetPlayerCount())) <= 50)
-		{
-
-			SetChaseTarget(0);
-		}
-		else
-		{
-			SetChaseTarget(1);
-		}
-
-	}
-	else
-	{
-		SetChaseTarget(0);
-	}
-
-
-	m_NewDir = m_pTarget->GetGameObject()->GetTransform()->GetPositionIndex().x >= GetGameObject()->GetTransform()->GetPositionIndex().x ? Direction::RIGHT : Direction::LEFT;
-	GetGameObject()->GetComponent<MoveComponent>()->SetCurrentDirection(m_NewDir);
-	m_ActionMaxTime = RandomFloatBetween(0.75f, m_AttackMaxTime);
-	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_ACTION);
-	m_IsCharging = true;
-	m_IsIdle = false;
-	m_ActionTimer = 0.f;
-}
-
 void dae::NpcComponent::Update(float deltaTime)
 {
 	if (m_IsReset)
@@ -152,21 +120,43 @@ void dae::NpcComponent::Update(float deltaTime)
 	}	
 
 	
+	
+	
+	NpcUpdate(deltaTime);
+	
+}
+
+void dae::NpcComponent::NpcUpdate(float deltaTime)
+{
 	if (m_Type == NPCType::ROCK)
+	{
 		if (!m_IsHit && !m_IsCrushed)
 			GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
-	
-	if (m_Type != NPCType::ROCK)
+	}
+	else
+	{
 		if (!m_IsHit && !m_IsCrushed)
-		{	
-	
+		{
+
 			if (m_IsIdle)
 			{
 				GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_IDLE);
+
+				const auto index = GetGameObject()->GetTransform()->GetPositionIndex();
+
+				const auto currTile = m_pLevelManager->GetTile(index.x, index.y);
+
+				if (currTile != nullptr)
+					if (currTile->GetTileState() != TileState::USED)
+					{
+						StartTunneling();
+						return;
+					}
+
 				if (m_ActionTimer >= m_ActionMaxTime)
 				{
 					auto rnd = RandomIntBetween(0, 100);
-					if (rnd <= 65.f )
+					if (rnd <= 65.f)
 					{
 						if (!m_IsChasing)
 						{
@@ -179,7 +169,7 @@ void dae::NpcComponent::Update(float deltaTime)
 						{
 							StartAttacking();
 						}
-						
+
 					}
 					else if (rnd <= 90.f)
 					{
@@ -195,8 +185,8 @@ void dae::NpcComponent::Update(float deltaTime)
 							StartIdleMove();
 						}
 					}
-					
-							
+
+
 				}
 				else
 				{
@@ -204,28 +194,12 @@ void dae::NpcComponent::Update(float deltaTime)
 				}
 
 			}
-			else
-			{
-				/*if(m_MovingMaxTime >= m_MaxActionMaxTime)
-				{
-					m_IsIdle = true;
-					m_IsMoving = false;
-					m_IsChasing = false;
-					m_IsChangeTunnel = false;
-					m_IsCharging = false;
-					m_isAttacking = false;
-					m_MaxActionTimer = 0.f;
-					m_ActionTimer = 0.f;
 
-				}
-				m_MaxActionTimer += deltaTime;*/
-			}
-			
-			Tunneling();
+			Tunneling(deltaTime);
 			IdleMove(deltaTime);
 			Chasing(deltaTime);
 
-			if(m_Type == NPCType::FYGAR)
+			if (m_Type == NPCType::FYGAR)
 			{
 				Fire(deltaTime);
 				Attacking(deltaTime);
@@ -233,15 +207,16 @@ void dae::NpcComponent::Update(float deltaTime)
 				CollisionEvents();
 			}
 		}
+	}
 
-		const auto index = GetGameObject()->GetTransform()->GetPositionIndex();
-		const auto tile = m_pLevelManager->GetTile(index.x, index.y);
 
-		if (tile->GetTileState() == TileState::FREE)
-			m_isGhosting = true;
-		else
-			m_isGhosting = false;
-	
+	const auto index = GetGameObject()->GetTransform()->GetPositionIndex();
+	const auto tile = m_pLevelManager->GetTile(index.x, index.y);
+
+	if (tile->GetTileState() == TileState::FREE)
+		m_isGhosting = true;
+	else
+		m_isGhosting = false;
 }
 
 void dae::NpcComponent::StartIdleMove()
@@ -282,10 +257,7 @@ void dae::NpcComponent::StopMovement()
 void dae::NpcComponent::IdleMove(float deltaTime)
 {
 
-	const auto index = GetGameObject()->GetTransform()->GetPositionIndex();
-
-	const auto currTile = m_pLevelManager->GetTile(index.x, index.y);
-	
+	const auto index = GetGameObject()->GetTransform()->GetPositionIndex();	
 
 	const auto nextTile = m_pLevelManager->GetTile(index.x + static_cast<int>(DirectionAxis(m_NewDir).x), index.y + static_cast<int>(DirectionAxis(m_NewDir).y));
 
@@ -293,13 +265,7 @@ void dae::NpcComponent::IdleMove(float deltaTime)
 	
 	if (m_IsMoving)
 	{
-		if(currTile != nullptr)
-			if (currTile->GetTileState() != TileState::USED)
-			{
-				StartTunneling();
-				m_IsMoving = false;
-				return;
-			}
+		
 
 		if (nextTile != nullptr)
 		{
@@ -506,7 +472,7 @@ void dae::NpcComponent::StartTunneling()
 	m_IsIdle = false;
 
 	m_TargetLocation = m_pTarget->GetGameObject()->GetTransform()->GetPositionIndex();
-
+	m_ActionMaxTime = RandomFloatBetween(0.25f, m_ChaseMaxTime);
 	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_MOVE);
 }
 
@@ -519,7 +485,7 @@ void dae::NpcComponent::StopTunneling()
 	m_pMove->SetMovementInput(0, 0);
 }
 
-void dae::NpcComponent::Tunneling()
+void dae::NpcComponent::Tunneling(float deltaTime)
 {
 	if (m_IsChangeTunnel)
 	{
@@ -536,6 +502,12 @@ void dae::NpcComponent::Tunneling()
 		if(static_cast<int>(DistanceY) != 0)
 			DirY = static_cast<float>(DistanceY / abs(DistanceY));
 
+		if (m_ActionTimer >= m_ActionMaxTime)
+		{
+			m_ActionTimer = 0.f;
+			StopTunneling();
+			return;
+		}
 	
 
 		const auto XTile = m_pLevelManager->GetTile(index.x + static_cast<int>(DirX), index.y);
@@ -545,6 +517,7 @@ void dae::NpcComponent::Tunneling()
 		{
 			if(static_cast<int>(DistanceX) == 0 && static_cast<int>(DistanceY) == 0 && GetGameObject()->GetComponent<MoveComponent>()->IsCentered())
 			{
+				m_ActionTimer = 0.f;
 				StopTunneling();
 				std::cout << GetGameObject()->GetName() << " GHOSTING ARRIVED\n";
 				return;
@@ -569,17 +542,60 @@ void dae::NpcComponent::Tunneling()
 			{
 				m_pMove->SetMovementInput(0, static_cast<float>(DirY));
 			}
+			else if ((XTile->GetTileState() != TileState::OCCUPIED || XTile->GetTileState() != TileState::BLOCKED) && DirX != 0)
+			{
+				m_pMove->SetMovementInput(static_cast<float>(DirX), 0);
+			}
+			else if ((YTile->GetTileState() != TileState::OCCUPIED || YTile->GetTileState() != TileState::BLOCKED) && DirY != 0)
+			{
+				m_pMove->SetMovementInput(0, static_cast<float>(DirY));
+			}
 			else if (DirX <= 0 && DirY <= 0 && GetGameObject()->GetComponent<MoveComponent>()->IsCentered())
 			{
+				m_ActionTimer = 0.f;
 				StopTunneling();
 			}
-
+			
 		}
 		else
 		{
+			m_ActionTimer = 0.f;
 			StopTunneling();
 		}
+
+		m_ActionTimer += deltaTime;
 	}
+}
+
+void dae::NpcComponent::StartAttacking()
+{
+
+	if (m_pLevelManager->GetPlayerCount() > 1)
+	{
+		if (RandomIntBetween(0, 100 * static_cast<int>(m_pLevelManager->GetPlayerCount())) <= 50)
+		{
+
+			SetChaseTarget(0);
+		}
+		else
+		{
+			SetChaseTarget(1);
+		}
+
+	}
+	else
+	{
+		SetChaseTarget(0);
+	}
+
+
+	m_NewDir = m_pTarget->GetGameObject()->GetTransform()->GetPositionIndex().x >= GetGameObject()->GetTransform()->GetPositionIndex().x ? Direction::RIGHT : Direction::LEFT;
+	GetGameObject()->GetComponent<MoveComponent>()->SetCurrentDirection(m_NewDir);
+	m_ActionMaxTime = RandomFloatBetween(0.75f, m_AttackMaxTime);
+	GetGameObject()->GetSprite()->onNotify(NotifyEvent::EVENT_ACTION);
+	m_IsCharging = true;
+	m_IsIdle = false;
+	m_ActionTimer = 0.f;
 }
 
 void dae::NpcComponent::AllignAttack() const

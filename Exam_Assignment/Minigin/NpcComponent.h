@@ -49,6 +49,7 @@ namespace dae
 	protected:
 		void Initialize() override;
 		void StartAttacking();
+		void NpcUpdate(float deltaTime);
 		void StartTunneling();
 		void StartIdleMove();
 		void StartChasing();
@@ -62,7 +63,7 @@ namespace dae
 		void StopChasing();
 		void Chasing(float deltaTime);
 		void StopTunneling();
-		void Tunneling();
+		void Tunneling(float deltaTime);
 
 		void AllignAttack() const;
 		//void MoveAttack(float deltaTime);

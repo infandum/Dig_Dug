@@ -196,6 +196,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="DemoScene.h" />
     <ClInclude Include="HealthDisplayComponent.h" />
+    <ClInclude Include="MainMenuComponent.h" />
     <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="NpcComponent.h" />
     <ClInclude Include="NpcStates.h" />
@@ -243,6 +244,7 @@ xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\x64\*.dll" "$(OutputPath)" /R /Y</Com
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="DemoScene.cpp" />
     <ClCompile Include="HealthDisplayComponent.cpp" />
+    <ClCompile Include="MainMenuComponent.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="NpcComponent.cpp" />
     <ClCompile Include="NpcStates.cpp" />

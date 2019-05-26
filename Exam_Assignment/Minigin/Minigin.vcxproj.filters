@@ -187,6 +187,9 @@
     <ClInclude Include="LevelManager.h">
       <Filter>Game\Manager</Filter>
     </ClInclude>
+    <ClInclude Include="MainMenuComponent.h">
+      <Filter>Game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FPSComponent.cpp">
@@ -299,6 +302,9 @@
     </ClCompile>
     <ClCompile Include="LevelManager.cpp">
       <Filter>Game\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuComponent.cpp">
+      <Filter>Game\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

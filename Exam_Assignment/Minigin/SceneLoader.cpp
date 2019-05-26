@@ -88,27 +88,27 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 	case SceneList::MAIN_MENU:
 			m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Main menu");
 
-			AddMenu();
-
 			AddBackground(01);
 
 			GenerateTile();
 
 			font = resource->LoadFont("Lingua.otf", 32);
-			AddText(font, {0,0,0}, "Programming 4 Assignment", 16, 100);
+			AddText(font, {0,0,0}, "Programming 4 Assignment", 16, 116);
+
+			font = resource->LoadFont("Lingua.otf", 24);
+			AddText(font, { 0,0,0 }, "2DAE07 - Plettinx Alexander", 32.f * 2.5f, 148);
 
 			font = resource->LoadFont("emulogic.ttf", 32);
-			AddText(font, { 0,0,0 }, "DigDug", 124, 64);
+			AddText(font, { 0,0,0 }, "DigDug", 124, 70);
 
 			font = resource->LoadFont("emulogic.ttf", 12);
 			AddFPS(font, color);
 
-		break;
-	case SceneList::LEVEL_SINGLE:
-		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level single");
+			AddMenu();
 
-		AddMenu();
-		font = resource->LoadFont("emulogic.ttf", 16);
+		break;
+	case SceneList::LEVEL_1_SINGLE:
+		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Single");
 
 		AddBackground(01);
 		
@@ -132,12 +132,42 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
+
+		AddLevelExit();
+
 		break;
-	case SceneList::LEVEL_COOP:
-		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Coop");
+	case SceneList::LEVEL_2_SINGLE:
+		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Single");
+
+		AddBackground(01);
+
+		GenerateTile();
+
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 6, 32.f * 9);
+
+		AddNpc(NPCType::POOKA, 32.f, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 10, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 9, 32.f * 14);
+
+		AddNpc(NPCType::FYGAR, 32.f * 3, 32.f * 12);
+
+		AddNpc(NPCType::ROCK, 32.f * 3, 32.f * 13);
+
+		AddNpc(NPCType::ROCK, 32.f * 4, 32.f * 5);
+
+		AddNpc(NPCType::ROCK, 32.f * 10, 32.f * 11);
 
 		font = resource->LoadFont("emulogic.ttf", 12);
-		AddMenu();
+		AddFPS(font, color);
+
+		AddLevelExit();
+
+		break;
+	case SceneList::LEVEL_1_COOP:
+		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Coop");
+
 		
 		AddBackground(01);
 
@@ -145,19 +175,62 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 7, 32.f * 9);
 
-		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 5, 32.f * 9);
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 5, 32.f * 9, 32.f * 17.f, 64 * 5.5f);
 
-		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
-		
-		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
+		AddNpc(NPCType::POOKA, 32.f, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 10, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 9, 32.f * 14);
+
+		AddNpc(NPCType::FYGAR, 32.f * 3, 32.f * 12);
+
+		AddNpc(NPCType::ROCK, 32.f * 3, 32.f * 13);
+
+		AddNpc(NPCType::ROCK, 32.f * 4, 32.f * 5);
+
+		AddNpc(NPCType::ROCK, 32.f * 10, 32.f * 11);
 
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
+
+		AddLevelExit();
+
+		break;
+	case SceneList::LEVEL_2_COOP:
+		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level Coop");
+
+
+		AddBackground(01);
+
+		GenerateTile();
+
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 7, 32.f * 9);
+
+		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 5, 32.f * 9, 32.f * 17.f, 64 * 5.5f);
+
+		AddNpc(NPCType::POOKA, 32.f, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 10, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 9, 32.f * 14);
+
+		AddNpc(NPCType::FYGAR, 32.f * 3, 32.f * 12);
+
+		AddNpc(NPCType::ROCK, 32.f * 3, 32.f * 13);
+
+		AddNpc(NPCType::ROCK, 32.f * 4, 32.f * 5);
+
+		AddNpc(NPCType::ROCK, 32.f * 10, 32.f * 11);
+
+		font = resource->LoadFont("emulogic.ttf", 12);
+		AddFPS(font, color);
+
+		AddLevelExit();
+
 		break;
 	case SceneList::LEVEL_VS:
 		m_Scene = ServiceLocator::GetSceneManager()->CreateScene("Level VS");
-
-		AddMenu();
 
 		AddBackground(01);
 
@@ -165,14 +238,25 @@ void dae::SceneLoader::InitScene(dae::SceneList scene)
 		
 		AddPlayer(PlayerType::PLAYER_DIGDUG, 32.f * 6, 32.f * 9);
 		
-		AddPlayer(PlayerType::PLAYER_FYGAR, 0.f, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);	
+		AddPlayer(PlayerType::PLAYER_FYGAR, 32.f * 3, 32.f * 12, 72.f, 32.f * 17.f, 64 * 5.5f);
 		
-		AddNpc(NPCType::POOKA, 32.f, 32 * 8.f);
-		
-		AddNpc(NPCType::ROCK, 32.f * 4.f, 32 * 6.f);
+		AddNpc(NPCType::POOKA, 32.f, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 10, 32.f * 4);
+
+		AddNpc(NPCType::POOKA, 32.f * 9, 32.f * 14);
+
+		AddNpc(NPCType::ROCK, 32.f * 3, 32.f * 13);
+
+		AddNpc(NPCType::ROCK, 32.f * 4, 32.f * 5);
+
+		AddNpc(NPCType::ROCK, 32.f * 10, 32.f * 11);
 
 		font = resource->LoadFont("emulogic.ttf", 12);
 		AddFPS(font, color);
+
+		AddLevelExit();
+
 		break;
 	default: ;
 	}
@@ -188,7 +272,7 @@ void dae::SceneLoader::PostInitScene(SceneList scene)
 		break;
 	case SceneList::MAIN_MENU:
 		break;
-	case SceneList::LEVEL_SINGLE:
+	case SceneList::LEVEL_1_SINGLE:
 		level->CreateTunnel(6, 2, Direction::DOWN, 7);
 		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
 
@@ -200,7 +284,33 @@ void dae::SceneLoader::PostInitScene(SceneList scene)
 
 		level->CreateTunnel(9, 11, Direction::DOWN, 4);
 		break;
-	case SceneList::LEVEL_COOP:
+	case SceneList::LEVEL_2_SINGLE:
+		level->CreateTunnel(6, 2, Direction::DOWN, 7);
+		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
+
+		level->CreateTunnel(1, 8, Direction::RIGHT, 2);
+
+		level->CreateTunnel(8, 5, Direction::RIGHT, 2);
+
+		level->CreateTunnel(6, 11, Direction::RIGHT, 2);
+
+		level->CreateTunnel(8, 14, Direction::RIGHT, 2);
+
+		level->CreateTunnel(1, 10, Direction::DOWN, 2);
+		break;
+	case SceneList::LEVEL_1_COOP:
+		level->CreateTunnel(6, 2, Direction::DOWN, 7);
+		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
+
+		level->CreateTunnel(1, 4, Direction::DOWN, 4);
+
+		level->CreateTunnel(2, 12, Direction::RIGHT, 3);
+
+		level->CreateTunnel(9, 4, Direction::RIGHT, 3);
+
+		level->CreateTunnel(9, 11, Direction::DOWN, 4);
+		break;
+	case SceneList::LEVEL_2_COOP:
 		level->CreateTunnel(6, 2, Direction::DOWN, 7);
 		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
 
@@ -219,8 +329,16 @@ void dae::SceneLoader::PostInitScene(SceneList scene)
 		level->CreateTunnel(6, 2, Direction::DOWN, 7);
 		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
 
-		level->CreateTunnel(12, 12, Direction::UP, 2);
-		level->CreateTunnel(12, 12, Direction::LEFT, 2);
+		level->CreateTunnel(6, 2, Direction::DOWN, 7);
+		level->CreateTunnel(5, 9, Direction::RIGHT, 2);
+
+		level->CreateTunnel(1, 4, Direction::DOWN, 4);
+
+		level->CreateTunnel(2, 12, Direction::RIGHT, 3);
+
+		level->CreateTunnel(9, 4, Direction::RIGHT, 3);
+
+		level->CreateTunnel(9, 11, Direction::DOWN, 4);
 		break;
 	}
 
@@ -240,11 +358,30 @@ void dae::SceneLoader::ResetScene(SceneList scene)
 	PostInitScene(scene);
 }
 
+void dae::SceneLoader::SetScene(const int& index)
+{
+	ServiceLocator::GetSceneManager()->SetActive(index);
+}
+
 void dae::SceneLoader::AddMenu() const
 {
 	std::shared_ptr<GameObject> menu = std::make_shared<GameObject>();
 	menu->SetName("Menu");
+	menu->AddComponent(std::make_shared<TransformComponent>(10.f, 32.f * 5.25f));
+	menu->AddComponent(std::make_shared<RenderComponent>());
+	menu->AddComponent(std::make_shared<MainMenuComponent>());
+	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonStart, SDLK_ESCAPE, menu.get());
+	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<EnterCommand>(), ControllerButton::ButtonA, SDLK_SPACE, menu.get());
+	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_UP, menu.get());
+	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_DOWN, menu.get());
+	m_Scene->Add(menu);
+}
+
+void dae::SceneLoader::AddLevelExit() const
+{
+	std::shared_ptr<GameObject> menu = std::make_shared<GameObject>();
 	menu->AddComponent(std::make_shared<InputComponent>());
+	menu->SetName("Menu");
 	ServiceLocator::GetInputManager()->AddCommand(std::make_shared<ExitCommand>(), ControllerButton::ButtonSelect, SDLK_ESCAPE, menu.get());
 	m_Scene->Add(menu);
 }
@@ -305,11 +442,11 @@ void dae::SceneLoader::AddPlayer(PlayerType type, float playerX, float playerY, 
 	}
 	else
 	{
-		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonUp, SDLK_w, player.get());
-		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonDown, SDLK_s, player.get());
-		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonLeft, SDLK_a, player.get());
-		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonRight, SDLK_d, player.get());
-		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonX, SDLK_LSHIFT, player.get());
+		input->AddCommand(std::make_shared<UpCommand>(), ControllerButton::ButtonNone, SDLK_w, player.get());
+		input->AddCommand(std::make_shared<DownCommand>(), ControllerButton::ButtonNone, SDLK_s, player.get());
+		input->AddCommand(std::make_shared<LeftCommand>(), ControllerButton::ButtonNone, SDLK_a, player.get());
+		input->AddCommand(std::make_shared<RightCommand>(), ControllerButton::ButtonNone, SDLK_d, player.get());
+		input->AddCommand(std::make_shared<AttackCommand>(), ControllerButton::ButtonNone, SDLK_LSHIFT, player.get());
 	}
 
 	//HEALTH GUI

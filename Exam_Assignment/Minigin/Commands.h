@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "ServiceLocator.h"
 #include "MoveComponent.h"
+#include "MainMenuComponent.h"
 
 //TODO: RETHINK COMMANDS ASSIGNEMENT
 
@@ -49,34 +50,44 @@ namespace dae
 
 	inline void ExitCommand::Execute()
 	{
-		/*auto input = ServiceLocator::GetInputManager();
-		input->CloseWindow();*/
-		if (m_Input->IsKeyDown())
-		{
-			
-			if(!m_DoOnce)
-			{
-				auto scene = ServiceLocator::GetSceneManager();
-				scene->NextScene();
-				std::cout << "DO ONCE" << std::endl;
-				m_DoOnce = true;
-				
-			}
-			
-		}
-
 		if (m_Input->IsKeyUp())
 		{
-			m_DoOnce = false;
+			if (m_pOwner->GetComponent<MainMenuComponent>())
+			{
+				auto input = ServiceLocator::GetInputManager();
+				input->CloseWindow();
+			}
+			else
+			{
+				auto scene = ServiceLocator::GetSceneManager();
+				scene->SetActive("Main menu");
+			}
 		}
 	}
 
+	class EnterCommand : public Command
+	{
+	public:
+		void Execute() override;
+	};
+
+	inline void EnterCommand::Execute()
+	{
+		if (m_pOwner->GetComponent<MainMenuComponent>())
+		{
+			if (m_Input->IsKeyUp())
+			{
+				m_pOwner->GetComponent<MainMenuComponent>()->SelectButton();
+			}
+		}
+	}
 
 	class UpCommand : public Command
 	{
 	public:
 		void Execute() override;
 	};
+
 	inline void UpCommand::Execute()
 	{
 		if (m_pOwner->GetComponent<MoveComponent>() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
@@ -95,6 +106,13 @@ namespace dae
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			}
 
+		}
+		else if(m_pOwner->GetComponent<MainMenuComponent>())
+		{
+			if (m_Input->IsKeyUp())
+			{
+				m_pOwner->GetComponent<MainMenuComponent>()->PreviousButton();
+			}
 		}
 	}
 
@@ -122,6 +140,13 @@ namespace dae
 				m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
 			}
 
+		}
+		else if (m_pOwner->GetComponent<MainMenuComponent>())
+		{
+			if (m_Input->IsKeyUp())
+			{
+				m_pOwner->GetComponent<MainMenuComponent>()->NextButton();
+			}
 		}
 	}
 
@@ -160,7 +185,6 @@ namespace dae
 
 	inline void RightCommand::Execute()
 	{
-		
 		if (m_pOwner->GetTransform() && !m_pOwner->GetComponent<PlayerComponent>()->IsAttacking())
 		{
 			if (m_Input->IsKeyDown())
@@ -194,17 +218,6 @@ namespace dae
 			notify(NotifyEvent::EVENT_ACTION);
 			m_pOwner->GetComponent<PlayerComponent>()->Attack(attack = true);
 			m_pOwner->GetComponent<MoveComponent>()->SetVelocity({ 0, 0, 0 });
-			/*if (gameObject.GetChildCount() > 0)
-				if (gameObject.GetChild(0).get()->GetIsFollowingParent())
-					gameObject.GetChild(0).get()->SetIsFollowParent(false);
-				else
-					gameObject.GetChild(0).get()->SetIsFollowParent(true);*/
-
-			//if (m_pOwner->GetChildCount() > 0)
-			//	if (m_pOwner->GetChild(0).get()->IsEnabled())
-			//		m_pOwner->GetChild(0).get()->Enable(false);
-			//	else
-			//		m_pOwner->GetChild(0).get()->Enable(true);
 		}
 
 		if (m_Input->IsKeyUp())

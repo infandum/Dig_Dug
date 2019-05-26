@@ -11,9 +11,11 @@ namespace dae
 	enum class SceneList
 	{
 		MAIN_MENU = 0,
-		LEVEL_SINGLE = 1,
-		LEVEL_COOP = 2,
-		LEVEL_VS = 3
+		LEVEL_1_SINGLE = 1,
+		LEVEL_2_SINGLE = 2,
+		LEVEL_1_COOP = 3,
+		LEVEL_2_COOP = 4,
+		LEVEL_VS = 5
 	};
 
 	class SceneManager;
@@ -28,13 +30,16 @@ namespace dae
 		static void PostInitScene(SceneList scene);
 
 		static void ResetScene(SceneList scene);
+		static void SetScene(const int& index);
 
 		static void Initialize();
 
 		std::shared_ptr<Scene> m_Scene = nullptr;
 
 	private:
+
 		void AddMenu() const;
+		void AddLevelExit() const;
 		void AddPlayer(PlayerType type, float playerX = 0.f, float playerY = 0.f, float guiHPX = 0.f, float guiHPY = 32.f * 17.f, float guiPointsX = 0.f, float guiPointsY = 16.f) const;
 		void AddNpc(NPCType type, float x = 0.f, float y = 0.f) const;
 		void GenerateTile() const;

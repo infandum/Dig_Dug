@@ -77,7 +77,7 @@ void dae::SceneManager::SetActive(const std::string& sceneName)
 	
 }
 
-void dae::SceneManager::SetActive(int& index)
+void dae::SceneManager::SetActive(const int& index)
 {
 	ActiveSceneIndex = index;
 

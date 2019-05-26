@@ -1,7 +1,6 @@
 #include "MiniginPCH.h"
 #include "InputManager.h"
 #include "ServiceLocator.h"
-#include "Scene.h"
 #include "DataStructs.h"
 #include "Commands.h"
 
@@ -42,22 +41,56 @@ std::shared_ptr<dae::Command> dae::InputManager::HandleInput(SceneObject* owner)
 {
 	for (auto& command : m_pCommands)
 	{
+		GetButtonState(command->GetButton());
 		if ((IsPressed(command->GetButton()) || IsPressed(command->GetKey())) && command->GetOwner() == owner)
-		{
+		{	
+			if(m_WasPressed != command->GetButton())
+			{
+				m_WasPressed = command->GetButton();
+			}
+				
 			return command;
 		}
 	}
+	//m_WasPressed = ControllerButton::ButtonNone;
 	return nullptr;
 }
 
-bool dae::InputManager::IsPressed(ControllerButton button) const
+bool dae::InputManager::IsPressed(ControllerButton button) 
 {
-		return (currentState.Gamepad.wButtons & WORD(button)) != 0;
+	bool isPressed = (currentState.Gamepad.wButtons & WORD(button)) != 0;
+	return isPressed;
 }
 
 bool dae::InputManager::IsPressed(SDL_Keycode key) const
 {
 	return m_KeyDown == key || m_KeyUp == key;
+}
+
+bool dae::InputManager::WasPressed(ControllerButton button)
+{
+	if(button != ControllerButton::ButtonNone)
+		return m_WasPressed == button;
+
+	return false;
+}
+
+void dae::InputManager::GetButtonState(ControllerButton button)
+{
+	if (WasPressed(button))
+	{
+		if (IsPressed(button))
+			m_IsKeyDown = true;
+		else
+			m_IsKeyUp = true;
+	}
+	else
+	{
+		if (IsPressed(button))
+			m_IsKeyDown = true;
+		else
+			m_IsKeyUp = false;
+	}
 }
 
 bool dae::InputManager::IsKeyDown() const

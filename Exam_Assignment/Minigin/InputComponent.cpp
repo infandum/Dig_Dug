@@ -10,7 +10,9 @@ void dae::InputComponent::ExecuteCommand() const
 	auto command = input->HandleInput(this->GetGameObject());
 
 	if (command != nullptr)
+	{
 		command->Execute();
+	}
 }
 
 void dae::InputComponent::onNotify(GameObject& , NotifyEvent& )
